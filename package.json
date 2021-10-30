@@ -1,0 +1,40 @@
+{
+  "name": "jagr.co",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "node ace serve --watch",
+    "build": "node ace build --production",
+    "start": "node server.js"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^5.3.7",
+    "@symfony/webpack-encore": "^1.6.1",
+    "adonis-preset-ts": "^2.1.0",
+    "autoprefixer": "^10.4.0",
+    "pino-pretty": "^7.1.0",
+    "postcss": "^8.3.11",
+    "postcss-loader": "^6.2.0",
+    "postcss-nested": "^5.0.6",
+    "tailwindcss": "^2.2.19",
+    "typescript": "~4.2",
+    "youch": "^2.2.2",
+    "youch-terminal": "^1.1.1"
+  },
+  "dependencies": {
+    "@adonisjs/auth": "^8.0.10",
+    "@adonisjs/core": "^5.4.0",
+    "@adonisjs/lucid": "^16.2.2",
+    "@adonisjs/repl": "^3.1.7",
+    "@adonisjs/session": "^6.1.2",
+    "@adonisjs/shield": "^7.0.7",
+    "@adonisjs/view": "^6.1.1",
+    "@tailwindcss/forms": "^0.3.4",
+    "luxon": "^2.0.2",
+    "pg": "^8.7.1",
+    "phc-argon2": "^1.1.2",
+    "proxy-addr": "^2.0.7",
+    "reflect-metadata": "^0.1.13",
+    "source-map-support": "^0.5.20"
+  }
+}

@@ -1,0 +1,33 @@
+@layout('layouts/auth')
+
+@section('content')
+<h1 class="text-2xl font-semibold">
+  Sign in to your account
+</h1>
+<p>
+  Need an account? <a href="{{ route('auth.signup') }}">Sign up</a>.
+</p>
+<form method="POST" action="{{ route('auth.signin') }}">
+  @if (flashMessages.has('errors.form'))
+    <div role="alert" class="bg-red-100 text-red-600 p-3 rounded border border-red-200">
+      {{ flashMessages.get('errors.form') }}
+    </div>
+  @endif
+
+  @!component('components/input', {
+    type: 'email',
+    name: 'email',
+    placeholder: 'Enter email',
+    errors: flashMessages.get('errors.email')
+  })
+
+  @!component('components/input', {
+    type: 'password',
+    name: 'password',
+    placeholder: 'Enter password',
+    errors: flashMessages.get('errors.password')
+  })
+  <button type="submit">Sign In</button>
+</form>
+
+@endsection

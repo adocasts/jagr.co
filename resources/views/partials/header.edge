@@ -1,0 +1,17 @@
+<div class="bg-gray-100 flex justify-between items-center px-6 py-3 mb-6">
+  <div></div>
+  <div class="flex items-center">
+    @if (auth.user)
+      <a href="{{ route('auth.signout') }}">
+        Sign Out
+      </a>
+    @else
+      <a href="{{ route('auth.signin') }}" class="mr-3">
+        Sign In
+      </a>
+      <a href="{{ route('auth.signup') }}">
+        Sign Up
+      </a>
+    @endif
+  </div>
+</div>
