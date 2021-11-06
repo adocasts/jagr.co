@@ -1,0 +1,134 @@
+@layout('layouts/studio')
+
+@section('content')
+
+  @set('action', route('studio.posts.store'))
+
+  @if(post?.id)
+    @set('action', route('studio.posts.update', { id: post.id}, { qs: { _method: 'PUT' }}))
+  @endif
+
+  <h1>Create New Post</h1>
+
+  <button type="button" onclick="saveAs({{ states.PUBLIC }})">Publish</button>
+  <button type="button" onclick="saveAs({{ states.DRAFT }})">Save As Draft</button>
+  <button type="button" onclick="saveAs({{ states.UNLISTED }})">Save As Unlisted</button>
+  <button type="button" onclick="saveAs({{ states.PRIVATE }})">Save As Private</button>
+
+  <form name="postForm" method="POST" action="{{ action }}">
+    <input type="hidden" name="timezone" value="" />
+    <input type="hidden" name="stateId" value="{{ post?.stateId ?? states.DRAFT }}" />
+
+    <div class="flex flex-wrap -mx-3">
+      <div class="w-full lg:w-2/3 lg:px-3">
+        @!component('components/input', {
+          label: 'Title',
+          name: 'title',
+          value: post?.title ?? flashMessages.get('title'),
+          errors: flashMessages.get('errors.title'),
+          required: true,
+        })
+
+        @!component('components/input', {
+          label: 'Slug',
+          name: 'slug',
+          value: post?.slug ?? flashMessages.get('slug') ?? '',
+          errors: flashMessages.get('errors.slug')
+        })
+
+        @!component('components/input', {
+          type: 'textarea',
+          label: 'Description',
+          name: 'description',
+          value: post?.description ?? flashMessages.get('description') ?? '',
+          errors: flashMessages.get('errors.description'),
+          rows: 3
+        })
+
+        @component('components/input', {
+          type: 'group',
+          label: 'Publish At'
+        })
+          @slot('input')
+            <div class="flex items-center">
+              @!component('components/input', {
+                type: 'date',
+                name: 'publishAtDate',
+                value: post?.publishAtDateString ?? flashMessages.get('date') ?? '',
+                errors: flashMessages.get('errors.date')
+              })
+    
+              @!component('components/input', {
+                type: 'time',
+                name: 'publishAtTime',
+                value: post?.publishAtTimeString ?? flashMessages.get('time') ?? '',
+                errors: flashMessages.get('errors.time')
+              })
+            </div>
+          @endslot
+        @endcomponent
+
+        <details class="mb-6">
+          <summary>Search Engine Optimization (SEO)</summary>
+
+          @!component('components/input', {
+            label: 'Page Title',
+            name: 'pageTitle',
+            value: post?.pageTitle ?? flashMessages.get('pageTitle') ?? '',
+            errors: flashMessages.get('errors.pageTitle')
+          })
+
+          @!component('components/input', {
+            type: 'textarea',
+            label: 'Meta Description',
+            name: 'metaDescription',
+            value: post?.metaDescription ?? flashMessages.get('metaDescription') ?? '',
+            errors: flashMessages.get('errors.metaDescription'),
+            rows: 3
+          })
+
+          @!component('components/input', {
+            label: 'Canonical',
+            name: 'canonical',
+            value: post?.canonical ?? flashMessages.get('canonical') ?? '',
+            errors: flashMessages.get('errors.canonical')
+          })
+        </details>
+
+        @!component('components/input', {
+          type: 'textarea',
+          label: 'Body',
+          name: 'body',
+          value: post?.body ?? flashMessages.get('body') ?? '',
+          errors: flashMessages.get('errors.body'),
+          rows: 3
+        })
+      </div>
+
+      <div class="w-full lg:w-1/3 lg:px-3">
+        @!component('components/input', {
+          label: 'Video URL',
+          name: 'videoUrl',
+          value: post?.videoUrl ?? flashMessages.get('videoUrl') ?? '',
+          errors: flashMessages.get('errors.videoUrl')
+        })
+      </div>
+    </div>
+
+    <button type="submit">Save Post</button>
+  </form>
+
+@endsection
+
+@section('scripts')
+
+<script>
+  document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  function saveAs(stateId) {
+    document.forms.postForm.stateId.value = stateId;
+    document.forms.postForm.submit();
+  }
+</script>
+
+@endsection

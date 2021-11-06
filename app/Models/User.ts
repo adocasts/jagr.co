@@ -47,6 +47,9 @@ export default class User extends BaseModel {
   @hasOne(() => Profile)
   public profile: HasOne<typeof Profile>
 
-  @manyToMany(() => Post)
+  @manyToMany(() => Post, {
+    pivotTable: 'author_posts',
+    pivotColumns: ['author_type_id']
+  })
   public posts: ManyToMany<typeof Post>
 }

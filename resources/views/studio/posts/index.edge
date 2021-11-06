@@ -1,0 +1,42 @@
+@layout('layouts/studio')
+
+@section('content')
+
+  <h1>Working</h1>
+
+  <a href="{{ route('studio.posts.create') }}">Create a new post</a>
+
+  <table class="w-full">
+    <thead>
+      <tr>
+        <th align="left">Title</th>
+        <td></td>
+      </tr>
+    </thead>
+    <body>
+      @each (post in posts.rows)
+        <tr>
+          <td>
+            <div class="flex flex-col">
+              <a href="{{ route('studio.posts.edit', { id: post.id }) }}">
+                {{ post.title }}
+              </a>
+              <a href="" class="text-xs">
+                {{ post.slug }}
+              </a>
+            </div>
+          </td>
+          <td class="flex items-center">
+            <a href="{{ route('studio.posts.edit', { id: post.id }) }}" class="pr-3">
+              Edit
+            </a>
+            <form method="POST" action="{{ route('studio.posts.destroy', { id: post.id }, { qs: { _method: 'DELETE' }}) }}">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      @endeach
+    </body>
+  </table>
+
+@endsection

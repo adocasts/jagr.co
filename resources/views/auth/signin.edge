@@ -1,12 +1,14 @@
 @layout('layouts/auth')
 
 @section('content')
-<h1 class="text-2xl font-semibold">
-  Sign in to your account
-</h1>
-<p>
-  Need an account? <a href="{{ route('auth.signup') }}">Sign up</a>.
-</p>
+<div class="mb-6">
+  <h1 class="text-2xl font-semibold">
+    Sign in to your account
+  </h1>
+  <p>
+    Need an account? <a href="{{ route('auth.signup') }}">Sign up</a>.
+  </p>
+</div>
 <form method="POST" action="{{ route('auth.signin') }}">
   @if (flashMessages.has('errors.form'))
     <div role="alert" class="bg-red-100 text-red-600 p-3 rounded border border-red-200">
@@ -15,17 +17,23 @@
   @endif
 
   @!component('components/input', {
-    type: 'email',
+    label: 'Username / Email',
+    type: 'text',
     name: 'email',
-    placeholder: 'Enter email',
-    errors: flashMessages.get('errors.email')
+    placeholder: 'Enter username or email',
+    value: flashMessages.get('email') ?? '',
+    autocomplete: 'email',
+    required: true,
   })
 
   @!component('components/input', {
+    label: 'Password',
     type: 'password',
     name: 'password',
     placeholder: 'Enter password',
-    errors: flashMessages.get('errors.password')
+    value: '',
+    autocomplete: 'new-password',
+    required: true
   })
   <button type="submit">Sign In</button>
 </form>

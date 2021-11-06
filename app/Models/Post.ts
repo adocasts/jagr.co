@@ -1,9 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Topic from './Topic'
 import Asset from './Asset'
 import PostSnapshot from './PostSnapshot'
 import User from './User'
+import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import State from 'App/Enums/States'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -13,6 +15,10 @@ export default class Post extends BaseModel {
   public title: string
 
   @column()
+  @slugify({
+    strategy: 'dbIncrement',
+    fields: ['title']
+  })
   public slug: string
 
   @column()
@@ -46,7 +52,7 @@ export default class Post extends BaseModel {
   public viewCountUnique: number | null
 
   @column()
-  public stateId: number | null
+  public stateId: State
 
   @column()
   public timezone: string | null
@@ -78,6 +84,19 @@ export default class Post extends BaseModel {
   @hasMany(() => PostSnapshot)
   public snapshots: HasMany<typeof PostSnapshot>
 
-  @manyToMany(() => User)
+  @manyToMany(() => User, {
+    pivotTable: 'author_posts',
+    pivotColumns: ['author_type_id']
+  })
   public authors: ManyToMany<typeof User>
+
+  @computed()
+  public get publishAtDateString() {
+    return this.publishAt?.toFormat('yyyy-MM-dd')
+  }
+
+  @computed()
+  public get publishAtTimeString() {
+    return this.publishAt?.toFormat('HH:mm')
+  }
 }

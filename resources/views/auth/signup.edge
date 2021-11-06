@@ -1,31 +1,48 @@
 @layout('layouts/auth')
 
 @section('content')
-  <h1 class="text-2xl font-semibold">
-    Create your free account
-  </h1>
-  <p>
-    Already have an account? <a href="{{ route('auth.signin') }}">Sign in</a>.
-  </p>
+  <div class="mb-6">
+    <h1 class="text-2xl font-semibold">
+      Create your free account
+    </h1>
+    <p>
+      Already have an account? <a href="{{ route('auth.signin') }}">Sign in</a>.
+    </p>
+  </div>
   <form method="POST" action="{{ route('auth.signup') }}">
     @!component('components/input', {
+      label: 'Username',
       name: 'username',
       placeholder: 'Enter username',
-      errors: flashMessages.get('errors.username')
+      value: flashMessages.get('username') ?? '',
+      errors: flashMessages.get('errors.username'),
+      autocomplete: 'username',
+      hint: 'Minimum of 3 characters containing only letters, numbers, _, or -',
+      min: 3,
+      required: true,
     })
     
     @!component('components/input', {
+      label: 'Email',
       type: 'email',
       name: 'email',
       placeholder: 'Enter email',
-      errors: flashMessages.get('errors.email')
+      value: flashMessages.get('email') ?? '',
+      errors: flashMessages.get('errors.email'),
+      autocomplete: 'email',
+      required: true,
     })
 
     @!component('components/input', {
+      label: 'Password',
       type: 'password',
       name: 'password',
       placeholder: 'Enter password',
-      errors: flashMessages.get('errors.password')
+      value: '',
+      errors: flashMessages.get('errors.password'),
+      autocomplete: 'new-password',
+      required: true,
+      min: 8
     })
     <button type="submit">Sign Up</button>
   </form>
