@@ -10,6 +10,11 @@ export default class AppProvider {
 
   public async boot () {
     // IoC container is ready
+    const View = this.app.container.use('Adonis/Core/View')
+
+    View.global('appUrl', (path) => {
+      return 'http://localhost:3333' + path
+    })
   }
 
   public async ready () {

@@ -1,42 +1,77 @@
 @layout('layouts/studio')
 
+@section('heading')
+  @component('components/studio_heading', { heading: 'Posts' })
+    @component('components/button', { href: route('studio.posts.create') })
+      Create New Post
+    @endcomponent
+  @endcomponent
+@endsection
+
 @section('content')
 
-  <h1>Working</h1>
-
-  <a href="{{ route('studio.posts.create') }}">Create a new post</a>
-
-  <table class="w-full">
-    <thead>
-      <tr>
-        <th align="left">Title</th>
-        <td></td>
-      </tr>
-    </thead>
-    <body>
-      @each (post in posts.rows)
-        <tr>
-          <td>
-            <div class="flex flex-col">
-              <a href="{{ route('studio.posts.edit', { id: post.id }) }}">
-                {{ post.title }}
-              </a>
-              <a href="" class="text-xs">
-                {{ post.slug }}
-              </a>
-            </div>
-          </td>
-          <td class="flex items-center">
-            <a href="{{ route('studio.posts.edit', { id: post.id }) }}" class="pr-3">
+  <div class="-m-6">
+    @component('components/table', { 
+      data: posts, 
+      columns: [
+        { name: 'Title', field: 'title' },
+        { name: 'Author', field: 'author' },
+        { name: 'Status', field: 'status' },
+        { name: 'Type', field: 'type' },
+        { name: 'Views', field: 'view_count' },
+        { name: 'Publish Date', field: 'publish_at' },
+        { name: '', field: '_actions' }
+      ] 
+    })
+      @slot('tableData', scope)
+        @if (scope.column.field === 'title')
+          <div class="text-sm leading-5 font-medium">
+            <a href="{{ route('studio.posts.edit', { id: scope.row.id }) }}" class="hover:underline text-gray-950">
+              {{ scope.row.title }}
+            </a>
+          </div>
+          <div class="text-sm leading-5">
+            <a href="/posts/{{ scope.row.slug }}" target="_blank" class="hover:underline text-gray-800">
+              {{ scope.row.slug }}
+            </a>
+          </div>
+        @elseif (scope.column.field === 'author')
+          @if (scope.row.authors)
+            @each (author in scope.row.authors)
+              {{ author.username }}
+            @endeach
+          @endif
+        @elseif (scope.column.field === 'status')
+          @component('components/badge', { stateId: scope.row.stateId })
+            {{ stateDescriptions[scope.row.stateId] }}
+          @endcomponent
+          <div class="whitespace-nowrap text-xs text-gray-800 pt-1">
+            {{--  {{ post.history.length }} versions  --}}
+          </div>
+        @elseif (scope.column.field === 'type')
+          {{ postTypeDescriptions[scope.row.postTypeId] }}
+        @elseif (scope.column.field === 'publish_at')
+          {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
+          <div class="text-xs text-gray-800">
+            {{ formatDte(post.publish_at) }}
+          </div> --}}
+        @elseif (scope.column.field === '_actions')
+          <div class="flex">
+            <a href="{{ route('studio.posts.edit', { id: scope.row.id }) }}" class="text-gray-950 hover:text-brand-800 mr-3">
               Edit
             </a>
-            <form method="POST" action="{{ route('studio.posts.destroy', { id: post.id }, { qs: { _method: 'DELETE' }}) }}">
-              <button type="submit">Delete</button>
+            <form>
+            <form method="POST" action="{{ route('studio.posts.destroy', { id: scope.row.id }, { qs: { _method: 'DELETE' }}) }}">
+              <button type="submit" class="text-red-800 hover:text-red-900">
+                Delete
+              </button>
             </form>
-          </td>
-        </tr>
-      @endeach
-    </body>
-  </table>
-
+          </div>
+        @else
+          {{ scope.row[scope.column.field] }}
+        @endif
+      @endslot
+    @endcomponent
+  </div>
+  
 @endsection

@@ -1,5 +1,30 @@
 @layout('layouts/studio')
 
+@section('heading')
+  @component('components/studio_heading', { 
+    heading: post?.id ? 'Update Post' : 'Create New Posts',
+    wrapSlot: true
+  })
+    <div class="space-x-3">
+      @component('components/button', { onClick: `saveAs(${states.PUBLIC})`, id: 'btnPublish' })
+        Publish
+      @endcomponent
+
+      @component('components/button', { onClick: `saveAs(${states.DRAFT})`, variant: 'baseSecondary' })
+        Save As Draft
+      @endcomponent
+
+      @component('components/button', { onClick: `saveAs(${states.UNLISTED})`, variant: 'baseSecondary' })
+        Save As Unlisted
+      @endcomponent
+
+      @component('components/button', { onClick: `saveAs(${states.PRIVATE})`, variant: 'baseSecondary' })
+        Save As Private
+      @endcomponent
+    </div>
+  @endcomponent
+@endsection
+
 @section('content')
 
   @set('action', route('studio.posts.store'))
@@ -8,14 +33,8 @@
     @set('action', route('studio.posts.update', { id: post.id}, { qs: { _method: 'PUT' }}))
   @endif
 
-  <h1>Create New Post</h1>
-
-  <button type="button" onclick="saveAs({{ states.PUBLIC }})">Publish</button>
-  <button type="button" onclick="saveAs({{ states.DRAFT }})">Save As Draft</button>
-  <button type="button" onclick="saveAs({{ states.UNLISTED }})">Save As Unlisted</button>
-  <button type="button" onclick="saveAs({{ states.PRIVATE }})">Save As Private</button>
-
   <form name="postForm" method="POST" action="{{ action }}">
+    {{ csrfField() }}
     <input type="hidden" name="timezone" value="" />
     <input type="hidden" name="stateId" value="{{ post?.stateId ?? states.DRAFT }}" />
 
@@ -27,6 +46,7 @@
           value: post?.title ?? flashMessages.get('title'),
           errors: flashMessages.get('errors.title'),
           required: true,
+          max: 100
         })
 
         @!component('components/input', {
@@ -95,14 +115,19 @@
           })
         </details>
 
-        @!component('components/input', {
-          type: 'textarea',
+        @component('components/input', {
+          type: 'group',
           label: 'Body',
           name: 'body',
           value: post?.body ?? flashMessages.get('body') ?? '',
-          errors: flashMessages.get('errors.body'),
-          rows: 3
+          errors: flashMessages.get('errors.body')
         })
+          @slot('input')
+            <div class="-mx-8">
+              <div id="editorjs"></div>
+            </div>
+          @endslot
+        @endcomponent
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3">
@@ -114,18 +139,19 @@
         })
       </div>
     </div>
-
-    <button type="submit">Save Post</button>
   </form>
 
 @endsection
 
 @section('scripts')
 
+@entryPointScripts('studio.posts.editor')
+
 <script>
   document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   function saveAs(stateId) {
+    console.log('here')
     document.forms.postForm.stateId.value = stateId;
     document.forms.postForm.submit();
   }

@@ -7,7 +7,7 @@ export default class PostHistories extends BaseSchema {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
       table.integer('post_id').unsigned().references('id').inTable('posts').notNullable()
-      table.integer('revision')
+      table.integer('revision').notNullable()
       table.timestamp('revision_date').notNullable()
       table.integer('revised_by').unsigned().notNullable()
       table.string('title', 100).notNullable()

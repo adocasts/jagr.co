@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
 import { schema as Schema, rules } from '@ioc:Adonis/Core/Validator'
+import AuthAttemptService from 'App/Services/AuthAttemptServices'
 
 export default class AuthController {
   public async signupShow({ view }: HttpContextContract) {
@@ -30,12 +31,21 @@ export default class AuthController {
   }
 
   public async signin({ request, response, auth, session }: HttpContextContract) {
-    const { email, password } = request.only(['email', 'password'])
+    const { uid, password } = request.only(['uid', 'password'])
+
+    const loginAttemptsRemaining = await AuthAttemptService.getRemainingAttempts(uid)
+    if (loginAttemptsRemaining <= 0) {
+      session.flash('error', 'Your account has been locked due to repeated bad login attempts. Please reset your password.')
+      return response.redirect('/forgot-password')
+    }
 
     try {
-      await auth.attempt(email, password)
+      await auth.attempt(uid, password)
+      await AuthAttemptService.deleteBadAttempts(uid)
     } catch (error) {
-      session.flash('errors', { form: 'The provided email or password is incorrect' })
+      await AuthAttemptService.recordLoginAttempt(uid)
+
+      session.flash('errors', { form: 'The provided username/email or password is incorrect' })
       return response.redirect().back()
     }
 

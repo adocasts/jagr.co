@@ -30,11 +30,20 @@ Route.get('/signin',  'AuthController.signinShow').as('auth.signin.show')
 Route.post('/signin', 'AuthController.signin').as('auth.signin')
 Route.get('/signout', 'AuthController.signout').as('auth.signout')
 
+Route.get('/:provider/redirect', 'AuthSocialController.redirect').as('auth.social.redirect');
+Route.get('/:provider/callback', 'AuthSocialController.callback').as('auth.social.callback');
+
+Route.get('/forgot-password',       'PasswordResetController.forgotPassword').as('auth.password.forgot');
+Route.get('/forgot-password/sent',  'PasswordResetController.forgotPasswordSent').as('auth.password.forgot.sent');
+Route.post('/forgot-password',      'PasswordResetController.forgotPasswordSend').as('auth.password.forgot.send')//.middleware(['honeypot']);
+Route.get('/reset-password/:email', 'PasswordResetController.resetPassword').as('auth.password.reset');
+Route.post('/reset-password',       'PasswordResetController.resetPasswordStore').as('auth.password.reset.store');
+
 Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('/:page?',    'PostsController.index').as('index').where('page', Route.matchers.number())
+    Route.get('/',    'PostsController.index').as('index')
     Route.get('/create',    'PostsController.create').as('create')
     Route.post('/',         'PostsController.store').as('store')
     Route.get('/:id/edit',  'PostsController.edit').as('edit')

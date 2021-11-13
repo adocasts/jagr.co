@@ -29,4 +29,15 @@ export default Env.rules({
 	PG_USER: Env.schema.string(),
 	PG_PASSWORD: Env.schema.string.optional(),
 	PG_DB_NAME: Env.schema.string(),
+
+	GOOGLE_CLIENT_ID: Env.schema.string(),
+	GOOGLE_CLIENT_SECRET: Env.schema.string(),
+
+	GITHUB_CLIENT_ID: Env.schema.string(),
+	GITHUB_CLIENT_SECRET: Env.schema.string(),
+
+	SMTP_HOST: Env.schema.string({ format: 'host' }),
+	SMTP_PORT: Env.schema.number(),
+	SMTP_USERNAME: Env.schema.string(),
+	SMTP_PASSWORD: Env.schema.string(),
 })

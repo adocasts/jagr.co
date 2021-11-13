@@ -1,15 +1,27 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import State from 'App/Enums/States'
+import State, { StateDesc } from 'App/Enums/States'
 import Post from 'App/Models/Post'
 import PostStoreValidator from 'App/Validators/PostStoreValidator'
+import Route from '@ioc:Adonis/Core/Route'
 import { DateTime } from 'luxon'
+import PostType, { PostTypeDesc } from 'App/Enums/PostType'
 
 export default class PostsController {
-  public async index({ view, auth, params }: HttpContextContract) {
-    const page = params.page ?? 1
-    const posts = await auth.user!.related('posts').query().paginate(page, 20)
+  public async index({ request, view, auth }: HttpContextContract) {
+    const page = request.input('page', 1)
+    const posts = await auth.user!.related('posts').query()
+      .preload('authors')
+      .paginate(page, 20)
 
-    return view.render('studio/posts/index', { posts })
+    posts.baseUrl(Route.makeUrl('studio.posts.index'))
+
+    const states = State;
+    const stateDescriptions = StateDesc;
+
+    const postTypes = PostType;
+    const postTypeDescriptions = PostTypeDesc;
+
+    return view.render('studio/posts/index', { posts, states, stateDescriptions, postTypes, postTypeDescriptions })
   }
 
   public async create({ view }: HttpContextContract) {
@@ -18,11 +30,21 @@ export default class PostsController {
   }
 
   public async store ({ request, response, auth }: HttpContextContract) {
-    const data = await request.validate(PostStoreValidator)
+    const { publishAtDate, publishAtTime, ...data } = await request.validate(PostStoreValidator)
 
     if (!data.stateId) data.stateId = State.PUBLIC
 
-    const post = await Post.create(data)
+    let publishAt = DateTime.now()
+
+    if (publishAtDate) {
+      publishAt = publishAt.set({ year: publishAtDate.year, month: publishAtDate.month, day: publishAtDate.day })
+    }
+
+    if (publishAtTime) {
+      publishAt = publishAt.set({ hour: publishAtTime.hour, minute: publishAtTime.minute })
+    }
+
+    const post = await Post.create({ ...data, publishAt })
 
     await auth.user!.related('posts').attach([post.id])
 

@@ -5,6 +5,7 @@ import Role from './Role'
 import Topic from './Topic'
 import Profile from './Profile'
 import Post from './Post'
+import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -14,6 +15,10 @@ export default class User extends BaseModel {
   public roleId: number
 
   @column()
+  @slugify({
+    strategy: 'dbIncrement',
+    fields: ['username']
+  })
   public username: string
 
   @column()
@@ -24,6 +29,18 @@ export default class User extends BaseModel {
 
   @column()
   public rememberMeToken?: string
+
+  @column()
+  avatarUrl: string
+
+  @column()
+  githubAccessToken: string
+
+  @column()
+  googleAccessToken: string
+
+  @column()
+  twitterAccessToken: string
 
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime

@@ -7,6 +7,11 @@
       "js": [
         "http://localhost:8080/assets/app.js"
       ]
+    },
+    "studio.posts.editor": {
+      "js": [
+        "http://localhost:8080/assets/studio.posts.editor.js"
+      ]
     }
   }
 }
