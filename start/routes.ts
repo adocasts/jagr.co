@@ -24,6 +24,9 @@ Route.get('/', async ({ view }) => {
   return view.render('welcome')
 })
 
+Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
+// Route.get('/img/*', 'AssetsController.show').where('path', /.*/).as('img');
+
 Route.get('/signup',  'AuthController.signupShow').as('auth.signup.show')
 Route.post('/signup', 'AuthController.signup').as('auth.signup')
 Route.get('/signin',  'AuthController.signinShow').as('auth.signin.show')
@@ -50,6 +53,20 @@ Route.group(() => {
     Route.put('/:id',       'PostsController.update').as('update')
     Route.delete('/:id',    'PostsController.destroy').as('destroy')
 
-  }).prefix('/posts').as('posts')
+  }).prefix('/posts').as('posts').middleware(['role:admin'])
 
-}).namespace('App/Controllers/Http/Studio').prefix('studio').as('studio')
+  Route.group(() => {
+
+    Route.get('/', 'SettingsController.index').as('index')
+
+  }).prefix('/settings').as('settings')
+
+}).namespace('App/Controllers/Http/Studio').prefix('studio').as('studio').middleware(['auth'])
+
+Route.group(() => {
+
+  Route.post('/studio/assets', 'AssetsController.store').as('studio.assets.store')
+  Route.delete('/studio/assets/:id', 'AssetsController.destroy').as('studio.assets.destroy')
+  Route.post('/studio/editor/assets', 'AssetsController.store').as('studio.editor.asset')//.middleware(['admin'])
+
+}).prefix('/api').as('api').middleware(['auth'])

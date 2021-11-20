@@ -2,14 +2,14 @@
 @set('Nav', (name, href, show) => ({ name, href, show, active: activeUrl === href }))
 
 @set('studioNav', [
-  Nav('Dashboard', '#', true),
-  Nav('Posts', route('studio.posts.index'), true),
-  Nav('Series', '#', true),
-  Nav('Topics', '#', true),
-  Nav('Comments', '#', true),
+  Nav('Dashboard', '#', settings.permissions.studio.canAccessDashboard),
+  Nav('Posts', route('studio.posts.index'), settings.permissions.studio.canAccessPosts),
+  Nav('Series', '#', settings.permissions.studio.canAccessSeries),
+  Nav('Topics', '#', settings.permissions.studio.canAccessTopics),
+  Nav('Comments', '#', settings.permissions.studio.canAccessComments),
   Nav('Appearance', '#', false),
-  Nav('Settings', '#', true)
-])
+  Nav('Settings', '#', settings.permissions.studio.canAccessSettings)
+].filter(r => r.show))
 
 <nav id="studioNav" class="py-2 bg-brand-950 overflow-hidden w-full px-2 sm:px-4 lg:px-8 shadow-xl">
   <div class="-mx-2">

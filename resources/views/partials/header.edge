@@ -1,11 +1,11 @@
 @set('studioRoutes', [
-  { name: 'Dashboard', href: '#' },
-  { name: 'Posts', href: route('studio.posts.index') },
-  { name: 'Series', href: '#' },
-  { name: 'Topics', href: '#' },
-  { name: 'Comments', href: '#' },
-  { name: 'Settings', href: '#' },
-])
+  { name: 'Dashboard', href: '#', show: settings.permissions.studio.canAccessDashboard },
+  { name: 'Posts', href: route('studio.posts.index'), show: settings.permissions.studio.canAccessPosts },
+  { name: 'Series', href: '#', show: settings.permissions.studio.canAccessSeries },
+  { name: 'Topics', href: '#', show: settings.permissions.studio.canAccessTopics },
+  { name: 'Comments', href: '#', show: settings.permissions.studio.canAccessComments },
+  { name: 'Settings', href: route('studio.settings.index'), show: settings.permissions.studio.canAccessSettings },
+].filter(r => r.show))
 
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="relative bg-gradient-to-r from-brand-950 to-brand-900">
@@ -222,7 +222,7 @@
       @else
         @component('components/dropdown')
           @slot('trigger')
-            <img class="rounded-full w-8 h-8" src="https://i.picsum.photos/id/1084/200/200.jpg?hmac=xQYOwJzrnLV26FtETQNbcf3y4H2IUqFTWagLcKPfrbA" />
+            <img class="rounded-full w-8 h-8" src="{{ auth.user.avatar }}" />
           @endslot
 
           @component('components/dropdown_item', { href: '#' })

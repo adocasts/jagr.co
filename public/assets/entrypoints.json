@@ -8,6 +8,11 @@
         "http://localhost:8080/assets/app.js"
       ]
     },
+    "file_manager": {
+      "js": [
+        "http://localhost:8080/assets/file_manager.js"
+      ]
+    },
     "studio.posts.editor": {
       "js": [
         "http://localhost:8080/assets/studio.posts.editor.js"

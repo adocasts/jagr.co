@@ -54,7 +54,7 @@ export default class PasswordResetController {
 
   public async resetPasswordStore({ request, response, session, auth }: HttpContextContract) {
     try {
-      const schema = await Schema.create({
+      const schema = Schema.create({
         email: Schema.string({ trim: true }, [rules.exists({ table: 'users', column: 'email' })]),
         password: Schema.string({ trim: true }, [rules.minLength(8)]),
       })

@@ -3,10 +3,12 @@ import State, { StateDesc } from 'App/Enums/States'
 import Post from 'App/Models/Post'
 import PostStoreValidator from 'App/Validators/PostStoreValidator'
 import Route from '@ioc:Adonis/Core/Route'
-import { DateTime } from 'luxon'
 import PostType, { PostTypeDesc } from 'App/Enums/PostType'
+import DateService from 'App/Services/DateService'
+import PostService from 'App/Services/PostService'
 
 export default class PostsController {
+
   public async index({ request, view, auth }: HttpContextContract) {
     const page = request.input('page', 1)
     const posts = await auth.user!.related('posts').query()
@@ -30,23 +32,17 @@ export default class PostsController {
   }
 
   public async store ({ request, response, auth }: HttpContextContract) {
-    const { publishAtDate, publishAtTime, ...data } = await request.validate(PostStoreValidator)
+    const { publishAtDate, publishAtTime, assetIds, ...data } = await request.validate(PostStoreValidator)
 
     if (!data.stateId) data.stateId = State.PUBLIC
 
-    let publishAt = DateTime.now()
-
-    if (publishAtDate) {
-      publishAt = publishAt.set({ year: publishAtDate.year, month: publishAtDate.month, day: publishAtDate.day })
-    }
-
-    if (publishAtTime) {
-      publishAt = publishAt.set({ hour: publishAtTime.hour, minute: publishAtTime.minute })
-    }
+    const publishAt = DateService.getPublishAtDateTime(publishAtDate, publishAtTime)
 
     const post = await Post.create({ ...data, publishAt })
 
     await auth.user!.related('posts').attach([post.id])
+    
+    await PostService.syncAssets(post, assetIds)
 
     return response.redirect().toRoute('studio.posts.index')
   }
@@ -56,7 +52,10 @@ export default class PostsController {
 
   public async edit ({ view, params }: HttpContextContract) {
     const states = State
-    const post = await Post.findOrFail(params.id)
+    const post = await Post.query()
+      .where('id', params.id)
+      .preload('assets', query => query.orderBy('sort_order'))
+      .firstOrFail()
 
     return view.render('studio/posts/createOrEdit', { states, post })
   }
@@ -64,21 +63,15 @@ export default class PostsController {
   public async update ({ request, response, params }: HttpContextContract) {
     const post = await Post.findOrFail(params.id)
 
-    const { publishAtDate, publishAtTime, ...data } = await request.validate(PostStoreValidator)
+    const { publishAtDate, publishAtTime, assetIds, ...data } = await request.validate(PostStoreValidator)
 
-    let publishAt = DateTime.now()
-
-    if (publishAtDate) {
-      publishAt = publishAt.set({ year: publishAtDate.year, month: publishAtDate.month, day: publishAtDate.day })
-    }
-
-    if (publishAtTime) {
-      publishAt = publishAt.set({ hour: publishAtTime.hour, minute: publishAtTime.minute })
-    }
+    const publishAt = DateService.getPublishAtDateTime(publishAtDate, publishAtTime)
 
     post.merge({ ...data, publishAt })
 
     await post.save()
+
+    await PostService.syncAssets(post, assetIds)
 
     return response.redirect().toRoute('studio.posts.index')
   }
@@ -87,6 +80,8 @@ export default class PostsController {
     const post = await Post.findOrFail(params.id)
 
     await post.related('authors').detach()
+
+    await PostService.destroyAssets(post)
 
     await post.delete()
 

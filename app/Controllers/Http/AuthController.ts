@@ -9,8 +9,8 @@ export default class AuthController {
   }
 
   public async signup({ request, response, auth, session }: HttpContextContract) {
-    const schema = await Schema.create({
-      username: Schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'username' })]),
+    const schema = Schema.create({
+      username: Schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'username', caseInsensitive: true })]),
       email: Schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'email' })]),
       password: Schema.string({ trim: true }, [rules.minLength(8)]),
     })
@@ -31,7 +31,12 @@ export default class AuthController {
   }
 
   public async signin({ request, response, auth, session }: HttpContextContract) {
-    const { uid, password } = request.only(['uid', 'password'])
+    const schema = Schema.create({
+      uid: Schema.string(),
+      password: Schema.string()
+    })
+
+    const { uid, password } = await request.validate({ schema })
 
     const loginAttemptsRemaining = await AuthAttemptService.getRemainingAttempts(uid)
     if (loginAttemptsRemaining <= 0) {

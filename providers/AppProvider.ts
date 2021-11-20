@@ -1,4 +1,5 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
+import AssetService from 'App/Services/AssetService'
 
 export default class AppProvider {
   constructor (protected app: ApplicationContract) {
@@ -15,6 +16,8 @@ export default class AppProvider {
     View.global('appUrl', (path) => {
       return 'http://localhost:3333' + path
     })
+
+    View.global('img', AssetService.getAssetUrl)
   }
 
   public async ready () {

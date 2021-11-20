@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Post from './Post'
+import AssetService from 'App/Services/AssetService'
 
 export default class Asset extends BaseModel {
   @column({ isPrimary: true })
@@ -26,6 +27,11 @@ export default class Asset extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get assetUrl() {
+    return AssetService.getAssetUrl(this.filename)
+  }
 
   @manyToMany(() => Post, {
     pivotTable: 'asset_posts',

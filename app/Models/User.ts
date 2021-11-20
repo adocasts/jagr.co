@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, belongsTo, BelongsTo, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, BaseModel, belongsTo, BelongsTo, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany, computed } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Topic from './Topic'
 import Profile from './Profile'
 import Post from './Post'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import gravatar from 'gravatar'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -47,6 +48,13 @@ export default class User extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get avatar() {
+    if (this.avatarUrl) return this.avatarUrl
+
+    return gravatar.url(this.email, { s: '40' })
+  }
 
   @beforeSave()
   public static async hashPassword (user: User) {

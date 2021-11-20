@@ -135,7 +135,7 @@ const bodyParserConfig: BodyParserConfig = {
     | projects/:id/file
     | ```
     */
-    processManually: [],
+    processManually: ['/api/studio/assets', '/api/studio/editor/assets'],
 
     /*
     |--------------------------------------------------------------------------

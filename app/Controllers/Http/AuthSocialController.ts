@@ -1,7 +1,7 @@
 import { inject } from '@adonisjs/fold';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User';
-import AuthSocialService from 'App/Services/AuthSocialService';
+import AuthSocialService from 'App/Services/Http/AuthSocialService';
 
 @inject()
 export default class AuthSocialController {
@@ -12,7 +12,6 @@ export default class AuthSocialController {
   }
 
   public async callback ({ response, auth, params }: HttpContextContract) {
-    console.log({ params })
     const { isSuccess, user } = await this.authSocialService.getUser(params.provider);
 
     if (!isSuccess) {

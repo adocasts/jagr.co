@@ -28,7 +28,8 @@
     "@adonisjs/auth",
     "@adonisjs/lucid-slugify",
     "@adonisjs/ally",
-    "@adonisjs/mail"
+    "@adonisjs/mail",
+    "@adonisjs/redis"
   ],
   "metaFiles": [
     {

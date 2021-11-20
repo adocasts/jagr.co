@@ -40,49 +40,55 @@
 
     <div class="flex flex-wrap -mx-3">
       <div class="w-full lg:w-2/3 lg:px-3">
-        @!component('components/input', {
+        @!component('components/input_alt', {
           label: 'Title',
           name: 'title',
+          placeholder: 'Enter a concise & descriptive title',
           value: post?.title ?? flashMessages.get('title'),
           errors: flashMessages.get('errors.title'),
           required: true,
-          max: 100
+          max: 100,
+          title: true
         })
 
-        @!component('components/input', {
+        @!component('components/input_alt', {
           label: 'Slug',
           name: 'slug',
+          placeholder: 'Enter a unique url safe identifier',
           value: post?.slug ?? flashMessages.get('slug') ?? '',
           errors: flashMessages.get('errors.slug')
         })
 
-        @!component('components/input', {
+        @!component('components/input_alt', {
           type: 'textarea',
           label: 'Description',
           name: 'description',
+          placeholder: 'Enter a high-level overview of your post',
           value: post?.description ?? flashMessages.get('description') ?? '',
           errors: flashMessages.get('errors.description'),
           rows: 3
         })
 
-        @component('components/input', {
+        @component('components/input_alt', {
           type: 'group',
           label: 'Publish At'
         })
           @slot('input')
             <div class="flex items-center">
-              @!component('components/input', {
+              @!component('components/input_alt', {
                 type: 'date',
                 name: 'publishAtDate',
                 value: post?.publishAtDateString ?? flashMessages.get('date') ?? '',
-                errors: flashMessages.get('errors.date')
+                errors: flashMessages.get('errors.date'),
+                group: true
               })
     
-              @!component('components/input', {
+              @!component('components/input_alt', {
                 type: 'time',
                 name: 'publishAtTime',
                 value: post?.publishAtTimeString ?? flashMessages.get('time') ?? '',
-                errors: flashMessages.get('errors.time')
+                errors: flashMessages.get('errors.time'),
+                group: true
               })
             </div>
           @endslot
@@ -94,6 +100,7 @@
           @!component('components/input', {
             label: 'Page Title',
             name: 'pageTitle',
+            placeholder: 'Enter a concise SEO friendly page title. Defaults to the title when left empty',
             value: post?.pageTitle ?? flashMessages.get('pageTitle') ?? '',
             errors: flashMessages.get('errors.pageTitle')
           })
@@ -102,6 +109,7 @@
             type: 'textarea',
             label: 'Meta Description',
             name: 'metaDescription',
+            placeholder: 'Enter a SEO friendly description. Defaults to the summary when left empty.',
             value: post?.metaDescription ?? flashMessages.get('metaDescription') ?? '',
             errors: flashMessages.get('errors.metaDescription'),
             rows: 3
@@ -110,12 +118,13 @@
           @!component('components/input', {
             label: 'Canonical',
             name: 'canonical',
+            placeholder: 'Cross-posting from another site? Link the original here',
             value: post?.canonical ?? flashMessages.get('canonical') ?? '',
             errors: flashMessages.get('errors.canonical')
           })
         </details>
 
-        @component('components/input', {
+        @component('components/input_alt', {
           type: 'group',
           label: 'Body',
           name: 'body',
@@ -130,10 +139,22 @@
         @endcomponent
       </div>
 
-      <div class="w-full lg:w-1/3 lg:px-3">
-        @!component('components/input', {
+      <div class="w-full lg:w-1/3 lg:px-3 -my-3 p-6 shadow-inner bg-gray-50 rounded-lg">
+        @component('components/input_alt', { type: 'group', label: 'Images', help: 'Max image size of 2MB' })
+          @slot('input')
+            @!component('components/file_manager', { 
+              postId: post?.id,
+              assets: post?.assets,
+              placeholder: 'Select and image' 
+            })
+          @endslot
+        @endcomponent
+
+        @!component('components/input_alt', {
           label: 'Video URL',
           name: 'videoUrl',
+          help: 'Add a YouTube video url to feature a video',
+          placeholder: 'Example: https://www.youtube.com/watch?v=kfSGzUcddjU',
           value: post?.videoUrl ?? flashMessages.get('videoUrl') ?? '',
           errors: flashMessages.get('errors.videoUrl')
         })

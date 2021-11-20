@@ -1,4 +1,4 @@
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import { schema, rules, DbRowCheckOptions } from "@ioc:Adonis/Core/Validator";
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import PostType from 'App/Enums/PostType'
 import State from 'App/Enums/States'
@@ -7,28 +7,19 @@ export default class PostStoreValidator {
   constructor (protected ctx: HttpContextContract) {
   }
 
-	/*
-	 * Define schema to validate the "shape", "type", "formatting" and "integrity" of data.
-	 *
-	 * For example:
-	 * 1. The username must be of data type string. But then also, it should
-	 *    not contain special characters or numbers.
-	 *    ```
-	 *     schema.string({}, [ rules.alpha() ])
-	 *    ```
-	 *
-	 * 2. The email must be of data type string, formatted as a valid
-	 *    email. But also, not used by any other user.
-	 *    ```
-	 *     schema.string({}, [
-	 *       rules.email(),
-	 *       rules.unique({ table: 'users', column: 'email' }),
-	 *     ])
-	 *    ```
-	 */
+  get slugUniqueConstraint() {
+  	return !this.ctx.params.id ? {} : {
+			whereNot: { id: this.ctx.params.id }
+		}
+  }
+
   public schema = schema.create({
 		title: schema.string({}, [rules.maxLength(100)]),
-		slug: schema.string.optional({}, [rules.maxLength(255)]),
+		slug: schema.string.optional({}, [rules.maxLength(255), rules.unique({ 
+			table: 'posts', 
+			column: 'slug', 
+			...this.slugUniqueConstraint
+		})]),
 		pageTitle: schema.string.optional({}, [rules.maxLength(100)]),
 		description: schema.string.optional({}, [rules.maxLength(255)]),
 		metaDescription: schema.string.optional({}, [rules.maxLength(255)]),
@@ -39,7 +30,8 @@ export default class PostStoreValidator {
 		publishAtDate: schema.date.optional({ format: 'yyyy-MM-dd' }),
 		publishAtTime: schema.date.optional({ format: 'HH:mm' }),
 		postTypeId: schema.number.optional(),
-		stateId: schema.number.optional()
+		stateId: schema.number.optional(),
+		assetIds: schema.array.optional().members(schema.number([rules.exists({ table: 'assets', column: 'id' })]))
   })
 
 	/**
