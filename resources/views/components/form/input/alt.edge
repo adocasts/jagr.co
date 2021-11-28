@@ -1,6 +1,9 @@
 @set('internalValue', value === null || value === 'null' || typeof value === 'undefined' ? '' : value)
 @set('cloak', cloak ?? true)
 @set('rightGutter', error || type === 'group' || type === 'password' ? '' : 'pr-10')
+@set('dataAttributes', dataAttributes ?? {})
+
+@set('dataAttrs', Object.keys(dataAttributes).map(attr => `data-${dashCase(attr)}="${dataAttributes[attr]}"`).join(' '))
 
 <div 
   x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" 
@@ -40,6 +43,7 @@
         aria-describedby="{{ name }}-error"
         {{ max && `maxlength=${max}` }}
         {{ min && `minlength=${min}` }}
+        oninput="{{ onInput ?? undefined }}"
         @focus="focused = true"
         @blur="focused = false"
       ></textarea>
@@ -86,6 +90,8 @@
         style="{{ type === 'date' || type === 'time' ? 'line-height: 1;' : '' }} {{ style }}"
         {{ max ? `maxlength=${max}` : '' }}
         {{ min ? `minlength=${min}` : '' }}
+        {{{ dataAttrs }}}
+        oninput="{{ onInput ?? undefined }}"
         @focus="focused = true"
         @blur="focused = false">
     @endif
@@ -128,5 +134,9 @@
     <p class="mt-2 text-sm text-red-800" id="{{ name }}-error">
       {{ sentenceCase(errors.join(', ')) }}
     </p>
+  @endif
+
+  @if ($slots.after)
+    {{{ await $slots.after() }}}
   @endif
 </div>  

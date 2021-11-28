@@ -2,11 +2,11 @@ import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
 import { column, beforeSave, BaseModel, belongsTo, BelongsTo, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany, computed } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
-import Topic from './Topic'
 import Profile from './Profile'
 import Post from './Post'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import gravatar from 'gravatar'
+import Collection from './Collection'
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -51,7 +51,7 @@ export default class User extends BaseModel {
 
   @computed()
   public get avatar() {
-    if (this.avatarUrl) return this.avatarUrl
+    if (this.avatarUrl) return `/img/${this.avatarUrl}`
 
     return gravatar.url(this.email, { s: '40' })
   }
@@ -66,8 +66,10 @@ export default class User extends BaseModel {
   @belongsTo(() => Role)
   public role: BelongsTo<typeof Role>
 
-  @hasMany(() => Topic)
-  public topics: HasMany<typeof Topic>
+  @hasMany(() => Collection, {
+    foreignKey: 'ownerId'
+  })
+  public collections: HasMany<typeof Collection>
 
   @hasOne(() => Profile)
   public profile: HasOne<typeof Profile>

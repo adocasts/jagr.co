@@ -7,13 +7,13 @@
 
 @set('size', size ?? 'base')
 @set('sizes', {
-  base: 'px-5 py-6 sm:gap-8 sm:p-8',
+  base: 'px-3 py-4 sm:gap-8 sm:p-6',
   sm: 'px-3 py-2 sm:pag-3 sm:p-4'
 })
 
 <div x-data="{ isOpen: false }" class="relative" @click.away="isOpen = false">
   <!-- Item active: "text-gray-950", Item inactive: "text-gray-900" -->
-  <button @click="isOpen = !isOpen" type="button" class="text-brand-200 group rounded-md inline-flex items-center text-base font-medium hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 {{ triggerClassName }}" :class="{ 'text-gray-950': isOpen }" x-aria-expanded="isOpen ? 'true' : 'false'" {{{ triggerStyle && `style="${triggerStyle}"` }}}>
+  <button @click="isOpen = !isOpen" type="button" class="-my-2 p-2 text-brand-200 group rounded-md inline-flex items-center text-base font-medium hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-800 {{ triggerClassName }}" :class="{ 'text-gray-950': isOpen }" x-aria-expanded="isOpen ? 'true' : 'false'" {{{ triggerStyle && `style="${triggerStyle}"` }}}>
     @if ($slots.trigger)
       {{{ await $slots.trigger() }}}
     @else
@@ -25,7 +25,7 @@
 
       Item active: "text-gray-600", Item inactive: "text-gray-400"
     -->
-    <svg class="text-brand-200 ml-2 h-5 w-5 group-hover:text-white" :class="{ 'text-white': isOpen }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+    <svg class="text-brand-200 ml-1 mt-1 h-5 w-5 group-hover:text-white" :class="{ 'text-white': isOpen }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
       <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
     </svg>
   </button>

@@ -2,7 +2,7 @@
 @set('cloak', cloak ?? true)
 @set('rightGutter', error || type === 'group' || type === 'password' ? '' : 'pr-10')
 
-<div x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" class="pb-6 relative {{ groupClass ?? '' }}">
+<div x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" class="pb-4 relative {{ groupClass ?? '' }}">
   @if (label)
     <label for="{{ id ?? name }}" class="block text-sm font-medium text-gray-950">
       {{ label }}

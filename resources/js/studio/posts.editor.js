@@ -94,3 +94,55 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 })
+
+class VideoManager {
+  static #normalizeSource(source) {
+    return source
+      .replace('www.', '')
+      .replace('https://youtu.be/', 'https://youtube.com/watch?v=')
+      .replace('https://youtube-nocookie.com/embed/', 'https://youtube.com/watch?v=')
+      .replace('https://youtube.com/embed/', 'https://youtube.com/watch?v=')
+      .replace('https://player.vimeo.com/video', 'https://vimeo.com/')
+      .trim()
+      .split('&')[0]
+  }
+
+  static #isSourceValid(source) {
+    const videoId = source.replace('https://youtube.com/watch?v=', '')
+    return (source.startsWith('https://youtube.com/watch?v=') || source.startsWith('https://vimeo.com/')) && videoId.length
+  }
+
+  static getEmbed(source) {
+    var embedUrl = source
+      .replace('https://youtube.com/watch?v=', 'https://youtube.com/embed/')
+      .replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
+
+    return `
+      <iframe 
+        style="width: 100%;" 
+        src="${embedUrl}" 
+        frameborder="0" 
+        allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture"
+        allowfullscreen
+      ></iframe>`
+  }
+
+  static onInput(event) {
+    if (!event.target.dataset.previewSelector) {
+      console.warn('Video input is missing a preview selector')
+      return
+    }
+
+    const source = this.#normalizeSource(event.target.value)
+    const isValid = this.#isSourceValid(source)
+    
+    if (!isValid) return
+
+    const embed = this.getEmbed(source)
+    const previewSelector = event.target.dataset.previewSelector
+
+    document.querySelector(previewSelector).innerHTML = embed
+  }
+}
+
+window.videoManager = VideoManager

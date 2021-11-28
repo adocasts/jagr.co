@@ -109,7 +109,7 @@ module.exports = {
       fontFamily: {
         heading: ['var(--font-heading)', ...defaultTheme.fontFamily.sans],
         body: ['var(--font-body)', ...defaultTheme.fontFamily.sans],
-        sans: ['Mukta', ...defaultTheme.fontFamily.sans],
+        sans: ['Venti', ...defaultTheme.fontFamily.sans],
         mono: ['Dank Mono', ...defaultTheme.fontFamily.mono]
       },
       typography: (theme) => ({
@@ -147,7 +147,8 @@ module.exports = {
   },
   variants: {
     extend: {
-      display: ['focus-within']
+      display: ['focus-within'],
+      translate: ['group-hover']
     },
   },
   plugins: [

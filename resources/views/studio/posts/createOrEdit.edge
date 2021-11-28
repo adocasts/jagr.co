@@ -1,28 +1,28 @@
 @layout('layouts/studio')
 
 @section('heading')
-  @component('components/studio_heading', { 
+  @studio.heading({ 
     heading: post?.id ? 'Update Post' : 'Create New Posts',
     wrapSlot: true
   })
     <div class="space-x-3">
-      @component('components/button', { onClick: `saveAs(${states.PUBLIC})`, id: 'btnPublish' })
+      @button({ onClick: `saveAs(${states.PUBLIC})`, id: 'btnPublish' })
         Publish
-      @endcomponent
+      @end
 
-      @component('components/button', { onClick: `saveAs(${states.DRAFT})`, variant: 'baseSecondary' })
+      @button({ onClick: `saveAs(${states.DRAFT})`, variant: 'baseSecondary' })
         Save As Draft
-      @endcomponent
+      @end
 
-      @component('components/button', { onClick: `saveAs(${states.UNLISTED})`, variant: 'baseSecondary' })
+      @button({ onClick: `saveAs(${states.UNLISTED})`, variant: 'baseSecondary' })
         Save As Unlisted
-      @endcomponent
+      @end
 
-      @component('components/button', { onClick: `saveAs(${states.PRIVATE})`, variant: 'baseSecondary' })
+      @button({ onClick: `saveAs(${states.PRIVATE})`, variant: 'baseSecondary' })
         Save As Private
-      @endcomponent
+      @end
     </div>
-  @endcomponent
+  @end
 @endsection
 
 @section('content')
@@ -40,7 +40,7 @@
 
     <div class="flex flex-wrap -mx-3">
       <div class="w-full lg:w-2/3 lg:px-3">
-        @!component('components/input_alt', {
+        @!form.input.alt({
           label: 'Title',
           name: 'title',
           placeholder: 'Enter a concise & descriptive title',
@@ -51,7 +51,7 @@
           title: true
         })
 
-        @!component('components/input_alt', {
+        @!form.input.alt({
           label: 'Slug',
           name: 'slug',
           placeholder: 'Enter a unique url safe identifier',
@@ -59,7 +59,7 @@
           errors: flashMessages.get('errors.slug')
         })
 
-        @!component('components/input_alt', {
+        @!form.input.alt({
           type: 'textarea',
           label: 'Description',
           name: 'description',
@@ -69,13 +69,13 @@
           rows: 3
         })
 
-        @component('components/input_alt', {
+        @form.input.alt({
           type: 'group',
           label: 'Publish At'
         })
           @slot('input')
             <div class="flex items-center">
-              @!component('components/input_alt', {
+              @!form.input.alt({
                 type: 'date',
                 name: 'publishAtDate',
                 value: post?.publishAtDateString ?? flashMessages.get('date') ?? '',
@@ -83,7 +83,7 @@
                 group: true
               })
     
-              @!component('components/input_alt', {
+              @!form.input.alt({
                 type: 'time',
                 name: 'publishAtTime',
                 value: post?.publishAtTimeString ?? flashMessages.get('time') ?? '',
@@ -92,12 +92,12 @@
               })
             </div>
           @endslot
-        @endcomponent
+        @end
 
         <details class="mb-6">
           <summary>Search Engine Optimization (SEO)</summary>
 
-          @!component('components/input', {
+          @!form.input({
             label: 'Page Title',
             name: 'pageTitle',
             placeholder: 'Enter a concise SEO friendly page title. Defaults to the title when left empty',
@@ -105,7 +105,7 @@
             errors: flashMessages.get('errors.pageTitle')
           })
 
-          @!component('components/input', {
+          @!form.input({
             type: 'textarea',
             label: 'Meta Description',
             name: 'metaDescription',
@@ -115,7 +115,7 @@
             rows: 3
           })
 
-          @!component('components/input', {
+          @!form.input({
             label: 'Canonical',
             name: 'canonical',
             placeholder: 'Cross-posting from another site? Link the original here',
@@ -124,7 +124,7 @@
           })
         </details>
 
-        @component('components/input_alt', {
+        @form.input.alt({
           type: 'group',
           label: 'Body',
           name: 'body',
@@ -136,28 +136,43 @@
               <div id="editorjs"></div>
             </div>
           @endslot
-        @endcomponent
+        @end
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3 -my-3 p-6 shadow-inner bg-gray-50 rounded-lg">
-        @component('components/input_alt', { type: 'group', label: 'Images', help: 'Max image size of 2MB' })
+        @form.input.alt({ type: 'group', label: 'Images', help: 'Max image size of 2MB' })
           @slot('input')
-            @!component('components/file_manager', { 
+            @!form.file.manager({ 
               postId: post?.id,
               assets: post?.assets,
               placeholder: 'Select and image' 
             })
           @endslot
-        @endcomponent
+        @end
 
-        @!component('components/input_alt', {
+        @form.input.alt({
           label: 'Video URL',
           name: 'videoUrl',
           help: 'Add a YouTube video url to feature a video',
           placeholder: 'Example: https://www.youtube.com/watch?v=kfSGzUcddjU',
           value: post?.videoUrl ?? flashMessages.get('videoUrl') ?? '',
-          errors: flashMessages.get('errors.videoUrl')
+          errors: flashMessages.get('errors.videoUrl'),
+          onInput: 'videoManager.onInput(event)',
+          dataAttributes: {
+            previewSelector: '#videoUrlPreview'
+          }
         })
+          @slot('after')
+            <div id="videoUrlPreview" class="aspect-w-16 aspect-h-9 rounded overflow-hidden bg-gray-100 shadow-inner mt-3">
+              <div class="text-gray-700 flex flex-col h-full w-full items-center justify-center">
+                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <h4 class="font-semibold">No Video</h4>
+                <p class="text-xs">Enter a valid youtube video url to add a video to this post</p>
+              </div>
+            </div>
+          @endslot
+        @end
+
       </div>
     </div>
   </form>

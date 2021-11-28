@@ -22,7 +22,7 @@
   </div>
 
   <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-    <div class="bg-white py-8 px-4 shadow sm:rounded-b-lg sm:px-10">
+    <div class="bg-white py-6 px-3 shadow sm:rounded-b-lg sm:px-8">
       <form action="{{ route('auth.signin') }}" method="POST">
         {{ csrfField() }}
         {{-- @!component('honeypot') --}}
@@ -37,7 +37,7 @@
           </div>
         @endif
 
-        @!component('components/input', {
+        @!form.input({
           label: 'Username / Email',
           type: 'text',
           name: 'uid',
@@ -47,7 +47,7 @@
           required: true,
         })
 
-        @!component('components/input', {
+        @!form.input({
           label: 'Password',
           type: 'password',
           name: 'password',
@@ -72,9 +72,9 @@
           </div>
         </div>
 
-        @component('components/button', { type: 'submit', className: 'w-full flex justify-center mt-8' })
+        @button({ type: 'submit', className: 'w-full flex justify-center mt-8' })
           Login
-        @endcomponent
+        @endbutton
       </form>
 
       <div class="mt-6">

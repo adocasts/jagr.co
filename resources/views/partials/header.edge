@@ -1,15 +1,15 @@
 @set('studioRoutes', [
   { name: 'Dashboard', href: '#', show: settings.permissions.studio.canAccessDashboard },
   { name: 'Posts', href: route('studio.posts.index'), show: settings.permissions.studio.canAccessPosts },
-  { name: 'Series', href: '#', show: settings.permissions.studio.canAccessSeries },
-  { name: 'Topics', href: '#', show: settings.permissions.studio.canAccessTopics },
+  { name: 'Collections', href: route('studio.collections.index'), show: settings.permissions.studio.canAccessSeries },
+  { name: 'Taxonomies', href: '#', show: settings.permissions.studio.canAccessTopics },
   { name: 'Comments', href: '#', show: settings.permissions.studio.canAccessComments },
   { name: 'Settings', href: route('studio.settings.index'), show: settings.permissions.studio.canAccessSettings },
 ].filter(r => r.show))
 
 <!-- This example requires Tailwind CSS v2.0+ -->
-<div class="relative bg-gradient-to-r from-brand-950 to-brand-900">
-  <div class="flex justify-between items-center px-4 py-4 sm:px-6 md:space-x-10">
+<div class="relative bg-gradient-to-r from-brand-950 to-brand-900 z-30">
+  <div class="flex justify-between items-center px-4 py-3 sm:px-6 md:space-x-10 max-w-screen-xl mx-auto">
     <div>
       <a href="/" class="flex">
         <span class="sr-only">Jagr</span>
@@ -25,8 +25,8 @@
         </svg>
       </button>
     </div>
-    <nav class="hidden md:flex space-x-10">
-      @component('components/header_dropdown', { label: 'Series', big: true })
+    <nav class="hidden md:flex space-x-6">
+      @dropdown.header({ label: 'Series', big: true })
         <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2">
           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50">
             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12">
@@ -145,7 +145,7 @@
             </p>
           </a>
         </div>
-      @endcomponent
+      @end
 
       <a href="#" class="text-base font-medium text-brand-200 hover:text-white">
         Lessons
@@ -157,7 +157,7 @@
         Topics
       </a>
 
-      @component('components/header_dropdown', { label: 'More' })
+      @dropdown.header({ label: 'More' })
         <a href="#" class="-m-3 p-3 block rounded-md hover:bg-gray-50">
           <p class="text-base font-medium text-gray-950">
             Help Center
@@ -193,7 +193,7 @@
             Understand how we take your privacy seriously.
           </p>
         </a>
-      @endcomponent
+      @end
     </nav>
     <div class="hidden md:flex items-center md:ml-12">
       <div class="relative z-0 flex-1 px-2 flex items-center justify-end sm:justify-end sm:pr-16 lg:pr-0 sm:absolute lg:relative sm:inset-0">
@@ -220,14 +220,14 @@
           Sign up
         </a>
       @else
-        @component('components/dropdown')
+        @dropdown.base()
           @slot('trigger')
             <img class="rounded-full w-8 h-8" src="{{ auth.user.avatar }}" />
           @endslot
 
-          @component('components/dropdown_item', { href: '#' })
+          @dropdown.item({ href: '#' })
             {{ auth.user.username }}
-          @endcomponent
+          @end
 
           <div class="border-b border-gray-200 pt-1 mb-1"></div>
 
@@ -236,17 +236,17 @@
           </div>
 
           @each (route in studioRoutes)
-            @component('components/dropdown_item', { href: route.href })
+            @dropdown.item({ href: route.href })
               {{ route.name }}
-            @endcomponent
+            @end
           @endeach
 
           <div class="border-b border-gray-200 pt-1 mb-1"></div>
 
-          @component('components/dropdown_item', { href: route('auth.signout') })
+          @dropdown.item({ href: route('auth.signout') })
             Sign out
-          @endcomponent
-        @endcomponent
+          @end
+        @end
       @endif
     </div>
   </div>

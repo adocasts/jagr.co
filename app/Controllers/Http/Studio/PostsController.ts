@@ -87,4 +87,16 @@ export default class PostsController {
 
     return response.redirect().toRoute('studio.posts.index')
   }
+
+  public async search ({ request, response }: HttpContextContract) {
+    const term = request.input('term', '')
+    const ignoreIds = request.input('ignore', '').split(',').filter(Boolean)
+
+    const posts = await Post.query()
+      .if(Array.isArray(ignoreIds), query => query.whereNotIn('id', ignoreIds))
+      .where('title', 'LIKE', `%${term}%`)
+      .orderBy('publishAt', 'desc')
+
+    return response.json({ posts })
+  } 
 }

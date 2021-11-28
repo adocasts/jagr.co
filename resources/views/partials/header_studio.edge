@@ -4,8 +4,8 @@
 @set('studioNav', [
   Nav('Dashboard', '#', settings.permissions.studio.canAccessDashboard),
   Nav('Posts', route('studio.posts.index'), settings.permissions.studio.canAccessPosts),
-  Nav('Series', '#', settings.permissions.studio.canAccessSeries),
-  Nav('Topics', '#', settings.permissions.studio.canAccessTopics),
+  Nav('Collections', route('studio.collections.index'), settings.permissions.studio.canAccessSeries),
+  Nav('Taxonomies', '#', settings.permissions.studio.canAccessTopics),
   Nav('Comments', '#', settings.permissions.studio.canAccessComments),
   Nav('Appearance', '#', false),
   Nav('Settings', '#', settings.permissions.studio.canAccessSettings)
@@ -13,7 +13,7 @@
 
 <nav id="studioNav" class="py-2 bg-brand-950 overflow-hidden w-full px-2 sm:px-4 lg:px-8 shadow-xl">
   <div class="-mx-2">
-    <ul class="max-w-screen-2xl mx-auto list-none flex justify-center space-x-4 lg:space-x-8">
+    <ul class="max-w-screen-xl mx-auto list-none flex justify-center space-x-4 lg:space-x-8">
       @each(item in studioNav.filter(s => s.show))
         <li>
           <a 

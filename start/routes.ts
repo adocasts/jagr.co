@@ -21,7 +21,7 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async ({ view }) => {
-  return view.render('welcome')
+  return view.render('index')
 })
 
 Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
@@ -46,7 +46,7 @@ Route.group(() => {
 
   Route.group(() => {
 
-    Route.get('/',    'PostsController.index').as('index')
+    Route.get('/',          'PostsController.index').as('index')
     Route.get('/create',    'PostsController.create').as('create')
     Route.post('/',         'PostsController.store').as('store')
     Route.get('/:id/edit',  'PostsController.edit').as('edit')
@@ -54,6 +54,17 @@ Route.group(() => {
     Route.delete('/:id',    'PostsController.destroy').as('destroy')
 
   }).prefix('/posts').as('posts').middleware(['role:admin'])
+
+  Route.group(() => {
+
+    Route.get('/',          'CollectionsController.index').as('index')
+    Route.get('/create',    'CollectionsController.create').as('create')
+    Route.post('/',         'CollectionsController.store').as('store')
+    Route.get('/:id/edit',  'CollectionsController.edit').as('edit')
+    Route.put('/:id',       'CollectionsController.update').as('update')
+    Route.delete('/:id',    'CollectionsController.destroy').as('destroy')
+
+  }).prefix('/collections').as('collections').middleware(['role:admin'])
 
   Route.group(() => {
 
@@ -68,5 +79,13 @@ Route.group(() => {
   Route.post('/studio/assets', 'AssetsController.store').as('studio.assets.store')
   Route.delete('/studio/assets/:id', 'AssetsController.destroy').as('studio.assets.destroy')
   Route.post('/studio/editor/assets', 'AssetsController.store').as('studio.editor.asset')//.middleware(['admin'])
+
+  Route.group(() => {
+
+    Route.get('/posts/search', 'PostsController.search').as('posts.search')
+
+    Route.post('/collections/stub', 'CollectionsController.stub').as('collections.stub')
+
+  }).prefix('/studio').as('studio').namespace('App/Controllers/Http/Studio')
 
 }).prefix('/api').as('api').middleware(['auth'])

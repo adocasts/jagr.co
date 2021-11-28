@@ -1,0 +1,69 @@
+@layout('layouts/studio')
+
+@section('heading')
+  @studio.heading({ heading: 'Collections' })
+    @button({ href: route('studio.collections.create') })
+      Create New Collection
+    @end
+  @end
+@endsection
+
+@section('content')
+
+  <div class="-m-6">
+    @table.base({ 
+      data: collections, 
+      columns: [
+        { name: 'Name', field: 'name' },
+        { name: 'State', field: 'stateId' },
+        { name: 'Type', field: 'type' },
+        { name: 'Views', field: 'view_count' },
+        { name: '', field: '_actions' }
+      ] 
+    })
+      @slot('tableData', scope)
+        @if (scope.column.field === 'name')
+          <div class="text-sm leading-5 font-medium">
+            <a href="{{ route('studio.collections.edit', { id: scope.row.id }) }}" class="hover:underline text-gray-950">
+              {{ scope.row.name }}
+            </a>
+          </div>
+          <div class="text-sm leading-5">
+            <a href="/collections/{{ scope.row.slug }}" target="_blank" class="hover:underline text-gray-800">
+              {{ scope.row.slug }}
+            </a>
+          </div>
+        @elseif (scope.column.field === 'stateId')
+          @badge({ stateId: scope.row.stateId })
+            {{ stateDescriptions[scope.row.stateId] }} / {{ statusDescriptions[scope.row.statusId] }}
+          @end
+          <div class="whitespace-nowrap text-xs text-gray-800 pt-1">
+            {{--  {{ post.history.length }} versions  --}}
+          </div>
+        @elseif (scope.column.field === 'type')
+          {{ scope.row.collectionTypeId }}
+        @elseif (scope.column.field === 'publish_at')
+          {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
+          <div class="text-xs text-gray-800">
+            {{ formatDte(post.publish_at) }}
+          </div> --}}
+        @elseif (scope.column.field === '_actions')
+          <div class="flex">
+            <a href="{{ route('studio.collections.edit', { id: scope.row.id }) }}" class="text-gray-950 hover:text-brand-800 mr-3">
+              Edit
+            </a>
+            <form method="POST" action="{{ route('studio.collections.destroy', { id: scope.row.id }, { qs: { _method: 'DELETE' }}) }}">
+              {{ csrfField() }}
+              <button type="submit" class="text-red-800 hover:text-red-900">
+                Delete
+              </button>
+            </form>
+          </div>
+        @else
+          {{ scope.row[scope.column.field] }}
+        @endif
+      @endslot
+    @end
+  </div>
+  
+@endsection

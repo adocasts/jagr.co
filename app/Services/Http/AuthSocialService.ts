@@ -1,9 +1,10 @@
-import { GoogleDriverContract, GithubDriverContract, SocialProviders } from "@ioc:Adonis/Addons/Ally";
+import { GoogleDriverContract, GithubDriverContract, SocialProviders, AllyUserContract, GithubToken, GoogleToken } from "@ioc:Adonis/Addons/Ally";
 import BaseHttpService from "App/Services/Http/BaseHttpService";
 import User from "App/Models/User";
 import RoleEnum from 'App/Enums/Roles'
 import slugify from 'slugify'
 import Database from "@ioc:Adonis/Lucid/Database";
+import AssetService from "../AssetService";
 
 export default class AuthSocialService extends BaseHttpService {
   /**
@@ -48,21 +49,31 @@ export default class AuthSocialService extends BaseHttpService {
   /**
    * Find or create the social authenticated user
    * @param {GoogleDriverContract|GithubDriverContract} social            [description]
-   * @param {keyof                                  SocialProviders} socialProvider [description]
+   * @param {keyof SocialProviders} socialProvider [description]
    */
   private async findOrCreateUser(social: GoogleDriverContract|GithubDriverContract, socialProvider: keyof SocialProviders) {
     const user = await social.user()
     const username = await this.getUniqueUsername(user.name)
     const tokenKey = `${socialProvider}AccessToken`
+    
+    let jagrUser = await User.query()
+      .where('email', user.email!)
+      .whereNotNull(tokenKey)
+      .first()
 
-    return User.firstOrCreate({
-      email: user.email!,
-    }, {
-      username,
-      avatarUrl: user.avatarUrl ?? undefined,
-      roleId: RoleEnum.USER,
-      [tokenKey]: user.token.token
-    })
+    if (!jagrUser) {
+      jagrUser = await User.create({
+        username,
+        email: user.email!,
+        avatarUrl: user.avatarUrl ?? undefined,
+        roleId: RoleEnum.USER,
+        [tokenKey]: user.token.token
+      })
+    }
+
+    await AssetService.refreshAvatar(jagrUser, user)
+
+    return jagrUser
   }
 
   /**

@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
-import Topic from './Topic'
 import Asset from './Asset'
 import PostSnapshot from './PostSnapshot'
 import User from './User'
@@ -68,12 +67,6 @@ export default class Post extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
-
-  @manyToMany(() => Topic, {
-    pivotTable: 'post_topics',
-    pivotColumns: ['sort_order']
-  })
-  public topics: ManyToMany<typeof Topic>
 
   @manyToMany(() => Asset, {
     pivotTable: 'asset_posts',

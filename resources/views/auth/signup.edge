@@ -22,7 +22,7 @@
   </div>
 
   <div class="sm:mx-auto sm:w-full sm:max-w-md relative z-10 overflow-auto" style="max-height: 200px;">
-    <div class="bg-white py-8 px-4 shadow sm:rounded-b-lg sm:px-10">
+    <div class="bg-white py-6 px-3 shadow sm:rounded-b-lg sm:px-8">
       <form action="{{ route('auth.signup') }}" method="POST">
         {{ csrfField() }}
         {{-- @!component('honeypot') --}}
@@ -33,7 +33,7 @@
           </div>
         @endif
 
-        @!component('components/input', {
+        @!form.input({
           label: 'Username',
           name: 'username',
           placeholder: 'Enter username',
@@ -45,7 +45,7 @@
           required: true,
         })
         
-        @!component('components/input', {
+        @!form.input({
           label: 'Email',
           type: 'email',
           name: 'email',
@@ -56,7 +56,7 @@
           required: true,
         })
 
-        @!component('components/input', {
+        @!form.input({
           label: 'Password',
           type: 'password',
           name: 'password',
@@ -68,12 +68,12 @@
           min: 8
         })
 
-        @component('components/button', {
+        @button({
           type: 'submit',
           className: 'w-full flex justify-center mt-2'
         })
           Register
-        @endcomponent
+        @endbutton
       </form>
 
       <div class="mt-6">

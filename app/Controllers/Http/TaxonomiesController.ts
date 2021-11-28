@@ -1,6 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class TopicsController {
+export default class TaxonomiesController {
   public async index ({}: HttpContextContract) {
   }
 

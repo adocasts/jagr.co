@@ -1,17 +1,17 @@
 @layout('layouts/studio')
 
 @section('heading')
-  @component('components/studio_heading', { heading: 'Posts' })
-    @component('components/button', { href: route('studio.posts.create') })
+  @studio.heading({ heading: 'Posts' })
+    @button({ href: route('studio.posts.create') })
       Create New Post
-    @endcomponent
-  @endcomponent
+    @end
+  @end
 @endsection
 
 @section('content')
 
   <div class="-m-6">
-    @component('components/table', { 
+    @table.base({ 
       data: posts, 
       columns: [
         { name: 'Title', field: 'title' },
@@ -42,9 +42,9 @@
             @endeach
           @endif
         @elseif (scope.column.field === 'status')
-          @component('components/badge', { stateId: scope.row.stateId })
+          @badge({ stateId: scope.row.stateId })
             {{ stateDescriptions[scope.row.stateId] }}
-          @endcomponent
+          @end
           <div class="whitespace-nowrap text-xs text-gray-800 pt-1">
             {{--  {{ post.history.length }} versions  --}}
           </div>
@@ -71,7 +71,7 @@
           {{ scope.row[scope.column.field] }}
         @endif
       @endslot
-    @endcomponent
+    @end
   </div>
   
 @endsection
