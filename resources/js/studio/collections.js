@@ -3,10 +3,12 @@ import axios from 'axios'
 import 'babel-polyfill'
 
 function collectionManager({ parentId, collections = [], posts = [] }) {
+  const limit = 15
   return {
     parentId,
     collections,
     posts,
+    collectionPostAddId: null,
     options: [],
     loading: false,
 
@@ -23,6 +25,10 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
     async addCollection() {
       const { data } = await axios.post('/api/studio/collections/stub', { parentId })
       this.collections.push(data.collection)
+    },
+
+    addPost() {
+
     },
 
     removePost(post, subcollection) {
@@ -51,7 +57,7 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
             try {
               this.loading = true
               const ignoreIds = this.getIgnoreIds(collection).join(',')
-              const { data } = await axios.get(`/api/studio/posts/search?term=${query}&ignore=${ignoreIds}`)
+              const { data } = await axios.get(`/api/studio/posts/search?term=${query}&ignore=${ignoreIds}&limit=${limit}`)
               this.loading = false
               this.options = data.posts
               return data.posts
@@ -63,10 +69,12 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
           keys: ["title"],
           // cache: true
         },
-        placeHolder: "Search for Food & Drinks!",
+        placeHolder: "Search posts ...",
         resultsList: {
+          class: 'w-full absolute bottom-100 left-0 shadow-xl rounded-lg bg-white z-10 p-3 text-sm',
           element: (list, data) => {
             const info = document.createElement("p");
+            info.className = "text-xs border-b border-gray-300 pb-1 px-2 mb-3"
             if (data.results.length > 0) {
               info.innerHTML = `Displaying <strong>${data.results.length}</strong> out of <strong>${data.matches.length}</strong> results`;
             } else {
@@ -75,19 +83,17 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
             list.prepend(info);
           },
           noResults: true,
-          maxResults: 15,
+          maxResults: limit,
           tabSelect: true
         },
         resultItem: {
           element: (item, data) => {
-            // Modify Results Item Style
-            item.style = "display: flex; justify-content: space-between;";
-            // Modify Results Item Content
+            item.className = "flex justify-between hover:bg-gray-50 py-1 px-2 mb-1 rounded-lg transition"
             item.innerHTML = `
             <span style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
               ${data.match}
             </span>
-            <span style="display: flex; align-items: center; font-size: 13px; font-weight: 100; text-transform: uppercase; color: rgba(0,0,0,.2);">
+            <span class="flex items-center text-xs uppercase text-gray-700">
               ${data.key}
             </span>`;
           },
@@ -98,7 +104,7 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
       autoCompleteJS.input.addEventListener("selection", (event) => {
         const feedback = event.detail;
         autoCompleteJS.input.blur();
-        
+
         // Render selected choice to selection div
         if (!collection) {
           this.posts.push(feedback.selection.value)
@@ -109,7 +115,6 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
         }
 
         autoCompleteJS.input.value = ''
-        console.log(feedback);
       });
     }
   }

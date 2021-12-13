@@ -1,0 +1,23 @@
+@layout('layouts/studio')
+
+@section('heading')
+  @studio.heading({ heading: 'Taxonomies' })
+    @button({ href: route('studio.taxonomies.create') })
+      Create New Taxonomy
+    @end
+  @end
+@endsection
+
+@section('content')
+
+  <div class="-ml-3">
+    @tree.base({ nodes: taxonomies, className: 'pl-3 border-l border-grey-300' })
+      @slot('main', scope)
+        <a href="#">
+          {{ scope.node.name }}
+        </a>
+      @endslot
+    @end
+  </div>
+
+@endsection

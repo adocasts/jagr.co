@@ -1,5 +1,12 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  BelongsTo,
+  belongsTo,
+  column, HasMany, hasMany,
+  ManyToMany,
+  manyToMany
+} from '@ioc:Adonis/Lucid/Orm'
 import CollectionType from 'App/Enums/Collectiontype'
 import Status from 'App/Enums/Status'
 import User from './User'
@@ -15,38 +22,38 @@ export default class Collection extends BaseModel {
 
   @column()
   public ownerId: number
-  
+
   @column()
   public parentId: number | null
-  
+
   @column()
   public collectionTypeId: CollectionType
-  
+
   @column()
   public statusId: Status
 
   @column()
   public stateId: State
-  
+
   @column()
   public assetId: number | null
-  
+
   @column()
   public name: string
-  
+
   @column()
   @slugify({
     strategy: 'dbIncrement',
     fields: ['name']
   })
   public slug: string
-  
+
   @column()
   public description: string
-  
+
   @column()
   public pageTitle: string
-  
+
   @column()
   public metaDescription: string
 
@@ -79,4 +86,9 @@ export default class Collection extends BaseModel {
     pivotColumns: ['sort_order']
   })
   public taxonomies: ManyToMany<typeof Taxonomy>
+
+  @hasMany(() => Collection, {
+    foreignKey: 'parentId'
+  })
+  public children: HasMany<typeof Collection>
 }

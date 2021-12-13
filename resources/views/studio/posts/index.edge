@@ -11,8 +11,8 @@
 @section('content')
 
   <div class="-m-6">
-    @table.base({ 
-      data: posts, 
+    @table.base({
+      data: posts,
       columns: [
         { name: 'Title', field: 'title' },
         { name: 'Author', field: 'author' },
@@ -21,7 +21,7 @@
         { name: 'Views', field: 'view_count' },
         { name: 'Publish Date', field: 'publish_at' },
         { name: '', field: '_actions' }
-      ] 
+      ]
     })
       @slot('tableData', scope)
         @if (scope.column.field === 'title')
@@ -43,13 +43,13 @@
           @endif
         @elseif (scope.column.field === 'status')
           @badge({ stateId: scope.row.stateId })
-            {{ stateDescriptions[scope.row.stateId] }}
+            {{ StateEnumDesc[scope.row.stateId] }}
           @end
           <div class="whitespace-nowrap text-xs text-gray-800 pt-1">
             {{--  {{ post.history.length }} versions  --}}
           </div>
         @elseif (scope.column.field === 'type')
-          {{ postTypeDescriptions[scope.row.postTypeId] }}
+          {{ PostTypeEnumDesc[scope.row.postTypeId] }}
         @elseif (scope.column.field === 'publish_at')
           {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
           <div class="text-xs text-gray-800">
@@ -73,5 +73,5 @@
       @endslot
     @end
   </div>
-  
+
 @endsection

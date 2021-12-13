@@ -16,7 +16,7 @@
             <tr>
               @if (columns?.length)
                 @each(column in columns)
-                  <th class="
+                  <th {{{ column.width && `style="width: ${column.width}"` }}} class="
                     px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-800 uppercase tracking-wider
                     {{ alignments[align ?? 'left'] }}
                     {{ column.className }}
@@ -25,7 +25,7 @@
                   </th>
                 @endeach
               @else
-                {{{ await $slots.thead() }}}                
+                {{{ await $slots.thead() }}}
               @endif
             </tr>
           </thead>

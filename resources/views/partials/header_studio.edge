@@ -1,27 +1,28 @@
 @set('activeUrl', request.url(false))
 @set('Nav', (name, href, show) => ({ name, href, show, active: activeUrl === href }))
 
-@set('studioNav', [
-  Nav('Dashboard', '#', settings.permissions.studio.canAccessDashboard),
-  Nav('Posts', route('studio.posts.index'), settings.permissions.studio.canAccessPosts),
-  Nav('Collections', route('studio.collections.index'), settings.permissions.studio.canAccessSeries),
-  Nav('Taxonomies', '#', settings.permissions.studio.canAccessTopics),
-  Nav('Comments', '#', settings.permissions.studio.canAccessComments),
-  Nav('Appearance', '#', false),
-  Nav('Settings', '#', settings.permissions.studio.canAccessSettings)
-].filter(r => r.show))
+@set('studioRoutes', [
+  Nav('Dashboard', '#', 'StudioPolicy.viewDashboard'),
+  Nav('Posts', route('studio.posts.index'), 'StudioPolicy.viewPosts'),
+  Nav('Collections', route('studio.collections.index'), 'StudioPolicy.viewCollections'),
+  Nav('Taxonomies', route('studio.taxonomies.index'), 'StudioPolicy.viewTaxonomies'),
+  Nav('Comments', '#', 'StudioPolicy.viewComments'),
+  Nav('Settings', route('studio.settings.index'), 'StudioPolicy.viewSettings')
+])
 
 <nav id="studioNav" class="py-2 bg-brand-950 overflow-hidden w-full px-2 sm:px-4 lg:px-8 shadow-xl">
   <div class="-mx-2">
     <ul class="max-w-screen-xl mx-auto list-none flex justify-center space-x-4 lg:space-x-8">
-      @each(item in studioNav.filter(s => s.show))
-        <li>
-          <a 
-            href="{{ item.href }}" 
-            class="bg-transparent text-brand-200 hover:bg-brand-900 hover:text-white rounded text-sm px-2 lg:px-3 py-1 inline-block {{ item.active && 'bg-brand-900 text-white' }} {{ item.soon && 'opacity-40' }}">
-            {{ item.name }}
-          </a>
-        </li>
+      @each(item in studioRoutes)
+        @can(item.show)
+          <li>
+            <a
+              href="{{ item.href }}"
+              class="bg-transparent text-brand-200 hover:bg-brand-900 hover:text-white rounded text-sm px-2 lg:px-3 py-1 inline-block {{ item.active && 'bg-brand-900 text-white' }} {{ item.soon && 'opacity-40' }}">
+              {{ item.name }}
+            </a>
+          </li>
+        @end
       @endeach
     </ul>
   </div>

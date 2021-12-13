@@ -3,73 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --font-heading: 'Venti', serif;
-  --font-body: 'Venti', serif;
+  --font-heading: 'IBM Plex Sans', serif;
+  --font-body: 'IBM Plex Sans', serif;
 }
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-Bold.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-Bold.woff') format('woff'),
-       url('fonts/venti/VentiCF-Bold.eot') format('eot');
-  font-weight: 700;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-BoldItalic.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-BoldItalic.woff') format('woff'),
-       url('fonts/venti/VentiCF-BoldItalic.eot') format('eot');
-  font-weight: 700;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-Medium.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-Medium.woff') format('woff'),
-       url('fonts/venti/VentiCF-Medium.eot') format('eot');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-MediumItalic.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-MediumItalic.woff') format('woff'),
-       url('fonts/venti/VentiCF-MediumItalic.eot') format('eot');
-  font-weight: 500;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-Regular.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-Regular.woff') format('woff'),
-       url('fonts/venti/VentiCF-Regular.eot') format('eot');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Venti';
-  src: url('fonts/venti/VentiCF-RegularItalic.woff2') format('woff2'),
-       url('fonts/venti/VentiCF-RegularItalic.woff') format('woff'),
-       url('fonts/venti/VentiCF-RegularItalic.eot') format('eot');
-  font-weight: normal;
-  font-style: italic;
-}
-
 
 [v-cloak],
 [x-cloak] {
   display: none;
-}
-
-html,
-body {
-  font-size: 18px;
 }
 
 a.brand {

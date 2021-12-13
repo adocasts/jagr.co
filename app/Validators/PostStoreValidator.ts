@@ -1,7 +1,5 @@
-import { schema, rules, DbRowCheckOptions } from "@ioc:Adonis/Core/Validator";
+import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import PostType from 'App/Enums/PostType'
-import State from 'App/Enums/States'
 
 export default class PostStoreValidator {
   constructor (protected ctx: HttpContextContract) {
@@ -15,9 +13,9 @@ export default class PostStoreValidator {
 
   public schema = schema.create({
 		title: schema.string({}, [rules.maxLength(100)]),
-		slug: schema.string.optional({}, [rules.maxLength(255), rules.unique({ 
-			table: 'posts', 
-			column: 'slug', 
+		slug: schema.string.optional({}, [rules.maxLength(255), rules.unique({
+			table: 'posts',
+			column: 'slug',
 			...this.slugUniqueConstraint
 		})]),
 		pageTitle: schema.string.optional({}, [rules.maxLength(100)]),

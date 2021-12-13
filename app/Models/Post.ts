@@ -92,4 +92,30 @@ export default class Post extends BaseModel {
   public get publishAtTimeString() {
     return this.publishAt?.toFormat('HH:mm')
   }
+
+  @computed()
+  public get isPublished(): boolean {
+    const isPublic = this.stateId === State.PUBLIC
+
+    if (!this.publishAt) {
+      return isPublic
+    }
+
+    const isPastPublishAt = this.publishAt.diffNow().as('seconds')
+
+    return isPublic && isPastPublishAt < 0
+  }
+
+  @computed()
+  public get isViewable(): boolean {
+    const isPublicOrUnlisted = this.stateId === State.PUBLIC || this.stateId === State.UNLISTED;
+
+    if (!this.publishAt) {
+      return isPublicOrUnlisted
+    }
+
+    const isPastPublishAt = this.publishAt.diffNow().as('seconds')
+
+    return isPublicOrUnlisted && isPastPublishAt < 0
+  }
 }

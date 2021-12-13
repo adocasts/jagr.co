@@ -1,7 +1,7 @@
 @layout('layouts/studio')
 
 @section('heading')
-  @studio.heading({ 
+  @studio.heading({
     heading: collection?.id ? 'Update Collection' : 'Create New Collection',
     wrapSlot: true
   })
@@ -113,37 +113,57 @@
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3 -my-3 p-6 shadow-inner bg-gray-50 rounded-lg">
-        <div x-data="collectionManager({ 
+        <div x-data="collectionManager({
           parentId: {{ collection?.id }},
           collections: {{ stringify(children) }},
-          posts: {{ stringify(collection.posts) }} 
+          posts: {{ collection?.posts && stringify(collection.posts) }}
         })">
-          <button type="button" @click="addCollection()">Add new collection</button>
+          <div class="flex justify-between border-b border-gray-300 pb-1 mb-3">
+            <strong>Lessons</strong>
+            <button type="button" @click="addCollection()" class="text-xs hover:text-brand-800 transition">
+              + Add new collection
+            </button>
+          </div>
 
           <ul>
             <template x-for="(subcollection, x) in collections" :key="subcollection.id">
-              <li>
+              <li class="pb-3">
                 <input type="hidden" :name="`subcollectionCollectionIds[${x}]`" :value="subcollection.id" />
-                <span class="font-bold" x-text="subcollection.name"></span>
+
+                <div class="flex justify-between pb-1">
+                  <input type="text" :name="`subcollectionCollectionNames[${x}]`" x-model="subcollection.name" class="w-full natural bg-transparent border-transparent focus-within:border-gray-300 focus-within:bg-white p-0 placeholder-gray-700 mr-3 -mx-1 px-1" />
+                  <button type="button" @click="collectionPostAddId = subcollection.id" class="text-xs hover:text-brand-800 transition whitespace-nowrap">
+                    + Add post
+                  </button>
+                </div>
 
                 @form.input({
                   type: 'group',
-                  label: 'Posts'
+                  groupClass: 'pl-3 border-l-2 border-gray-300 py-1',
+                  pb: false
                 })
                   @slot('input')
-                    <input :id="`autocomplete_collection_${subcollection.id}`" />
-      
                     <ul id="selectedPosts">
                       <template x-for="(post, y) in subcollection.posts" :key="post.id">
                         <li class="flex justify-between">
                           <input type="hidden" :name="`subcollectionPostIds[${x}][]`" :value="post.id" />
-                          <span x-text="post.title"></span>
+                          <span x-text="post.title" class="text-sm"></span>
                           <button type="button" class="text-red-700" @click="removePost(post, subcollection)">
                             &times;
                           </button>
                         </li>
                       </template>
                     </ul>
+
+                    <div x-show="collectionPostAddId === subcollection.id" class="pt-2">
+                      <div class="flex justify-between">
+                        <div class="text-sm">Select lesson to add</div>
+                        <button type="button" @click="collectionPostAddId = null" class="text-xs hover:text-brand-800 text-sm">
+                          Cancel
+                        </button>
+                      </div>
+                      <input :id="`autocomplete_collection_${subcollection.id}`" type="text" class="block w-full focus:outline-none sm:text-sm rounded-md placeholder-gray-700 px-2 py-1" placeholder="Search posts ..." />
+                    </div>
                   @endslot
                 @end
               </li>
@@ -155,19 +175,24 @@
             label: 'Posts'
           })
             @slot('input')
-              <input id="autocomplete_main" />
-
               <ul id="selectedPosts">
                 <template x-for="post in posts" :key="post.id">
                   <li class="flex justify-between">
                     <input type="hidden" name="postIds[]" :value="post.id" />
-                    <span x-text="post.title"></span>
+                    <span x-text="post.title" class="text-sm"></span>
                     <button type="button" class="text-red-700" @click="removePost(post)">
                       &times;
                     </button>
                   </li>
                 </template>
               </ul>
+
+              <div class="pt-2">
+                <div class="flex justify-between">
+                  <div class="text-sm">Select lesson to add</div>
+                </div>
+                <input id="autocomplete_main" type="text" class="block w-full focus:outline-none sm:text-sm rounded-md placeholder-gray-700 px-2 py-1" placeholder="Search posts ..." />
+              </div>
             @endslot
           @end
         </div>

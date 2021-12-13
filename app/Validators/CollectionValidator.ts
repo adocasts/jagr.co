@@ -1,7 +1,5 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CollectionType from 'App/Enums/Collectiontype'
-import Status from 'App/Enums/Status'
 
 export default class CollectionValidator {
   constructor (protected ctx: HttpContextContract) {
@@ -15,9 +13,9 @@ export default class CollectionValidator {
 
   public schema = schema.create({
 		name: schema.string({ trim: true }, [rules.maxLength(100)]),
-		slug: schema.string.optional({}, [rules.maxLength(150), rules.unique({ 
-			table: 'posts', 
-			column: 'slug', 
+		slug: schema.string.optional({}, [rules.maxLength(150), rules.unique({
+			table: 'collections',
+			column: 'slug',
 			...this.slugUniqueConstraint
 		})]),
 		collectionTypeId: schema.number(),
@@ -31,6 +29,9 @@ export default class CollectionValidator {
 		subcollectionCollectionIds: schema.array.optional().members(
 			schema.number([rules.exists({ table: 'collections', column: 'id' })])
 		),
+    subcollectionCollectionNames: schema.array.optional().members(
+      schema.string({ trim: true }, [rules.maxLength((100))])
+    ),
 		subcollectionPostIds: schema.array.optional().members(
 			schema.array.optional().members(
 				schema.number([rules.exists({ table: 'posts', column: 'id' })])

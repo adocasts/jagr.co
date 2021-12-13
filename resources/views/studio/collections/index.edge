@@ -11,15 +11,16 @@
 @section('content')
 
   <div class="-m-6">
-    @table.base({ 
-      data: collections, 
+    @table.base({
+      data: collections,
       columns: [
         { name: 'Name', field: 'name' },
-        { name: 'State', field: 'stateId' },
+        { name: 'State / Status', field: 'stateId' },
         { name: 'Type', field: 'type' },
+        { name: 'Content', field: 'total_posts' },
         { name: 'Views', field: 'view_count' },
         { name: '', field: '_actions' }
-      ] 
+      ]
     })
       @slot('tableData', scope)
         @if (scope.column.field === 'name')
@@ -35,13 +36,22 @@
           </div>
         @elseif (scope.column.field === 'stateId')
           @badge({ stateId: scope.row.stateId })
-            {{ stateDescriptions[scope.row.stateId] }} / {{ statusDescriptions[scope.row.statusId] }}
+            <div class="flex items-center">
+              <span>{{ StateEnumDesc[scope.row.stateId] }}</span>
+              <svg class="w-2 h-2 mx-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              <span class="font-normal">{{ StatusEnumDesc[scope.row.statusId] }}</span>
+            </div>
           @end
           <div class="whitespace-nowrap text-xs text-gray-800 pt-1">
             {{--  {{ post.history.length }} versions  --}}
           </div>
+        @elseif (scope.column.field === 'total_posts')
+          <div class="flex flex-col text-xs">
+            <div>{{ collectionCounts[scope.row.id] }} Posts</div>
+            <div>{{ scope.row.children.length }} Modules</div>
+          </div>
         @elseif (scope.column.field === 'type')
-          {{ scope.row.collectionTypeId }}
+          {{ CollectionTypeEnumDesc[scope.row.collectionTypeId] }}
         @elseif (scope.column.field === 'publish_at')
           {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
           <div class="text-xs text-gray-800">
@@ -65,5 +75,5 @@
       @endslot
     @end
   </div>
-  
+
 @endsection

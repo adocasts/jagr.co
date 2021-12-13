@@ -36,7 +36,8 @@
       "@adonisjs/lucid-slugify",
       "@adonisjs/ally",
       "@adonisjs/mail",
-      "@adonisjs/redis"
+      "@adonisjs/redis",
+      "@adonisjs/bouncer"
     ]
   }
 }

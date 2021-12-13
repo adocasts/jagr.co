@@ -1,7 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CollectionType from 'App/Enums/Collectiontype'
-import State, { StateDesc } from 'App/Enums/States'
-import Status, { StatusDesc } from 'App/Enums/Status'
+import State from 'App/Enums/States'
+import Status from 'App/Enums/Status'
 import Collection from 'App/Models/Collection'
 import CollectionValidator from 'App/Validators/CollectionValidator'
 import Route from '@ioc:Adonis/Core/Route'
@@ -11,17 +11,20 @@ export default class CollectionsController {
   public async index ({ view, request, auth }: HttpContextContract) {
     const page = request.input('page', 1)
     const collections = await auth.user!.related('collections').query()
-      // .preload('authors')
+      .preload('children', query => query.withCount('posts').select('id'))
+      .withCount('posts')
+      .whereNull('parentId')
       .paginate(page, 20)
+
+    const collectionCounts = {}
+    collections.map(collection => {
+      const subPosts = collection.children.reduce((count, child) => count + Number(child.$extras.posts_count), 0)
+      collectionCounts[collection.id] = Number(collection.$extras.posts_count) + subPosts
+    })
 
     collections.baseUrl(Route.makeUrl('studio.collections.index'))
 
-    const states = State;
-    const stateDescriptions = StateDesc;
-    const status = Status
-    const statusDescriptions = StatusDesc
-
-    return view.render('studio/collections/index', { collections, states, stateDescriptions, status, statusDescriptions })
+    return view.render('studio/collections/index', { collections, collectionCounts })
   }
 
   public async create ({ view }: HttpContextContract) {
@@ -80,28 +83,40 @@ export default class CollectionsController {
   }
 
   public async update ({ request, response, params }: HttpContextContract) {
-    const { postIds, subcollectionCollectionIds, subcollectionPostIds, ...data } = await request.validate(CollectionValidator)
+    const {
+      postIds,
+      subcollectionCollectionIds = [],
+      subcollectionCollectionNames = [],
+      subcollectionPostIds,
+      ...data
+    } = await request.validate(CollectionValidator)
 
     const collection = await Collection.findOrFail(params.id)
 
     await collection.merge(data).save()
-    
+
     await collection.related('posts').sync(postIds ?? [])
 
     if (subcollectionPostIds) {
-      const promises = (subcollectionCollectionIds ?? []).map((collectionId, i) => {
+      const promises = subcollectionCollectionIds.map((collectionId, i) => {
         return new Promise(async (resolve) => {
-          
           const postIds = subcollectionPostIds[i] ?? []
+          const collectionName = subcollectionCollectionNames[i]
           const postSyncData = postIds.reduce((prev, curr, i) => ({
             ...prev,
             [curr]: {
               sort_order: i
             }
           }), {})
-  
+
           const collection = await Collection.findOrFail(collectionId)
+
+          if (collection.name !== collectionName) {
+            await collection.merge({ name: collectionName }).save()
+          }
+
           await collection.related('posts').sync(postSyncData)
+
           resolve(true)
         })
       })

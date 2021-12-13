@@ -2,30 +2,30 @@
 @set('cloak', cloak ?? true)
 @set('rightGutter', error || type === 'group' || type === 'password' ? '' : 'pr-10')
 
-<div x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" class="pb-4 relative {{ groupClass ?? '' }}">
+<div x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" class="relative {{ pb !== false && 'pb-4' }} {{ groupClass ?? '' }}">
   @if (label)
     <label for="{{ id ?? name }}" class="block text-sm font-medium text-gray-950">
       {{ label }}
     </label>
-  @endif 
+  @endif
 
   <div class="mt-1 relative">
     @if(type === 'textarea')
       <textarea
-        id="{{ id || name }}" 
+        id="{{ id || name }}"
         name="{{ name }}"
         rows="{{ rows || 3 }}"
         class="
           {{ rightGutter }}
           block w-full focus:outline-none sm:text-sm rounded-md placeholder-gray-700
-          {{ error 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+          {{ error
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
             : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700' }}
-        " 
-        placeholder="{{ placeholder || '' }}" 
+        "
+        placeholder="{{ placeholder || '' }}"
         x-model="value"
         style="{{ style }}"
-        aria-invalid="{{ error ? true : false }}" 
+        aria-invalid="{{ error ? true : false }}"
         aria-describedby="{{ name }}-error"
         {{ max && `maxlength=${max}` }}
         {{ min && `minlength=${min}` }}
@@ -37,11 +37,11 @@
         {{{ await $slots.input()  }}}
       @endif
     @elseif(type === 'select')
-      <select 
-        id="{{ id || name }}" 
+      <select
+        id="{{ id || name }}"
         name="{{ name }}"
         x-model="value"
-        placeholder="{{ placeholder || '' }}" 
+        placeholder="{{ placeholder || '' }}"
         class="mt-1 block w-full pl-3 py-2 text-base border-gray-700 placeholder-gray-700 focus:outline-none focus:ring-brand-500 focus:border-brand-500 sm:text-sm rounded-md {{ rightGutter }}"
         style="{{ style }}"
         @focus="focused = true"
@@ -49,20 +49,20 @@
         {{{ await $slots.main() }}}
       </select>
     @else
-      <input 
+      <input
         {{{ staticType ? `type="${type || 'text'}"` : `:type="type"` }}}
-        id="{{ id || name }}" 
+        id="{{ id || name }}"
         name="{{ name }}"
         class="
           {{ rightGutter }}
           block w-full focus:outline-none sm:text-sm rounded-md placeholder-gray-700
-          {{ error 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
+          {{ error
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
             : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700' }}
-        " 
-        placeholder="{{ placeholder || '' }}" 
+        "
+        placeholder="{{ placeholder || '' }}"
         x-model="value"
-        aria-invalid="{{ error ? true : false }}" 
+        aria-invalid="{{ error ? true : false }}"
         aria-describedby="{{ name }}-error"
         style="{{ type === 'date' || type === 'time' ? 'line-height: 1;' : '' }} {{ style }}"
         {{ max ? `maxlength=${max}` : '' }}
@@ -88,7 +88,7 @@
         </div>
       </div>
     @endif
-  
+
     @if(hint && !error)
       <div class="text-xs text-right pt-1 absolute right-0 text-gray-700" style="bottom: -1rem">
         {{ hint }}
@@ -108,7 +108,7 @@
     <p class="mt-2 text-sm text-gray-700" x-text="`{{ info }}`.replaceAll('[[value]]', value)">
     </p>
   @endif
-  
+
   @if(errors)
     <p class="mt-2 text-sm text-red-800" id="{{ name }}-error">
       {{ sentenceCase(errors.join(', ')) }}

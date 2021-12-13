@@ -19,6 +19,7 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import { schema, rules } from '@ioc:Adonis/Core/Validator'
 
 Route.get('/', async ({ view }) => {
   return view.render('index')
@@ -53,7 +54,7 @@ Route.group(() => {
     Route.put('/:id',       'PostsController.update').as('update')
     Route.delete('/:id',    'PostsController.destroy').as('destroy')
 
-  }).prefix('/posts').as('posts').middleware(['role:admin'])
+  }).prefix('/posts').as('posts')
 
   Route.group(() => {
 
@@ -64,7 +65,18 @@ Route.group(() => {
     Route.put('/:id',       'CollectionsController.update').as('update')
     Route.delete('/:id',    'CollectionsController.destroy').as('destroy')
 
-  }).prefix('/collections').as('collections').middleware(['role:admin'])
+  }).prefix('/collections').as('collections')
+
+  Route.group(() => {
+
+    Route.get('/',          'TaxonomiesController.index').as('index')
+    Route.get('/create',    'TaxonomiesController.create').as('create')
+    Route.post('/',         'TaxonomiesController.store').as('store')
+    Route.get('/:id/edit',  'TaxonomiesController.edit').as('edit')
+    Route.put('/:id',       'TaxonomiesController.update').as('update')
+    Route.delete('/:id',    'TaxonomiesController.destroy').as('destroy')
+
+  }).prefix('/taxonomies').as('taxonomies')
 
   Route.group(() => {
 

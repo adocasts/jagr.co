@@ -1,0 +1,83 @@
+@layout('layouts/studio')
+
+@section('heading')
+  @studio.heading({
+    heading: taxonomy?.id ? 'Update Taxonomy' : 'Create New Taxonomy',
+    wrapSlot: true
+  })
+    <div class="space-x-3">
+      @button({ type: 'submit', form: 'taxonomyForm' })
+        Save
+      @end
+    </div>
+  @end
+@endsection
+
+@section('content')
+
+  @set('action', route('studio.taxonomies.store'))
+
+  @if(collection?.id)
+    @set('action', route('studio.taxonomies.update', { id: taxonomy.id }, { qs: { _method: 'PUT' }}))
+  @endif
+
+  <form id="taxonomyForm" name="taxonomyForm" method="POST" action="{{ action }}">
+    {{ csrfField() }}
+
+    <div class="flex flex-wrap -mx-3">
+      <div class="w-full lg:w-2/3 lg:px-3">
+        @!form.input.alt({
+          label: 'Name',
+          name: 'name',
+          placeholder: 'Enter a concise & descriptive name',
+          value: taxonomy?.name ?? flashMessages.get('name'),
+          errors: flashMessages.get('errors.name'),
+          required: true,
+          max: 100,
+          title: true
+        })
+
+        @!form.input.alt({
+          label: 'Slug',
+          name: 'slug',
+          placeholder: 'Enter a unique url safe identifier',
+          value: taxonomy?.slug ?? flashMessages.get('slug') ?? '',
+          errors: flashMessages.get('errors.slug')
+        })
+
+        @!form.input.alt({
+          type: 'textarea',
+          label: 'Description',
+          name: 'description',
+          placeholder: 'Enter a high-level overview of your collection',
+          value: taxonomy?.description ?? flashMessages.get('description') ?? '',
+          errors: flashMessages.get('errors.description'),
+          rows: 3
+        })
+
+        <details class="mb-6">
+          <summary>Search Engine Optimization (SEO)</summary>
+
+          @!form.input({
+            label: 'Page Title',
+            name: 'pageTitle',
+            placeholder: 'Enter a concise SEO friendly page title. Defaults to the title when left empty',
+            value: taxonomy?.pageTitle ?? flashMessages.get('pageTitle') ?? '',
+            errors: flashMessages.get('errors.pageTitle')
+          })
+
+          @!form.input({
+            type: 'textarea',
+            label: 'Meta Description',
+            name: 'metaDescription',
+            placeholder: 'Enter a SEO friendly description. Defaults to the summary when left empty.',
+            value: taxonomy?.metaDescription ?? flashMessages.get('metaDescription') ?? '',
+            errors: flashMessages.get('errors.metaDescription'),
+            rows: 3
+          })
+        </details>
+      </div>
+    </div>
+  </form>
+
+@endsection

@@ -9,29 +9,28 @@ export default class Taxonomy extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  
   @column()
   public parentId: number | null
-  
+
   @column()
   public assetId: number | null
-  
+
   @column()
   public name: string
-  
+
   @column()
   @slugify({
     strategy: 'dbIncrement',
     fields: ['name']
   })
   public slug: string
-  
+
   @column()
   public description: string
-  
+
   @column()
   public pageTitle: string
-  
+
   @column()
   public metaDescription: string
 
