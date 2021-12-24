@@ -29,7 +29,8 @@ export default class PostStoreValidator {
 		publishAtTime: schema.date.optional({ format: 'HH:mm' }),
 		postTypeId: schema.number.optional(),
 		stateId: schema.number.optional(),
-		assetIds: schema.array.optional().members(schema.number([rules.exists({ table: 'assets', column: 'id' })]))
+		assetIds: schema.array.optional().members(schema.number([rules.exists({ table: 'assets', column: 'id' })])),
+    taxonomyIds: schema.array.optional().members(schema.number([rules.exists({ table: 'taxonomies', column: 'id' })]))
   })
 
 	/**

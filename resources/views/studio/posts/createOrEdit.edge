@@ -173,6 +173,37 @@
           @endslot
         @end
 
+        @form.input.alt({
+          type: 'group',
+          label: 'Taxonomy'
+        })
+          @slot('input')
+            @set('selectedTaxonomyIds', post?.taxonomies.map(t => t.id) ?? [])
+            @set('parentIds', [])
+
+            <div class="-mx-6">
+              @tree.base({ nodes: taxonomies, className: 'pl-6 border-l border-grey-300' })
+                @slot('main', scope)
+                  @set('parentIds', scope.node.parentId ? [...parentIds, scope.node.parentId] : [])
+
+                  <label class="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="taxonomyIds[]"
+                      value="{{ scope.node.id }}"
+                      class="mr-2"
+                      data-parent-ids="{{ [...new Set(parentIds)].join(',') }},"
+                      onchange="toggleParents(this)"
+                      {{ selectedTaxonomyIds.includes(scope.node.id) ? 'checked=checked' : '' }}
+                    />
+
+                    <span>{{ scope.node.name }}</span>
+                  </label>
+                @endslot
+              @end
+            </div>
+          @endslot
+        @end
       </div>
     </div>
   </form>
@@ -187,9 +218,22 @@
   document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   function saveAs(stateId) {
-    console.log('here')
     document.forms.postForm.stateId.value = stateId;
     document.forms.postForm.submit();
+  }
+
+  function toggleParents(el) {
+    const parentIds = el.dataset.parentIds
+    const selector = parentIds.split(',').map(p => `input[value="${p}"]`).join(',')
+    const parents = [...document.querySelectorAll(selector)]
+
+    parents.map(parent => {
+      const children = document.querySelectorAll(`input[data-parent-ids*="${parent.value},"]:checked`)
+
+      children.length
+        ? parent.setAttribute('checked', 'checked')
+        : parent.removeAttribute('checked')
+    })
   }
 </script>
 

@@ -5,6 +5,7 @@ import PostStoreValidator from 'App/Validators/PostStoreValidator'
 import Route from '@ioc:Adonis/Core/Route'
 import DateService from 'App/Services/DateService'
 import PostService from 'App/Services/PostService'
+import TaxonomyService from 'App/Services/TaxonomyService'
 
 export default class PostsController {
 
@@ -24,13 +25,15 @@ export default class PostsController {
   public async create({ view, bouncer }: HttpContextContract) {
     await bouncer.with('PostPolicy').authorize('store')
 
-    return view.render('studio/posts/createOrEdit')
+    const taxonomies = await TaxonomyService.getAllForTree()
+
+    return view.render('studio/posts/createOrEdit', { taxonomies })
   }
 
   public async store ({ request, response, auth, bouncer }: HttpContextContract) {
     await bouncer.with('PostPolicy').authorize('store')
 
-    const { publishAtDate, publishAtTime, assetIds, ...data } = await request.validate(PostStoreValidator)
+    const { publishAtDate, publishAtTime, assetIds, taxonomyIds, ...data } = await request.validate(PostStoreValidator)
 
     if (!data.stateId) data.stateId = State.PUBLIC
 
@@ -39,6 +42,7 @@ export default class PostsController {
 
     await auth.user!.related('posts').attach([post.id])
     await PostService.syncAssets(post, assetIds)
+    await PostService.syncTaxonomies(post, taxonomyIds)
 
     return response.redirect().toRoute('studio.posts.index')
   }
@@ -50,11 +54,14 @@ export default class PostsController {
     const post = await Post.query()
       .where('id', params.id)
       .preload('assets', query => query.orderBy('sort_order'))
+      .preload('taxonomies', q => q.select(['id']))
       .firstOrFail()
 
     await bouncer.with('PostPolicy').authorize('update', post)
 
-    return view.render('studio/posts/createOrEdit', { post })
+    const taxonomies = await TaxonomyService.getAllForTree()
+
+    return view.render('studio/posts/createOrEdit', { post, taxonomies })
   }
 
   public async update ({ request, response, params, bouncer }: HttpContextContract) {
@@ -62,13 +69,14 @@ export default class PostsController {
 
     await bouncer.with('PostPolicy').authorize('update', post)
 
-    const { publishAtDate, publishAtTime, assetIds, ...data } = await request.validate(PostStoreValidator)
+    const { publishAtDate, publishAtTime, assetIds, taxonomyIds, ...data } = await request.validate(PostStoreValidator)
     const publishAt = DateService.getPublishAtDateTime(publishAtDate, publishAtTime)
 
     post.merge({ ...data, publishAt })
 
     await post.save()
     await PostService.syncAssets(post, assetIds)
+    await PostService.syncTaxonomies(post, taxonomyIds)
 
     return response.redirect().toRoute('studio.posts.index')
   }

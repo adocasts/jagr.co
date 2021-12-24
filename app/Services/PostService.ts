@@ -21,7 +21,18 @@ export default class PostService {
 
     await post.related('assets').detach()
     await Asset.query().whereIn('id', assetIds).delete()
-    
+
     StorageService.destroyAll(assetFilenames)
+  }
+
+  public static async syncTaxonomies(post: Post, taxonomyIds: number[] = []) {
+    const taxonomyData = taxonomyIds.reduce((prev, currentId, i) => ({
+      ...prev,
+      [currentId]: {
+        sort_order: i
+      }
+    }), {})
+
+    await post.related('taxonomies').sync(taxonomyData)
   }
 }

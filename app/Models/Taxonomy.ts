@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
 import Asset from './Asset'
 import Collection from './Collection'
 import Post from './Post'
@@ -43,8 +43,15 @@ export default class Taxonomy extends BaseModel {
   @belongsTo(() => Asset)
   public asset: BelongsTo<typeof Asset>
 
-  @belongsTo(() => Collection)
-  public parent: BelongsTo<typeof Collection>
+  @belongsTo(() => Taxonomy, {
+    localKey: 'parentId'
+  })
+  public parent: BelongsTo<typeof Taxonomy>
+
+  @hasMany(() => Taxonomy, {
+    foreignKey: 'parentId'
+  })
+  public children: HasMany<typeof Taxonomy>
 
   @manyToMany(() => Post, {
     pivotTable: 'post_taxonomies',

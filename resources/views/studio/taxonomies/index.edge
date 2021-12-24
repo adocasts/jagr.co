@@ -13,7 +13,7 @@
   <div class="-ml-3">
     @tree.base({ nodes: taxonomies, className: 'pl-3 border-l border-grey-300' })
       @slot('main', scope)
-        <a href="#">
+        <a href="{{ route('studio.taxonomies.edit', { id: scope.node.id }) }}">
           {{ scope.node.name }}
         </a>
       @endslot

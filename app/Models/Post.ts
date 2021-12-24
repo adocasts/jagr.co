@@ -5,6 +5,7 @@ import PostSnapshot from './PostSnapshot'
 import User from './User'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import State from 'App/Enums/States'
+import Taxonomy from "App/Models/Taxonomy";
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -82,6 +83,12 @@ export default class Post extends BaseModel {
     pivotColumns: ['author_type_id']
   })
   public authors: ManyToMany<typeof User>
+
+  @manyToMany(() => Taxonomy, {
+    pivotTable: 'post_taxonomies',
+    pivotColumns: ['sort_order']
+  })
+  public taxonomies: ManyToMany<typeof Taxonomy>
 
   @computed()
   public get publishAtDateString() {

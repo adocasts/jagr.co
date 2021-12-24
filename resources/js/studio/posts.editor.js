@@ -14,6 +14,7 @@ import Raw from '@editorjs/raw'
 import Table from '@editorjs/table'
 import Warning from '@editorjs/warning'
 import { DateTime } from 'luxon'
+import axios from "axios";
 
 const editor = new EditorJS({
   /**
@@ -118,10 +119,10 @@ class VideoManager {
       .replace('https://vimeo.com/', 'https://player.vimeo.com/video/')
 
     return `
-      <iframe 
-        style="width: 100%;" 
-        src="${embedUrl}" 
-        frameborder="0" 
+      <iframe
+        style="width: 100%;"
+        src="${embedUrl}"
+        frameborder="0"
         allow="accelerometer;autoplay;encrypted-media;gyroscope;picture-in-picture"
         allowfullscreen
       ></iframe>`
@@ -135,7 +136,7 @@ class VideoManager {
 
     const source = this.#normalizeSource(event.target.value)
     const isValid = this.#isSourceValid(source)
-    
+
     if (!isValid) return
 
     const embed = this.getEmbed(source)

@@ -45,5 +45,6 @@ Server.middleware.register([
 */
 Server.middleware.registerNamed({
   auth: () => import('App/Middleware/Auth'),
-  role: () => import('App/Middleware/Role')
+  role: () => import('App/Middleware/Role'),
+  honeypot: () => import('@ioc:Jagr/Honeypot')
 })
