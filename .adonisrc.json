@@ -32,8 +32,7 @@
     "@adonisjs/ally",
     "@adonisjs/mail",
     "@adonisjs/redis",
-    "@adonisjs/bouncer",
-    "adonisjs-honeypot"
+    "@adonisjs/bouncer"
   ],
   "metaFiles": [
     {

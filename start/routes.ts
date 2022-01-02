@@ -28,7 +28,7 @@ Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
 // Route.get('/img/*', 'AssetsController.show').where('path', /.*/).as('img');
 
 Route.get('/signup',  'AuthController.signupShow').as('auth.signup.show')
-Route.post('/signup', 'AuthController.signup').as('auth.signup').middleware(['honeypot'])
+Route.post('/signup', 'AuthController.signup').as('auth.signup')
 Route.get('/signin',  'AuthController.signinShow').as('auth.signin.show')
 Route.post('/signin', 'AuthController.signin').as('auth.signin')
 Route.get('/signout', 'AuthController.signout').as('auth.signout')

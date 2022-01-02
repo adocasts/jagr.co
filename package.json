@@ -56,7 +56,6 @@
     "@tailwindcss/forms": "^0.3.4",
     "@tailwindcss/typography": "^0.4.1",
     "@tarekraafat/autocomplete.js": "^10.2.6",
-    "adonisjs-honeypot": "github:jagr-co/adonisjs-honeypot",
     "aws-sdk": "^2.1030.0",
     "axios": "^0.24.0",
     "babel-polyfill": "^6.26.0",

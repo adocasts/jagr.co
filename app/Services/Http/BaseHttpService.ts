@@ -23,9 +23,9 @@ export default class BaseHttpService {
   public async validate(schema: RequestValidatorNode<ParsedTypedSchema<TypedSchema>>, nullableFields: Array<string> = []) {
     const nullableData = this.ctx.request.only(nullableFields)
     const validatedData = await this.ctx.request.validate(schema)
-    return { 
-      ...nullableData, 
-      ...validatedData 
+    return {
+      ...nullableData,
+      ...validatedData
     }
   }
 
