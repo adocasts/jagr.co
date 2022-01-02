@@ -7,7 +7,7 @@ import {
   ManyToMany,
   manyToMany
 } from '@ioc:Adonis/Lucid/Orm'
-import CollectionType from 'App/Enums/Collectiontype'
+import CollectionType from 'App/Enums/CollectionType'
 import Status from 'App/Enums/Status'
 import User from './User'
 import Post from './Post'

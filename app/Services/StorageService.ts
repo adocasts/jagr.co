@@ -1,7 +1,7 @@
 import { MultipartStream } from '@ioc:Adonis/Core/BodyParser';
 import Env from '@ioc:Adonis/Core/Env';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
-import storageConfig from 'Config/Storage';
+import storageConfig from 'config/storage';
 import FileType from 'file-type'
 
 export default class StorageService {
@@ -85,10 +85,9 @@ export default class StorageService {
       Key: `${directory}/${fileName}`
     }
 
-    return this.disk.deleteObject(params).promise().then((err, data) => {
-      if (err) return false
-      return true
-    })
+    const hasError = await this.disk.deleteObject(params).promise().then(err => err)
+
+    return !hasError
   }
 
   public static async destroyAll(fileNames: string[], directory: string = this.directory): Promise<boolean> {
@@ -99,10 +98,9 @@ export default class StorageService {
       }
     }
 
-    return this.disk.deleteObjects(params).promise().then((err, data) => {
-      if (err) return false
-      return true
-    })
+    const hasError = await this.disk.deleteObjects(params).promise().then(err => err)
+
+    return !hasError
   }
 
   public static async getContentType(file: any) {

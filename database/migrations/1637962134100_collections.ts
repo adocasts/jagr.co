@@ -1,5 +1,5 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
-import CollectionType from 'App/Enums/Collectiontype'
+import CollectionType from 'App/Enums/CollectionType'
 import State from 'App/Enums/States'
 import Status from 'App/Enums/Status'
 

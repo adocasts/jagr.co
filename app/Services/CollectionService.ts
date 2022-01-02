@@ -1,6 +1,7 @@
 import Collection from 'App/Models/Collection'
 
 export default class CollectionService {
+  // TODO: finish
   public static async getPostCounts(collections: Collection[]) {
     const ids = collections.map(c => c.id)
     const subCollections = await Collection.query()
@@ -9,15 +10,16 @@ export default class CollectionService {
       .withCount('posts')
       .select('id')
 
-
+    return subCollections
   }
 
+  // TODO: finish
   public static async getPostCount(collection: Collection) {
     const subCollections = await Collection.query()
-      .where('parentId', collectionId)
+      .where('parentId', collection.id)
       .withCount('posts')
       .select('id')
 
-    const
+    return subCollections
   }
 }

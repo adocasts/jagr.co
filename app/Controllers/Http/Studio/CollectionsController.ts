@@ -1,5 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CollectionType from 'App/Enums/Collectiontype'
+import CollectionType from 'App/Enums/CollectionType'
 import State from 'App/Enums/States'
 import Status from 'App/Enums/Status'
 import Collection from 'App/Models/Collection'

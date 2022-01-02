@@ -1,4 +1,4 @@
-import { GoogleDriverContract, GithubDriverContract, SocialProviders, AllyUserContract, GithubToken, GoogleToken } from "@ioc:Adonis/Addons/Ally";
+import { GoogleDriverContract, GithubDriverContract, SocialProviders } from "@ioc:Adonis/Addons/Ally";
 import BaseHttpService from "App/Services/Http/BaseHttpService";
 import User from "App/Models/User";
 import RoleEnum from 'App/Enums/Roles'
@@ -13,12 +13,12 @@ export default class AuthSocialService extends BaseHttpService {
    */
   public async getUser(socialProvider: keyof SocialProviders) {
     const social = this.ctx.ally.use(socialProvider)
-    
+
     if (!this.checkForErrors(social)) {
       return { isSuccess: false, user: null }
     }
 
-    const user = await this.findOrCreateUser(social, socialProvider)    
+    const user = await this.findOrCreateUser(social, socialProvider)
 
     return { isSuccess: true, user }
   }
@@ -55,7 +55,7 @@ export default class AuthSocialService extends BaseHttpService {
     const user = await social.user()
     const username = await this.getUniqueUsername(user.name)
     const tokenKey = `${socialProvider}AccessToken`
-    
+
     let jagrUser = await User.query()
       .where('email', user.email!)
       .whereNotNull(tokenKey)
