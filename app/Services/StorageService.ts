@@ -1,7 +1,7 @@
 import { MultipartStream } from '@ioc:Adonis/Core/BodyParser';
 import Env from '@ioc:Adonis/Core/Env';
 import { ManagedUpload } from 'aws-sdk/clients/s3';
-import storageConfig from 'config/storage';
+import storageConfig from 'Config/storage';
 import FileType from 'file-type'
 
 export default class StorageService {
