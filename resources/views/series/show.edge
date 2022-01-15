@@ -3,7 +3,7 @@
 @section('hero')
 
   {{--  TODO: if user hasn't start the series show series info instead of lesson info  --}}
-  <div class="bg-gradient-to-br from-brand-900 to-brand-800">
+  <div class="bg-gradient-to-br from-brand-900 to-brand-800 relative">
     <div class="">
       @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg' })
     </div>
@@ -43,8 +43,9 @@
 
 @section('content')
 
-  {{--  Trending Lessons  --}}
-  <div class="flex flex-wrap -mx-6 -mt-3 pt-3 rounded-t-lg relative bg-white z-10 overflow-hidden">
+  {{--  Series Lessons  --}}
+  {{--  TODO: need to display modules somehow  --}}
+  <div class="flex flex-wrap -mx-6 -mt-6  rounded-t-lg relative bg-white z-10 overflow-hidden">
     @each (i in [0,1,2,3,4])
       @!lesson.card({ index: i, className: 'rounded-lg' })
     @endeach
