@@ -9,7 +9,9 @@ export default class SeriesController {
 
   public async store({}: HttpContextContract) {}
 
-  public async show({}: HttpContextContract) {}
+  public async show({ view }: HttpContextContract) {
+    return view.render('series/show')
+  }
 
   public async edit({}: HttpContextContract) {}
 

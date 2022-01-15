@@ -19,7 +19,7 @@
 
 @set('sizeClass', (s) => sizes[s || 'base'])
 @set('variantClass', (v) => variants[v || 'base'])
-@set('displayClass', block ? 'flex w-full' : 'inline-flex')
+@set('displayClass', block ? 'flex w-full justify-center' : 'inline-flex')
 
 @if(!href)
   <button
@@ -31,7 +31,7 @@
       {{ variantClass(variant) }}
       {{ className || '' }}
       {{ disabled ? "bg-gray-200 text-gray-400 hover:bg-gray-200 hover:text-gray-400 focus:bg-gray-200 focus:text-gray-400" : "" }}
-      {{ blockClass }} items-center rounded-md transition duration-300
+      {{ displayClass }} items-center rounded-md transition duration-300
     "
     {{  disabled ? "disabled=disabled" : "" }}
     {{ form ? `form=${form}` : "" }}>
@@ -46,7 +46,7 @@
       {{ variantClass(variant) }}
       {{ className || '' }}
       {{ disabled ? "bg-gray-200 text-gray-400 hover:bg-gray-200 hover:text-gray-400 focus:bg-gray-200 focus:text-gray-400" : "" }}
-      {{ blockClass }} items-center rounded transition duration-300
+      {{ displayClass }} items-center rounded transition duration-300
     ">
     {{{ await $slots.main() }}}
   </a>
