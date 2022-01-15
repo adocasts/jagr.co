@@ -27,6 +27,7 @@ Route.get('/', async ({ view }) => {
 Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
 // Route.get('/img/*', 'AssetsController.show').where('path', /.*/).as('img');
 
+// AUTH
 Route.get('/signup',  'AuthController.signupShow').as('auth.signup.show')
 Route.post('/signup', 'AuthController.signup').as('auth.signup')
 Route.get('/signin',  'AuthController.signinShow').as('auth.signin.show')
@@ -42,6 +43,11 @@ Route.post('/forgot-password',      'PasswordResetController.forgotPasswordSend'
 Route.get('/reset-password/:email', 'PasswordResetController.resetPassword').as('auth.password.reset');
 Route.post('/reset-password',       'PasswordResetController.resetPasswordStore').as('auth.password.reset.store');
 
+// PUBLIC
+Route.get('/series',        'SeriesController.index').as('series.index')
+Route.get('/series/:slug',  'SeriesController.show').as('series.show')
+
+// STUDIO
 Route.group(() => {
 
   Route.group(() => {
@@ -85,6 +91,7 @@ Route.group(() => {
 
 }).namespace('App/Controllers/Http/Studio').prefix('studio').as('studio').middleware(['auth'])
 
+// API
 Route.group(() => {
 
   Route.post('/studio/assets', 'AssetsController.store').as('studio.assets.store')

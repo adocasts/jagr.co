@@ -6,6 +6,7 @@ export default class SettingsService extends BaseHttpService {
     return this.user?.roleId === RoleEnum.ADMIN
   }
 
+  // @deprecated use bouncer instead
   public get permissions() {
     return {
       studio: {
@@ -16,7 +17,7 @@ export default class SettingsService extends BaseHttpService {
 
         canAccessSeries: this.isAdmin,
         canManageSeries: this.isAdmin,
-        
+
         canAccessTopics: this.isAdmin,
         canManageTopics: this.isAdmin,
 

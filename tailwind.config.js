@@ -2,8 +2,7 @@ const defaultTheme = require('tailwindcss/defaultTheme');
 const colors = require('@radix-ui/colors')
 
 module.exports = {
-  purge: [],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./resources/**/*.{edge,js,ts,vue,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -118,37 +117,31 @@ module.exports = {
             color: theme('colors.gray.950'),
 
             strong: {
-              color: theme('colors.gray.950', defaultTheme.colors.gray[900]),
+              color: theme('colors.gray.950', colors.slate.slate11),
             },
 
             'ol > li::before': {
-              color: theme('colors.gray.800', defaultTheme.colors.gray[500]),
+              color: theme('colors.gray.800', colors.slate.slate7),
             },
             'ul > li::before': {
-              backgroundColor: theme('colors.gray.800', defaultTheme.colors.gray[300]),
+              backgroundColor: theme('colors.gray.800', colors.slate.slate5),
             },
 
             h1: {
-              color: theme('colors.gray.950', defaultTheme.colors.gray[900]),
+              color: theme('colors.gray.950', colors.slate.slate11),
             },
             h2: {
-              color: theme('colors.gray.950', defaultTheme.colors.gray[900]),
+              color: theme('colors.gray.950', colors.slate.slate11),
             },
             h3: {
-              color: theme('colors.gray.950', defaultTheme.colors.gray[900]),
+              color: theme('colors.gray.950', colors.slate.slate11),
             },
             h4: {
-              color: theme('colors.gray.950', defaultTheme.colors.gray[900]),
+              color: theme('colors.gray.950', colors.slate.slate11),
             },
           },
         },
       }),
-    },
-  },
-  variants: {
-    extend: {
-      display: ['focus-within'],
-      translate: ['group-hover']
     },
   },
   plugins: [
