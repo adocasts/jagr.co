@@ -5,17 +5,11 @@ export default class SeriesController {
     return view.render('series/index')
   }
 
-  public async create({}: HttpContextContract) {}
-
-  public async store({}: HttpContextContract) {}
-
   public async show({ view }: HttpContextContract) {
     return view.render('series/show')
   }
 
-  public async edit({}: HttpContextContract) {}
-
-  public async update({}: HttpContextContract) {}
-
-  public async destroy({}: HttpContextContract) {}
+  public async lesson({ view }: HttpContextContract) {
+    return view.render('series/lesson')
+  }
 }

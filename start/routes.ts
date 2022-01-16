@@ -44,8 +44,9 @@ Route.get('/reset-password/:email', 'PasswordResetController.resetPassword').as(
 Route.post('/reset-password',       'PasswordResetController.resetPasswordStore').as('auth.password.reset.store');
 
 // PUBLIC
-Route.get('/series',        'SeriesController.index').as('series.index')
-Route.get('/series/:slug',  'SeriesController.show').as('series.show')
+Route.get('/series',                      'SeriesController.index').as('series.index')
+Route.get('/series/:slug',                'SeriesController.show').as('series.show')
+Route.get('/series/:slug/lesson/:index',  'SeriesController.lesson').as('series.lesson')
 
 // STUDIO
 Route.group(() => {

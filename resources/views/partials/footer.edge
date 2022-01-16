@@ -1,8 +1,8 @@
 <!--
-  This example requires Tailwind CSS v2.0+ 
-  
+  This example requires Tailwind CSS v2.0+
+
   This example requires some changes to your config:
-  
+
   ```
   // tailwind.config.js
   module.exports = {
@@ -16,7 +16,7 @@
 -->
 <footer class="bg-white" aria-labelledby="footer-heading">
     <h2 id="footer-heading" class="sr-only">Footer</h2>
-    <div class="max-w-screen-2xl mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8">
+    @container({ className: 'py-12 lg:py-16' })
       <div class="xl:grid xl:grid-cols-3 xl:gap-8">
         <div class="grid grid-cols-2 gap-8 xl:col-span-2">
           <div class="md:grid md:grid-cols-2 md:gap-8">
@@ -30,13 +30,13 @@
                       Home
                     </a>
                 </li>
-                
+
                 <li>
                   <a href="/series" class="text-base text-gray-900 hover:text-gray-950">
                     Series
                   </a>
                 </li>
-  
+
                 <li>
                   <a href="/lessons" class="text-base text-gray-900 hover:text-gray-950">
                     Lessons
@@ -59,7 +59,7 @@
                       Topics
                     </a>
                 </li>
-  
+
                 {{--  <li>
                     <a href="/tags" class="text-base text-gray-900 hover:text-gray-950">
                       Tags
@@ -91,7 +91,7 @@
                         Support
                     </a>
                 </li>
-  
+
                 <li>
                   <a href="/sitemap" class="text-base text-gray-900 hover:text-gray-950">
                     Sitemap
@@ -109,13 +109,13 @@
                     Cookies
                   </a>
                 </li>
-  
+
                 <li>
                   <a href="/privacy" class="text-base text-gray-900 hover:text-gray-950">
                     Privacy
                   </a>
                 </li>
-  
+
                 <li>
                   <a href="/terms" class="text-base text-gray-900 hover:text-gray-950">
                     Terms
@@ -130,7 +130,7 @@
             Subscribe to our newsletter
           </h3>
           <p class="text-base text-gray-700">
-            It contains the a monthly roundup of our latest lessons. 
+            It contains the a monthly roundup of our latest lessons.
           </p>
           <form action="https://www.getrevue.co/profile/jagr_co/add_subscriber" method="post" id="revue-form" name="revue-form"  target="_blank" class="mt-4 sm:flex sm:max-w-md">
             <div class="min-w-0 flex-1">
@@ -168,6 +168,5 @@
             &copy; {{ DateTime.local().year }} Jagr, LLC. All rights reserved.
         </p>
       </div>
-    </div>
+    @end
   </footer>
-  
