@@ -18,7 +18,8 @@
   "preloads": [
     "./start/routes",
     "./start/kernel",
-    "./start/bouncer"
+    "./start/bouncer",
+    "./start/events"
   ],
   "providers": [
     "./providers/AppProvider",
