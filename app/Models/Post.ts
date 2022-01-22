@@ -16,6 +16,8 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import State from 'App/Enums/States'
 import Taxonomy from "App/Models/Taxonomy";
 import ReadService from 'App/Services/ReadService'
+import BodyTypes from 'App/Enums/BodyTypes'
+const BlockParser = require('editorjs-parser')
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -45,6 +47,12 @@ export default class Post extends BaseModel {
 
   @column()
   public body: string | null
+
+  @column()
+  public bodyBlocks: object | null
+
+  @column()
+  public bodyTypeId: number
 
   @column()
   public videoUrl: string | null
@@ -156,9 +164,20 @@ export default class Post extends BaseModel {
 
   @beforeSave()
   public static async setReadTimeValues(post: Post) {
-    const readTime = ReadService.getReadCounts(post.body);
-    post.readMinutes = readTime.minutes;
-    post.readTime = readTime.time;
-    post.wordCount = readTime.words;
+    const readTime = ReadService.getReadCounts(post.body)
+    post.readMinutes = readTime.minutes
+    post.readTime = readTime.time
+    post.wordCount = readTime.words
+
+    post.bodyTypeId = post.$dirty.bodyBlocks ? BodyTypes.JSON : BodyTypes.HTML
+
+    if (post.bodyTypeId == BodyTypes.JSON) {
+      const parser = new BlockParser()
+      const html = typeof post.bodyBlocks === 'string'
+        ? parser.parse(JSON.parse(post.bodyBlocks))
+        : parser.parse(post.bodyBlocks)
+
+      post.body = html
+    }
   }
 }

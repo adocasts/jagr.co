@@ -33,6 +33,8 @@
     @set('action', route('studio.posts.update', { id: post.id}, { qs: { _method: 'PUT' }}))
   @endif
 
+  {{ inspect(flashMessages.get('errors')) }}
+
   <form name="postForm" method="POST" action="{{ action }}">
     {{ csrfField() }}
     <input type="hidden" name="timezone" value="" />
@@ -44,7 +46,7 @@
           label: 'Title',
           name: 'title',
           placeholder: 'Enter a concise & descriptive title',
-          value: post?.title ?? flashMessages.get('title'),
+          value: flashMessages.get('title') ?? post?.title,
           errors: flashMessages.get('errors.title'),
           required: true,
           max: 100,
@@ -55,7 +57,7 @@
           label: 'Slug',
           name: 'slug',
           placeholder: 'Enter a unique url safe identifier',
-          value: post?.slug ?? flashMessages.get('slug') ?? '',
+          value: flashMessages.get('slug') ?? post?.slug ?? '',
           errors: flashMessages.get('errors.slug')
         })
 
@@ -64,7 +66,7 @@
           label: 'Description',
           name: 'description',
           placeholder: 'Enter a high-level overview of your post',
-          value: post?.description ?? flashMessages.get('description') ?? '',
+          value: flashMessages.get('description') ?? post?.description ?? '',
           errors: flashMessages.get('errors.description'),
           rows: 3
         })
@@ -78,7 +80,7 @@
               @!form.input.alt({
                 type: 'date',
                 name: 'publishAtDate',
-                value: post?.publishAtDateString ?? flashMessages.get('date') ?? '',
+                value: flashMessages.get('date') ?? post?.publishAtDateString ?? '',
                 errors: flashMessages.get('errors.date'),
                 group: true
               })
@@ -86,7 +88,7 @@
               @!form.input.alt({
                 type: 'time',
                 name: 'publishAtTime',
-                value: post?.publishAtTimeString ?? flashMessages.get('time') ?? '',
+                value: flashMessages.get('time') ?? post?.publishAtTimeString ?? '',
                 errors: flashMessages.get('errors.time'),
                 group: true
               })
@@ -101,7 +103,7 @@
             label: 'Page Title',
             name: 'pageTitle',
             placeholder: 'Enter a concise SEO friendly page title. Defaults to the title when left empty',
-            value: post?.pageTitle ?? flashMessages.get('pageTitle') ?? '',
+            value: flashMessages.get('pageTitle') ?? post?.pageTitle ?? '',
             errors: flashMessages.get('errors.pageTitle')
           })
 
@@ -110,7 +112,7 @@
             label: 'Meta Description',
             name: 'metaDescription',
             placeholder: 'Enter a SEO friendly description. Defaults to the summary when left empty.',
-            value: post?.metaDescription ?? flashMessages.get('metaDescription') ?? '',
+            value: flashMessages.get('metaDescription') ?? post?.metaDescription ?? '',
             errors: flashMessages.get('errors.metaDescription'),
             rows: 3
           })
@@ -119,7 +121,7 @@
             label: 'Canonical',
             name: 'canonical',
             placeholder: 'Cross-posting from another site? Link the original here',
-            value: post?.canonical ?? flashMessages.get('canonical') ?? '',
+            value: flashMessages.get('canonical') ?? post?.canonical ?? '',
             errors: flashMessages.get('errors.canonical')
           })
         </details>
@@ -128,12 +130,14 @@
           type: 'group',
           label: 'Body',
           name: 'body',
-          value: post?.body ?? flashMessages.get('body') ?? '',
-          errors: flashMessages.get('errors.body')
+          value: flashMessages.get('body') ?? post?.body ?? '',
+          errors: flashMessages.get('errors.body') ?? flashMessages.get('errors.bodyBlocks')
         })
           @slot('input')
             <div class="-mx-8">
               <input type="hidden" name="body" value="{{ flashMessages.get('body') ?? post?.body ?? '' }}" />
+              <input type="hidden" name="bodyBlocks" value="{{ stringify(flashMessages.get('bodyBlocks') ?? post?.bodyBlocks ?? '') }}" />
+              <input type="hidden" name="bodyTypeId" value="{{ flashMessages.get('bodyTypeId') ?? post?.bodyTypeId ?? 1 }}" />
               <div id="editorjs" class="prose md:prose-md lg:prose-lg xl:prose-xl"></div>
             </div>
           @endslot
@@ -156,7 +160,7 @@
           name: 'videoUrl',
           help: 'Add a YouTube video url to feature a video',
           placeholder: 'Example: https://www.youtube.com/watch?v=kfSGzUcddjU',
-          value: post?.videoUrl ?? flashMessages.get('videoUrl') ?? '',
+          value: flashMessages.get('videoUrl') ?? post?.videoUrl ?? '',
           errors: flashMessages.get('errors.videoUrl'),
           onInput: 'videoManager.onInput(event)',
           dataAttributes: {
@@ -219,26 +223,30 @@
   document.addEventListener('DOMContentLoaded', () => {
     document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
     videoManager.onLoad(document.forms.postForm.videoUrl)
-
-    function saveAs(stateId) {
-      document.forms.postForm.stateId.value = stateId;
-      document.forms.postForm.submit();
-    }
-
-    function toggleParents(el) {
-      const parentIds = el.dataset.parentIds
-      const selector = parentIds.split(',').map(p => `input[value="${p}"]`).join(',')
-      const parents = [...document.querySelectorAll(selector)]
-
-      parents.map(parent => {
-        const children = document.querySelectorAll(`input[data-parent-ids*="${parent.value},"]:checked`)
-
-        children.length
-          ? parent.setAttribute('checked', 'checked')
-          : parent.removeAttribute('checked')
-      })
-    }
   })
+
+  async function saveAs(stateId) {
+    const editorData = await window.editor.save()
+    console.log({ ...editorData })
+    document.forms.postForm.bodyBlocks.value = JSON.stringify(editorData)
+    document.forms.postForm.bodyTypeId.value = 2
+    document.forms.postForm.stateId.value = stateId
+    document.forms.postForm.submit();
+  }
+
+  function toggleParents(el) {
+    const parentIds = el.dataset.parentIds
+    const selector = parentIds.split(',').map(p => `input[value="${p}"]`).join(',')
+    const parents = [...document.querySelectorAll(selector)]
+
+    parents.map(parent => {
+      const children = document.querySelectorAll(`input[data-parent-ids*="${parent.value},"]:checked`)
+
+      children.length
+        ? parent.setAttribute('checked', 'checked')
+        : parent.removeAttribute('checked')
+    })
+  }
 </script>
 
 @endsection

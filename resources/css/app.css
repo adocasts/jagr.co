@@ -259,7 +259,3 @@ input[type="file"].file-drop + label:hover {
   bottom: 2ch;
   right: 0;
 }
-
-.codex-editor__redactor {
-  padding-bottom: 3ch !important;
-}

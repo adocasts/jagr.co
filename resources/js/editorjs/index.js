@@ -19,11 +19,17 @@ import Warning from '@editorjs/warning'
 
 (async () => {
 
+  const bodyTypeId = document.querySelector('input[name=bodyTypeId]').value
+  const body = document.querySelector('input[name=body]').value
+  const bodyBlocks = document.querySelector('input[name=bodyBlocks]').value
+
   const editor = new EditorJS({
     /**
      * Id of Element that should contain Editor instance
      */
     holder: 'editorjs',
+
+    data: JSON.parse(bodyBlocks),
 
     tools: {
       header: {
@@ -63,8 +69,10 @@ import Warning from '@editorjs/warning'
 
   await editor.isReady
 
-  const body = document.querySelector('input[name=body]').value
+  if (body && bodyTypeId == 1) {
+    editor.blocks.renderFromHTML(body)
+  }
 
-  editor.blocks.renderFromHTML(body)
+  window.editor = editor
 
 })();
