@@ -233,3 +233,33 @@ input[type="file"].file-drop + label:hover {
   right: 50%;
   width: 100vw;
 }
+
+.cdx-block.ce-code {
+  position: relative;
+}
+
+.ce-code__textarea {
+  min-height: 200px;
+  font-family: Menlo, Monaco, Consolas, Courier New, monospace;
+  color: #41314e;
+  line-height: 1.6em;
+  font-size: 12px;
+  background: #f8f7fa;
+  border: 1px solid #f1f1f4;
+  box-shadow: none;
+  white-space: pre;
+  word-wrap: normal;
+  overflow-x: auto;
+  resize: vertical;
+}
+
+.ce-code__languagecode {
+  @apply text-xs px-3 py-1 rounded;
+  position: absolute;
+  bottom: 2ch;
+  right: 0;
+}
+
+.codex-editor__redactor {
+  padding-bottom: 3ch !important;
+}

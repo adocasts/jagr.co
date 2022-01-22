@@ -5,8 +5,8 @@
 
 @set('dataAttrs', Object.keys(dataAttributes).map(attr => `data-${dashCase(attr)}="${dataAttributes[attr]}"`).join(' '))
 
-<div 
-  x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }" 
+<div
+  x-data="{ value: `{{ internalValue }}`, max: {{ max }}, min: {{ min }}, focused: false, type: `{{ type || 'text' }}` }"
   class="transition duration-300 ease-in-out relative py-2 {{ !group && 'mb-6 border-l-2 border-gray-300 focus-within:border-brand-800 pl-3' }} {{ error && 'border-red-600' }}">
   @if (label)
     <label for="{{ id ?? name }}" class="block text-sm font-medium text-gray-950">
@@ -15,7 +15,7 @@
         <sup class="text-red-800">*</sup>
       @endif
     </label>
-  @endif 
+  @endif
   @if (help)
     <p class="text-xs text-gray-800">
       {{ help }}
@@ -25,21 +25,21 @@
   <div class="mt-1 relative">
     @if(type === 'textarea')
       <textarea
-        id="{{ id || name }}" 
+        id="{{ id || name }}"
         name="{{ name }}"
         rows="{{ rows || 3 }}"
         class="
           {{ rightGutter }}
           w-full natural bg-transparent border-0 p-0 placeholder-gray-700 {{ title && 'font-semibold text-2xl' }}
-          {{ error 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
-            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700' 
+          {{ error
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
+            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700'
           }}
         "
-        placeholder="{{ placeholder || '' }}" 
+        placeholder="{{ placeholder || '' }}"
         x-model="value"
         style="{{ style }}"
-        aria-invalid="{{ error ? true : false }}" 
+        aria-invalid="{{ error ? true : false }}"
         aria-describedby="{{ name }}-error"
         {{ max && `maxlength=${max}` }}
         {{ min && `minlength=${min}` }}
@@ -52,17 +52,17 @@
         {{{ await $slots.input()  }}}
       @endif
     @elseif(type === 'select')
-      <select 
-        id="{{ id || name }}" 
+      <select
+        id="{{ id || name }}"
         name="{{ name }}"
         x-model="value"
-        placeholder="{{ placeholder || '' }}" 
+        placeholder="{{ placeholder || '' }}"
         class="
           {{ rightGutter }}
           w-full natural bg-transparent border-0 p-0 placeholder-gray-700 {{ title && 'font-semibold text-2xl' }}
-          {{ error 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
-            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700' 
+          {{ error
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
+            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700'
           }}
         "
         style="{{ style }}"
@@ -71,21 +71,21 @@
         {{{ await $slots.main() }}}
       </select>
     @else
-      <input 
+      <input
         {{{ staticType ? `type="${type || 'text'}"` : `:type="type"` }}}
-        id="{{ id || name }}" 
+        id="{{ id || name }}"
         name="{{ name }}"
         class="
           {{ rightGutter }}
           w-full natural bg-transparent border-0 p-0 placeholder-gray-700 {{ title && 'font-semibold text-2xl' }}
-          {{ error 
-            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500' 
-            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700' 
+          {{ error
+            ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
+            : 'focus:ring-brand-500 focus:border-brand-500 border-gray-700'
           }}
         "
-        placeholder="{{ placeholder || '' }}" 
+        placeholder="{{ placeholder || '' }}"
         x-model="value"
-        aria-invalid="{{ error ? true : false }}" 
+        aria-invalid="{{ error ? true : false }}"
         aria-describedby="{{ name }}-error"
         style="{{ type === 'date' || type === 'time' ? 'line-height: 1;' : '' }} {{ style }}"
         {{ max ? `maxlength=${max}` : '' }}
@@ -113,7 +113,7 @@
         </div>
       </div>
     @endif
-  
+
     @if(max)
       <p {{ cloak && 'x-cloak' }} x-show="value.length > max" class="absolute text-xs text-gray-800 absolute right-0 bottom-0">
         <span x-text="value.length"></span> of <span x-text="max"></span>
@@ -129,7 +129,7 @@
     <p class="mt-2 text-sm text-gray-700" x-text="`{{ info }}`.replaceAll('[[value]]', value)">
     </p>
   @endif
-  
+
   @if(errors)
     <p class="mt-2 text-sm text-red-800" id="{{ name }}-error">
       {{ sentenceCase(errors.join(', ')) }}
@@ -139,4 +139,4 @@
   @if ($slots.after)
     {{{ await $slots.after() }}}
   @endif
-</div>  
+</div>

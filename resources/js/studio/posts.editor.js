@@ -1,56 +1,5 @@
-import EditorJS from '@editorjs/editorjs';
-import Checklist from '@editorjs/checklist'
-import Code from '@editorjs/code'
-import Delimiter from '@editorjs/delimiter'
-import Embed from '@editorjs/embed'
-import Header from '@editorjs/header'
-import Image from '@editorjs/image'
-import Link from '@editorjs/link'
-import List from '@editorjs/list'
-import Marker from '@editorjs/marker'
-import NestedList from '@editorjs/nested-list'
-import Paragraph from '@editorjs/paragraph'
-import Raw from '@editorjs/raw'
-import Table from '@editorjs/table'
-import Warning from '@editorjs/warning'
 import { DateTime } from 'luxon'
-import axios from "axios";
-
-const editor = new EditorJS({
-  /**
-   * Id of Element that should contain Editor instance
-   */
-  holder: 'editorjs',
-
-  tools: {
-    header: {
-      class: Header,
-      inlineToolbar: true
-    },
-    list: List,
-    checklist: Checklist,
-    code: Code,
-    delimiter: Delimiter,
-    embed: Embed,
-    image: Image,
-    link: {
-      class: Link,
-      inlineToolbar: true
-    },
-    marker: {
-      class: Marker,
-      inlineToolbar: true
-    },
-    nestedList: NestedList,
-    paragraph: {
-      class: Paragraph,
-      inlineToolbar: true
-    },
-    raw: Raw,
-    table: Table,
-    warning: Warning,
-  }
-});
+import '../editorjs'
 
 // publish at btn updator
 document.addEventListener('DOMContentLoaded', function() {
@@ -129,20 +78,26 @@ class VideoManager {
   }
 
   static onInput(event) {
-    if (!event.target.dataset.previewSelector) {
+    const element = event.hasOwnProperty('target') ? event.target : event
+
+    if (!element.dataset.previewSelector) {
       console.warn('Video input is missing a preview selector')
       return
     }
 
-    const source = this.#normalizeSource(event.target.value)
+    const source = this.#normalizeSource(element.value)
     const isValid = this.#isSourceValid(source)
 
     if (!isValid) return
 
     const embed = this.getEmbed(source)
-    const previewSelector = event.target.dataset.previewSelector
+    const previewSelector = element.dataset.previewSelector
 
     document.querySelector(previewSelector).innerHTML = embed
+  }
+
+  static onLoad(element) {
+    this.onInput(element)
   }
 }
 

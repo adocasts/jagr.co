@@ -133,7 +133,8 @@
         })
           @slot('input')
             <div class="-mx-8">
-              <div id="editorjs"></div>
+              <input type="hidden" name="body" value="{{ flashMessages.get('body') ?? post?.body ?? '' }}" />
+              <div id="editorjs" class="prose md:prose-md lg:prose-lg xl:prose-xl"></div>
             </div>
           @endslot
         @end
@@ -214,27 +215,30 @@
 
 @entryPointScripts('studio.posts.editor')
 
-<script>
-  document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.forms.postForm.timezone.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    videoManager.onLoad(document.forms.postForm.videoUrl)
 
-  function saveAs(stateId) {
-    document.forms.postForm.stateId.value = stateId;
-    document.forms.postForm.submit();
-  }
+    function saveAs(stateId) {
+      document.forms.postForm.stateId.value = stateId;
+      document.forms.postForm.submit();
+    }
 
-  function toggleParents(el) {
-    const parentIds = el.dataset.parentIds
-    const selector = parentIds.split(',').map(p => `input[value="${p}"]`).join(',')
-    const parents = [...document.querySelectorAll(selector)]
+    function toggleParents(el) {
+      const parentIds = el.dataset.parentIds
+      const selector = parentIds.split(',').map(p => `input[value="${p}"]`).join(',')
+      const parents = [...document.querySelectorAll(selector)]
 
-    parents.map(parent => {
-      const children = document.querySelectorAll(`input[data-parent-ids*="${parent.value},"]:checked`)
+      parents.map(parent => {
+        const children = document.querySelectorAll(`input[data-parent-ids*="${parent.value},"]:checked`)
 
-      children.length
-        ? parent.setAttribute('checked', 'checked')
-        : parent.removeAttribute('checked')
-    })
-  }
+        children.length
+          ? parent.setAttribute('checked', 'checked')
+          : parent.removeAttribute('checked')
+      })
+    }
+  })
 </script>
 
 @endsection
