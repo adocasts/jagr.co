@@ -19,23 +19,25 @@
           </div>
 
           <div class="md:hidden relative -top-3 text-gray-800 pr-3">
-            <svg v-if="!show" xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
-            </svg>
-            <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
+            @!ui.arrowToggle()
           </div>
         </div>
-        <ol class="list-none m-0 p-0">
+        <ol class="list-none m-0 p-0 px-3">
           <li>
-            <div>Introduction</div>
+            <div class="px-3">Introduction</div>
             <ol class="text-sm">
-              <li>
-                <a href="">
-                  Debugging An AdonisJS Application
-                </a>
-              </li>
+              @each(i in [1,2,3,4,5])
+                <li>
+                  <a href="" class="flex items-center p-3">
+                    <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center mr-3 text-xs -my-3">
+                      1.{{ i }}
+                    </div>
+                    <div class="flex flex-col flex-1">
+                      <div>Debugging An AdonisJS Application</div>
+                    </div>
+                  </a>
+                </li>
+              @endeach
             </ol>
           </li>
         </ol>
