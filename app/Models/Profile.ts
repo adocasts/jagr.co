@@ -43,6 +43,15 @@ export default class Profile extends BaseModel {
   @column()
   public githubUrl: string | null
 
+  @column()
+  public emailOnComment: boolean
+
+  @column()
+  public emailOnCommentReply: boolean
+
+  @column()
+  public emailOnAchievement: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
