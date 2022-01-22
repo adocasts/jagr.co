@@ -33,10 +33,11 @@ export default class AuthController {
   public async signin({ request, response, auth, session }: HttpContextContract) {
     const schema = Schema.create({
       uid: Schema.string(),
-      password: Schema.string()
+      password: Schema.string(),
+      remember_me: Schema.boolean.optional()
     })
 
-    const { uid, password } = await request.validate({ schema })
+    const { uid, password, remember_me } = await request.validate({ schema })
 
     const loginAttemptsRemaining = await AuthAttemptService.getRemainingAttempts(uid)
     if (loginAttemptsRemaining <= 0) {
@@ -45,7 +46,7 @@ export default class AuthController {
     }
 
     try {
-      await auth.attempt(uid, password)
+      await auth.attempt(uid, password, remember_me)
       await AuthAttemptService.deleteBadAttempts(uid)
     } catch (error) {
       await AuthAttemptService.recordLoginAttempt(uid)

@@ -42,9 +42,9 @@
           </li>
         </ol>
       </div>
-      <div class="w-4/5 max-h-screen overflow-y-auto">
+      <div class="w-4/5 max-h-screen overflow-y-auto py-6 pr-6 bg-gray-950">
         {{--  TODO: if user hasn't start the series show series info instead of lesson info  --}}
-        <div class="bg-gradient-to-br from-brand-900 to-brand-800 relative">
+        <div class="bg-gradient-to-br from-brand-900 to-brand-800 relative rounded-xl overflow-hidden">
           <div class="overflow-hidden" style="min-height: 500px; max-height: calc(100vh - 65px)">
             @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg' })
           </div>
@@ -65,7 +65,7 @@
                   <p class="opacity-80 mb-6">
                     In this lesson, we'll learn how we can use the user's current time zone to create, update, or query time-sensitive information in AdonisJS using Luxon's DateTime object.
                   </p>
-                  <div class="flex items-center pb-12">
+                  <div class="flex items-center pb-3">
                     <button class="mr-3">
                       <svg class="w-12 h-12 md:w-16 md:h-16" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                     </button>
@@ -84,9 +84,19 @@
       </div>
     </div>
 
-    <div class="prose">
-      {{{ lesson.body }}}
-    </div>
+    @container({ className: 'pt-12' })
+      <div class="flex flex-wrap md:flex-nowrap -mx-6">
+        <div class="w-full flex-1 md:px-6">
+          <div class="prose md:prose-md lg:prose-lg xl:prose-xl">
+            {{{ lesson.body }}}
+          </div>
+        </div>
+
+        <div class="w-full flex-1 md:px-6">
+          aside
+        </div>
+      </div>
+    @end
   </div>
 
 @endsection
