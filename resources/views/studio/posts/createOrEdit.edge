@@ -33,8 +33,6 @@
     @set('action', route('studio.posts.update', { id: post.id}, { qs: { _method: 'PUT' }}))
   @endif
 
-  {{ inspect(flashMessages.get('errors')) }}
-
   <form name="postForm" method="POST" action="{{ action }}">
     {{ csrfField() }}
     <input type="hidden" name="timezone" value="" />
