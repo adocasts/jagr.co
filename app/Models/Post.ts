@@ -49,7 +49,7 @@ export default class Post extends BaseModel {
   public body: string | null
 
   @column()
-  public bodyBlocks: object | null
+  public bodyBlocks: object | string | null
 
   @column()
   public bodyTypeId: number
@@ -164,11 +164,6 @@ export default class Post extends BaseModel {
 
   @beforeSave()
   public static async setReadTimeValues(post: Post) {
-    const readTime = ReadService.getReadCounts(post.body)
-    post.readMinutes = readTime.minutes
-    post.readTime = readTime.time
-    post.wordCount = readTime.words
-
     post.bodyTypeId = post.$dirty.bodyBlocks ? BodyTypes.JSON : BodyTypes.HTML
 
     if (post.bodyTypeId == BodyTypes.JSON) {
@@ -179,5 +174,10 @@ export default class Post extends BaseModel {
 
       post.body = html
     }
+
+    const readTime = ReadService.getReadCounts(post.body)
+    post.readMinutes = readTime.minutes
+    post.readTime = readTime.time
+    post.wordCount = readTime.words
   }
 }

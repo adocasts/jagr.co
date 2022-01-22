@@ -70,7 +70,7 @@ export default class PostsController {
 
     await bouncer.with('PostPolicy').authorize('update', post)
 
-    const { publishAtDate, publishAtTime, assetIds, taxonomyIds, ...data } = await request.validate(PostStoreValidator)
+    let { publishAtDate, publishAtTime, assetIds, taxonomyIds, ...data } = await request.validate(PostStoreValidator)
     const publishAt = DateService.getPublishAtDateTime(publishAtDate, publishAtTime)
 
     post.merge({ ...data, publishAt })
