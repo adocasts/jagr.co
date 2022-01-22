@@ -14,6 +14,7 @@ export default class CollectionsController {
       .preload('children', query => query.withCount('posts').select('id'))
       .withCount('posts')
       .whereNull('parentId')
+      .orderBy('createdAt', 'desc')
       .paginate(page, 20)
 
     const collectionCounts = {}

@@ -15,6 +15,7 @@ export default class PostsController {
     const page = request.input('page', 1)
     const posts = await auth.user!.related('posts').query()
       .preload('authors')
+      .orderBy('publishAt', 'desc')
       .paginate(page, 20)
 
     posts.baseUrl(Route.makeUrl('studio.posts.index'))
