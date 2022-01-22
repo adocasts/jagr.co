@@ -1,11 +1,21 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeSave,
+  column,
+  computed,
+  HasMany,
+  hasMany,
+  ManyToMany,
+  manyToMany
+} from '@ioc:Adonis/Lucid/Orm'
 import Asset from './Asset'
 import PostSnapshot from './PostSnapshot'
 import User from './User'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import State from 'App/Enums/States'
 import Taxonomy from "App/Models/Taxonomy";
+import ReadService from 'App/Services/ReadService'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -53,6 +63,18 @@ export default class Post extends BaseModel {
 
   @column()
   public stateId: State
+
+  @column()
+  public readMinutes: number
+
+  @column()
+  public readTime: number
+
+  @column()
+  public wordCount: number
+
+  @column()
+  public videoSeconds: number
 
   @column()
   public timezone: string | null
@@ -124,5 +146,13 @@ export default class Post extends BaseModel {
     const isPastPublishAt = this.publishAt.diffNow().as('seconds')
 
     return isPublicOrUnlisted && isPastPublishAt < 0
+  }
+
+  @beforeSave()
+  public static async setReadTimeValues(post: Post) {
+    const readTime = ReadService.getReadCounts(post.body);
+    post.readMinutes = readTime.minutes;
+    post.readTime = readTime.time;
+    post.wordCount = readTime.words;
   }
 }
