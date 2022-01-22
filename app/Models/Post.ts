@@ -77,6 +77,12 @@ export default class Post extends BaseModel {
   public videoSeconds: number
 
   @column()
+  public postTypeId: number
+
+  @column()
+  public redirectUrl: string
+
+  @column()
   public timezone: string | null
 
   @column()
