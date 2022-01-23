@@ -17,7 +17,7 @@ import State from 'App/Enums/States'
 import Taxonomy from "App/Models/Taxonomy";
 import ReadService from 'App/Services/ReadService'
 import BodyTypes from 'App/Enums/BodyTypes'
-const BlockParser = require('editorjs-parser')
+import EditorBlockParser from 'App/Services/EditorBlockParser'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -167,12 +167,7 @@ export default class Post extends BaseModel {
     post.bodyTypeId = post.$dirty.bodyBlocks ? BodyTypes.JSON : BodyTypes.HTML
 
     if (post.bodyTypeId == BodyTypes.JSON) {
-      const parser = new BlockParser()
-      const html = typeof post.bodyBlocks === 'string'
-        ? parser.parse(JSON.parse(post.bodyBlocks))
-        : parser.parse(post.bodyBlocks)
-
-      post.body = html
+      await EditorBlockParser.parse(post)
     }
 
     const readTime = ReadService.getReadCounts(post.body)
