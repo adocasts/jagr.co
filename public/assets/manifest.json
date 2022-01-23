@@ -3,6 +3,5 @@
   "assets/app.js": "http://localhost:8080/assets/app.js",
   "assets/file_manager.js": "http://localhost:8080/assets/file_manager.js",
   "assets/studio.posts.editor.js": "http://localhost:8080/assets/studio.posts.editor.js",
-  "assets/studio.collections.js": "http://localhost:8080/assets/studio.collections.js",
-  "assets/studio.posts.editor.css": "http://localhost:8080/assets/studio.posts.editor.css"
+  "assets/studio.collections.js": "http://localhost:8080/assets/studio.collections.js"
 }

@@ -5,6 +5,7 @@ import Status, { StatusDesc } from 'App/Enums/Status'
 import CollectionType, { CollectionTypeDesc } from "App/Enums/CollectionType"
 import { DateTime } from 'luxon'
 import PostType, {PostTypeDesc} from "App/Enums/PostType";
+import Roles from 'App/Enums/Roles'
 
 export default class AppProvider {
   constructor (protected app: ApplicationContract) {
@@ -43,6 +44,7 @@ export default class AppProvider {
     View.global('CollectionTypeEnumDesc', CollectionTypeDesc)
     View.global('PostTypeEnum', PostType)
     View.global('PostTypeEnumDesc', PostTypeDesc)
+    View.global('Roles', Roles)
   }
 
   public async ready () {

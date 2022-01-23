@@ -24,14 +24,6 @@ Route.get('/', async ({ view }) => {
   return view.render('index')
 })
 
-Route.get('example', async ({ request }) => {
-  const body = request.body()
-
-  console.log(body)
-
-  return body
-})
-
 Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
 // Route.get('/img/*', 'AssetsController.show').where('path', /.*/).as('img');
 
