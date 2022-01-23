@@ -93,7 +93,29 @@
         </div>
 
         <div class="w-full flex-1 md:px-6">
-          aside
+          <div class="bg-gray-100 p-6 rounded">
+            <h5 class="text-xs uppercase font-semibold pb-1 mb-3 border-b border-gray-600">
+              Prepared By
+            </h5>
+            <div class="flex items-center mb-3">
+              <div class="mr-3">
+                <img class="rounded-full w-14 h-14 border-2 border-gray-600" src="{{ auth.user.avatar }}" />
+              </div>
+              <div>
+                <h4 class="text-lg lg:text-2xl">
+                  Tom Gobich
+                </h4>
+                <p class="text-xs -mt-1 text-gray-900">
+                  Cincinnati, OH
+                </p>
+              </div>
+            </div>
+            <div>
+              <p class="text-gray-900">
+                Owner of Jagr, JavaScript developer, educator, PlayStation gamer, burrito eater.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     @end
