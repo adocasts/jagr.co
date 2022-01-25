@@ -14,12 +14,14 @@ import PostSnapshot from './PostSnapshot'
 import User from './User'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import State from 'App/Enums/States'
-import Taxonomy from "App/Models/Taxonomy";
+import Taxonomy from "App/Models/Taxonomy"
 import ReadService from 'App/Services/ReadService'
 import BodyTypes from 'App/Enums/BodyTypes'
 import EditorBlockParser from 'App/Services/EditorBlockParser'
 
 export default class Post extends BaseModel {
+  public serializeExtras = true
+
   @column({ isPrimary: true })
   public id: number
 
@@ -160,6 +162,17 @@ export default class Post extends BaseModel {
     const isPastPublishAt = this.publishAt.diffNow().as('seconds')
 
     return isPublicOrUnlisted && isPastPublishAt < 0
+  }
+
+  @computed()
+  public get videoId() {
+    if (!this.videoUrl) return '';
+
+    return this.videoUrl
+      .replace('https://www.', 'https://')
+      .replace('https://youtube.com/watch?v=', '')
+      .replace('https://youtube.com/embed/', '')
+      .replace('https://youtu.be/', '');
   }
 
   @beforeSave()

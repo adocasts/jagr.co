@@ -41,6 +41,10 @@ h6 {
   max-width: 400px;
 }
 
+.aspect-video {
+  aspect-ratio: 16 / 9;
+}
+
 .bg-pattern {
   background-color: theme('colors.gray.950');
   position: relative;

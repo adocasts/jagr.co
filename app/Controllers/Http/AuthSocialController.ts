@@ -1,7 +1,8 @@
 import { inject } from '@adonisjs/fold';
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import User from 'App/Models/User';
-import AuthSocialService from 'App/Services/Http/AuthSocialService';
+import Profile from 'App/Models/Profile'
+import User from 'App/Models/User'
+import AuthSocialService from 'App/Services/Http/AuthSocialService'
 
 @inject()
 export default class AuthSocialController {
@@ -12,19 +13,19 @@ export default class AuthSocialController {
   }
 
   public async callback ({ response, auth, params }: HttpContextContract) {
-    const { isSuccess, user } = await this.authSocialService.getUser(params.provider);
+    const { isSuccess, user } = await this.authSocialService.getUser(params.provider)
 
     if (!isSuccess) {
-      return response.redirect('/login');
+      return response.redirect().toRoute('auth.signin.show')
     }
 
     await auth.use('web').login(<User>user)
 
-    // const hasProfile = await Profile.findBy('user_id', u.id);
-    // if (!hasProfile) {
-    //   await Profile.create({ user_id: u.id })
-    // }
+    const hasProfile = await Profile.findBy('userId', user?.id)
+    if (!hasProfile) {
+      await Profile.create({ userId: user?.id })
+    }
 
-    return response.redirect('/');
+    return response.redirect('/')
   }
 }

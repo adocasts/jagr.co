@@ -11,9 +11,9 @@ export default class SeriesController {
   }
 
   public async lesson({ view }: HttpContextContract) {
-    const lesson = await Post.query().orderBy('id', 'desc').firstOrFail()
-    const author = await lesson.related('authors').query().preload('profile').firstOrFail()
+    const post = await Post.query().orderBy('id', 'desc').firstOrFail()
+    const author = await post.related('authors').query().preload('profile').firstOrFail()
 
-    return view.render('series/lesson', { lesson, author })
+    return view.render('series/lesson', { post, author })
   }
 }
