@@ -3,9 +3,9 @@
 @section('content')
 
   <div class="break">
-    <div class="flex flex-col md:flex-row">
-      <div x-data="{ show: false }" class="w-1/5 overflow-y-auto bg-gray-950 text-gray-50">
-        <div @click="show = !show" class="flex justify-between items-center py-6">
+    <div class="flex flex-col md:flex-row md:justify-end relative">
+      <div x-data="{ show: false }" class="w-1/5 bg-gray-950 text-gray-50 md:absolute top-0 left-0 max-h-full overflow-y-scroll">
+        <div @click="show = !show" class="flex justify-between items-center py-6 md:sticky top-0 z-10 bg-gray-950">
           <div>
             <h5 class="font-medium uppercase text-sm opacity-60 flex items-center px-6">
               <span class="mr-2">
@@ -22,24 +22,32 @@
             @!ui.arrowToggle()
           </div>
         </div>
-        <ol class="list-none m-0 p-0 px-3">
-          <li>
-            <div class="px-3">Introduction</div>
-            <ol class="text-sm">
-              @each(i in [1,2,3,4,5])
-                <li>
-                  <a href="" class="flex items-center p-3 hover:bg-gray-900 rounded-xl transition duration-300">
-                    <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center mr-3 text-xs -my-3">
-                      1.{{ i }}
-                    </div>
-                    <div class="flex flex-col flex-1">
-                      <div>Debugging An AdonisJS Application</div>
-                    </div>
-                  </a>
-                </li>
-              @endeach
-            </ol>
-          </li>
+        <ol class="list-none m-0 p-0 px-3 top-0 left-0 overflow-y-auto mb-6">
+          @each(x in [1,2,3])
+            <li>
+              <div class="px-3">Introduction</div>
+              <ol class="text-sm">
+                @each(i in [1,2,3,4,5])
+                  <li>
+                    <a href="" class="flex items-center p-3 hover:bg-gray-900 rounded-xl transition duration-300 group">
+                      <div class="relative mr-3 -my-3">
+                        <div class="absolute -top-1 -left-1 opacity-0 group-hover:opacity-100 transition duration-300">
+                          <div class="w-8 h-8 bg-gray-900 rounded-full absolute top-1 left-1"></div>
+                          @!svg.play({ className: 'w-10 h-10 relative z-10' })
+                        </div>
+                        <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-xs">
+                          1.{{ i }}
+                        </div>
+                      </div>
+                      <div class="flex flex-col flex-1">
+                        <div>Debugging An AdonisJS Application</div>
+                      </div>
+                    </a>
+                  </li>
+                @endeach
+              </ol>
+            </li>
+          @endeach
         </ol>
       </div>
       <div class="w-4/5 py-6 pr-6 bg-gray-950">
