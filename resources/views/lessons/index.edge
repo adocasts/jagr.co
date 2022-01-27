@@ -1,0 +1,37 @@
+@layout('layouts/main')
+
+@section('content')
+
+  <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">
+    @container()
+
+      {{--  Lessons  --}}
+      <div class="py-3 flex flex-col mb-3">
+        <h1 class="text-3xl font-extrabold text-gray-950 tracking-tight">
+          Lessons
+        </h1>
+        <p class="max-w-prose text-lg text-gray-700">
+          Browse all available lessons
+        </p>
+      </div>
+
+      <div class="flex flex-wrap -mx-6">
+        <div class="w-full md:w-3/4 px-6">
+          @lesson.list({ items })
+            @slot('footer')
+              @!pagination({ data: items })
+            @endslot
+          @end
+        </div>
+        <div class="w-full md:w-1/4 px-6">
+
+        </div>
+      </div>
+    @end
+
+    <div class="w-full md:order-3 mt-16">
+      @!newsletter.large()
+    </div>
+  </div>
+
+@endsection

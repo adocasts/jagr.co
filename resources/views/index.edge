@@ -245,47 +245,14 @@
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
           </div>
-          <div class="flex flex-col -mx-6">
-            @each (i in [0,1,2,3,4,5,6,7,8,9,10])
-              <a href="#" class="w-full flex flex-wrap mb-3 p-3 rounded-xl hover:bg-gray-50 transition">
-                <div class="w-full md:w-2/5 md:pr-3">
-                  @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg', className: 'rounded-lg overflow-hidden' })
-                </div>
-                <div class="w-full md:w-3/5 flex flex-col md:pl-3">
-                  <object>
-                    <h5 class="uppercase inline-flex items-center text-accent-800 tracking-wide text-xs">
-                      <a href="#" class="anchor">
-                        AdonisJS Quick Tip
-                      </a>
-                      <span class="px-3 font-bold text-gray-400">/</span>
-                      <span class="text-gray-700">
-                        Lesson 1.3
-                      </span>
-                    </h5>
-                  </object>
-                  <h3 class="text-lg font-bold mb-1">
-                    Getting Data By The User's Timezone
-                  </h3>
-                  <p class="mb-2 text-sm">
-                    In this lesson, we'll learn how we can use the user's current time zone to create, update,
-                    or query time-sensitive information in AdonisJS using Luxon's DateTime object.
-                  </p>
-                  <object>
-                    <p class="flex text-sm items-center">
-                      By&nbsp;
-                      <a href="#" class="anchor-inv">
-                        Tom Gobich
-                      </a>
-                    </p>
-                  </object>
-                </div>
-              </a>
-            @endeach
 
-            <a href="#" class="anchor-inv text-lg font-bold inline-block mx-auto px-6 pb-2 mt-3">
-              View All Lessons
-            </a>
-          </div>
+          @lesson.list()
+            @slot('footer')
+              <a href="#" class="anchor-inv text-lg font-bold inline-block mx-auto px-6 pb-2 mt-3">
+                View All Lessons
+              </a>
+            @endslot
+          @end
         </div>
 
       </div>

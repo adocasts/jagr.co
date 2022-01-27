@@ -15,9 +15,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script defer>
-    const urlSearchParams = new URLSearchParams(window.location.search)
-    window.$params = Object.fromEntries(urlSearchParams.entries())
-    window.history.replaceState({}, document.title, window.location.pathname);
+    const url = new URL(window.location.href)
+    const urlParams = new URLSearchParams(url.search)
+    window.$params = Object.fromEntries(urlParams.entries())
+    if (url.search) {
+      urlParams.delete('autoplay')
+      url.search = urlParams.toString()
+      window.history.replaceState({}, document.title, url.toString())
+    }
   </script>
 </head>
 <body>

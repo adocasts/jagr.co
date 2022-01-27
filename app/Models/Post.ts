@@ -18,6 +18,7 @@ import Taxonomy from "App/Models/Taxonomy"
 import ReadService from 'App/Services/ReadService'
 import BodyTypes from 'App/Enums/BodyTypes'
 import EditorBlockParser from 'App/Services/EditorBlockParser'
+import PostType from 'App/Enums/PostType'
 
 export default class Post extends BaseModel {
   public serializeExtras = true
@@ -187,5 +188,17 @@ export default class Post extends BaseModel {
     post.readMinutes = readTime.minutes
     post.readTime = readTime.time
     post.wordCount = readTime.words
+  }
+
+  public static lessons() {
+    return this.query().where('postTypeId', PostType.LESSON)
+  }
+
+  public static blogs() {
+    return this.query().where('postTypeId', PostType.BLOG)
+  }
+
+  public static links() {
+    return this.query().where('postTypeId', PostType.LINK)
   }
 }

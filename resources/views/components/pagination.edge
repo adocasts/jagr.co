@@ -3,7 +3,6 @@
 @set('isLastPage', data.currentPage === data.lastPage)
 @set('pageStartCount', data.currentPage === data.firstPage ? 1 : data.currentPage * data.perPage)
 @set('pageEndCount', data.currentPage === data.lastPage ? data.totalNumber : data.currentPage * data.perPage + data.perPage)
-
 @set('disabledClass', 'text-gray-400 cursor-not-allowed')
 
 <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 {{ className }}">
@@ -48,7 +47,7 @@
             </a>
           @endif
         @endeach
-        
+
         {{--  <span class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-900">
           ...
         </span>  --}}

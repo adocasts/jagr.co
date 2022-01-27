@@ -48,6 +48,8 @@ Route.get('/series',                      'SeriesController.index').as('series.i
 Route.get('/series/:slug',                'SeriesController.show').as('series.show')
 Route.get('/series/:slug/lesson/:index',  'SeriesController.lesson').as('series.lesson')
 
+Route.get('/lessons', 'LessonsController.index').as('lessons.index')
+
 // STUDIO
 Route.group(() => {
 
