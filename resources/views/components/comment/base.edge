@@ -1,0 +1,23 @@
+@set('rootComments', comments.filter(c => !c.replyTo))
+
+<div x-data="{ 
+  editId: null, 
+  createId: null, 
+  create(createId) {
+    this.cancel()
+    this.createId = createId
+  },
+  edit(editId) {
+    this.cancel()
+    this.editId = editId
+  },
+  cancel() {
+    this.editId = null
+    this.createId = null
+  }
+}">
+  <h4 class="font-semibold mt-6">Comment</h4>
+
+  @!comment.form({ postId })
+  @!comment.list({ postId, comments, nodeComments: rootComments })
+</div>

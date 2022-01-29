@@ -1,7 +1,8 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { column } from '@ioc:Adonis/Lucid/Orm'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class AuthAttempt extends BaseModel {
+export default class AuthAttempt extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 

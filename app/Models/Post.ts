@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import {
-  BaseModel,
   beforeSave,
   column,
   computed,
@@ -19,8 +18,10 @@ import ReadService from 'App/Services/ReadService'
 import BodyTypes from 'App/Enums/BodyTypes'
 import EditorBlockParser from 'App/Services/EditorBlockParser'
 import PostType from 'App/Enums/PostType'
+import Comment from './Comment'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class Post extends BaseModel {
+export default class Post extends AppBaseModel {
   public serializeExtras = true
 
   @column({ isPrimary: true })
@@ -116,6 +117,9 @@ export default class Post extends BaseModel {
 
   @hasMany(() => PostSnapshot)
   public snapshots: HasMany<typeof PostSnapshot>
+
+  @hasMany(() => Comment)
+  public comments: HasMany<typeof Comment>
 
   @manyToMany(() => User, {
     pivotTable: 'author_posts',

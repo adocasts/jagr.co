@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon'
-import {BaseModel, BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany} from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Asset from './Asset'
 import Collection from './Collection'
 import Post from './Post'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class Taxonomy extends BaseModel {
+export default class Taxonomy extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 

@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon'
 import {
-  BaseModel,
   BelongsTo,
   belongsTo,
   column, HasMany, hasMany,
@@ -15,8 +14,9 @@ import Taxonomy from './Taxonomy'
 import Asset from './Asset'
 import State from 'App/Enums/States'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class Collection extends BaseModel {
+export default class Collection extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 

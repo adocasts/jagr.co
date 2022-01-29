@@ -52,7 +52,7 @@
       </div>
       <div class="w-4/5 py-6 pr-6 bg-gray-950">
         {{--  TODO: if user hasn't start the series show series info instead of lesson info  --}}
-        <div class="aspect-video bg-gradient-to-br from-brand-900 to-brand-800 relative rounded-xl overflow-hidden relative">
+        <div class="aspect-video bg-gradient-to-br from-brand-900 to-brand-800 relative rounded-xl overflow-hidden">
           <div id="lessonVideoEmbed" class="absolute top-0 left-0 w-full h-full"></div>
 
           @if (!post.videoUrl)
@@ -75,7 +75,8 @@
                       <div class="mr-3">2 MONTHS AGO</div>
                     </div>
                     <p class="opacity-80 mb-6">
-                      In this lesson, we'll learn how we can use the user's current time zone to create, update, or query time-sensitive information in AdonisJS using Luxon's DateTime object.
+                      In this lesson, we'll learn how we can use the user's current time zone to create, update, or 
+                      query time-sensitive information in AdonisJS using Luxon's DateTime object.
                     </p>
                     <div class="flex items-center pb-3">
                       <button class="mr-3">
@@ -134,110 +135,12 @@
           <div class="prose md:prose-md lg:prose-lg xl:prose-xl">
             {{{ post.body }}}
           </div>
+
+          @!comment.base({ postId: post.id, comments })
         </div>
 
         <div class="w-full flex-1 md:px-6">
-          <div class="px-3 border border-gray-300 rounded-xl">
-            <div class="bg-gray-100 rounded-b-xl p-3 mb-4">
-              <h5 class="text-xs uppercase font-semibold pb-1 mb-3 border-b border-gray-600">
-                Prepared By
-              </h5>
-              <div class="flex items-center">
-                <div class="mr-3">
-                  <img class="rounded-full w-14 h-14 border-2 border-gray-600" src="{{ auth.user.avatar }}" />
-                </div>
-                <div>
-                  <h4 class="text-lg lg:text-2xl">
-                    Tom Gobich
-                  </h4>
-                  <p class="text-xs -mt-1 text-gray-900">
-                    Cincinnati, OH
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="px-3">
-              <p class="text-gray-900 mb-4">
-                Owner of Jagr, JavaScript developer, educator, PlayStation gamer, burrito eater.
-              </p>
-
-              <ul class="stagger space-y-2 columns-2 mb-6">
-                @if (author.profile.company)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900">
-                    @!svg.briefcase()
-                    <div class="ml-3">
-                      {{ author.profile.company }}
-                    </div>
-                  </li>
-                @endif
-
-                @if (author.profile.youtubeUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.youtube()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.youtubeUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        YouTube
-                      </a>
-                    </div>
-                  </li>
-                @endif
-                @if (author.profile.githubUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.github()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.githubUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        GitHub
-                      </a>
-                    </div>
-                  </li>
-                @endif
-                @if (author.profile.twitterUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.twitter()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.twitterUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        Twitter
-                      </a>
-                    </div>
-                  </li>
-                @endif
-                @if (author.profile.facebookUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.facebook()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.facebookUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        Facebook
-                      </a>
-                    </div>
-                  </li>
-                @endif
-                @if (author.profile.instagramUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.instagram()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.instagramUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        Instagram
-                      </a>
-                    </div>
-                  </li>
-                @endif
-                @if (author.profile.linkedinUrl)
-                  <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
-                    @!svg.linkedin()
-                    <div class="ml-3">
-                      <a href="{{ author.profile.linkedinUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
-                        LinkedIn
-                      </a>
-                    </div>
-                  </li>
-                @endif
-              </ul>
-
-              @button({ href: author.profile.website, variant: 'blackSecondary', block: true, className: 'mb-6 rounded-full' })
-                Visit Website
-              @end
-            </div>
-          </div>
+          @!author.card({ author })
         </div>
       </div>
     @end
@@ -247,7 +150,7 @@
 
 @section('scripts')
 
-{{--   @entryPointScripts('post') --}}
+  {{--   @entryPointScripts('post') --}}
   <script src="{{ asset('assets/post.js') }}"></script>
 
   @if (post.videoId)

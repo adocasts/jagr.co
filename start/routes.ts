@@ -54,6 +54,10 @@ Route.get('/posts', 'PostsController.index').as('posts.index')
 
 Route.get('/topics', 'TopicsController.index').as('topics.index')
 
+Route.post('/comments',       'CommentsController.store').as('comments.store')
+Route.put('/comments/:id',    'CommentsController.update').as('comments.update')
+Route.delete('/comments/:id', 'CommentsController.destroy').as('comments.destroy')
+
 // STUDIO
 Route.group(() => {
 

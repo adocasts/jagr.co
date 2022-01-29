@@ -1,14 +1,16 @@
 import { DateTime } from 'luxon'
 import Hash from '@ioc:Adonis/Core/Hash'
-import { column, beforeSave, BaseModel, belongsTo, BelongsTo, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany, computed } from '@ioc:Adonis/Lucid/Orm'
+import { column, beforeSave, belongsTo, BelongsTo, hasMany, HasMany, hasOne, HasOne, manyToMany, ManyToMany, computed } from '@ioc:Adonis/Lucid/Orm'
 import Role from './Role'
 import Profile from './Profile'
 import Post from './Post'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import gravatar from 'gravatar'
 import Collection from './Collection'
+import Comment from './Comment'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class User extends BaseModel {
+export default class User extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -70,6 +72,9 @@ export default class User extends BaseModel {
     foreignKey: 'ownerId'
   })
   public collections: HasMany<typeof Collection>
+
+  @hasMany(() => Comment)
+  public comments: HasMany<typeof Comment>
 
   @hasOne(() => Profile)
   public profile: HasOne<typeof Profile>

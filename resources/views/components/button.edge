@@ -25,6 +25,7 @@
   <button
     {{{ id && `id="${id}"` }}}
     onclick="{{ onClick || undefined }}"
+    @click="{{ atClick || undefined }}"
     type="{{ type || 'button' }}"
     class="
       {{ sizeClass(size) }}

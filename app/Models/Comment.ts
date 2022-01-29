@@ -1,10 +1,11 @@
 import { DateTime } from 'luxon'
-import { BaseModel, BelongsTo, belongsTo, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column, computed, HasMany, hasMany } from '@ioc:Adonis/Lucid/Orm'
 import User from './User'
 import Post from './Post'
 import State from 'App/Enums/States'
+import AppBaseModel from 'App/Models/AppBaseModel'
 
-export default class Comment extends BaseModel {
+export default class Comment extends AppBaseModel {
   @column({ isPrimary: true })
   public id: number
 
@@ -18,7 +19,13 @@ export default class Comment extends BaseModel {
   public replyTo?: number
 
   @column()
+  public rootParentId: number
+
+  @column()
   public stateId: number
+
+  @column()
+  public levelIndex: number
 
   @column()
   public name: string
@@ -49,7 +56,7 @@ export default class Comment extends BaseModel {
   @hasMany(() => Comment, { foreignKey: 'replyTo' })
   public responses: HasMany<typeof Comment>
 
-  @belongsTo(() => Comment, { localKey: 'replyTo' })
+  @belongsTo(() => Comment, { foreignKey: 'replyTo' })
   public parent: BelongsTo<typeof Comment>
 
   @computed()
