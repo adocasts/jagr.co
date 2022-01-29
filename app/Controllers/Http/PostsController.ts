@@ -1,24 +1,14 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Post from 'App/Models/Post'
+import Route from '@ioc:Adonis/Core/Route'
 
 export default class PostsController {
-  public async index ({}: HttpContextContract) {
-  }
+  public async index ({ view, request }: HttpContextContract) {
+    const { page = 1, sortBy = 'publishAt', sort = 'desc' } = request.qs()
+    const items = await Post.blogs().orderBy(sortBy, sort).paginate(page, 12)
 
-  public async create ({}: HttpContextContract) {
-  }
+    items.baseUrl(Route.makeUrl('lessons.index'))
 
-  public async store ({}: HttpContextContract) {
-  }
-
-  public async show ({}: HttpContextContract) {
-  }
-
-  public async edit ({}: HttpContextContract) {
-  }
-
-  public async update ({}: HttpContextContract) {
-  }
-
-  public async destroy ({}: HttpContextContract) {
+    return view.render('blogs/index', { items })
   }
 }

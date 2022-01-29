@@ -50,6 +50,10 @@ Route.get('/series/:slug/lesson/:index',  'SeriesController.lesson').as('series.
 
 Route.get('/lessons', 'LessonsController.index').as('lessons.index')
 
+Route.get('/posts', 'PostsController.index').as('posts.index')
+
+Route.get('/topics', 'TopicsController.index').as('topics.index')
+
 // STUDIO
 Route.group(() => {
 
