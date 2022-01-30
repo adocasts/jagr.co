@@ -1,16 +1,18 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Comment from 'App/Models/Comment'
 import States from 'App/Enums/States'
+import { inject } from '@adonisjs/core/build/standalone'
 import IdentityService from 'App/Services/IdentityService'
+import HttpIdentityService from 'App/Services/Http/HttpIdentityService'
 
-// TODO: Authorization
+@inject()
 export default class CommentsController {
+  constructor(public httpIdentityService: HttpIdentityService) {}
+
   public async store({ request, response, auth }: HttpContextContract) {
     const data = request.only(['postId', 'body', 'rootParentId', 'replyTo', 'levelIndex'])
     const userId = auth.user?.id
-    const ip = request.ip()
-    const agent = request.headers()['user-agent']
-    const identity = await IdentityService.create(ip, agent)
+    const identity = await this.httpIdentityService.getRequestIdentity()
 
     // TODO: validate
 
@@ -25,20 +27,25 @@ export default class CommentsController {
     return response.redirect().back()
   }
 
-  public async update({ request, response, auth, params }: HttpContextContract) {
+  public async update({ request, response, auth, params, bouncer }: HttpContextContract) {
     const data = request.only(['body'])
+    const identity = await this.httpIdentityService.getRequestIdentity()
     const comment = await auth.user!.related('comments').query().where('id', params.id).firstOrFail()
 
+    await bouncer.with('CommentPolicy').authorize('update', comment, identity)
     await comment.merge(data).save()
 
     return response.redirect().back()
   }
 
-  public async destroy({ response, params }: HttpContextContract) {
+  public async destroy({ response, params, bouncer }: HttpContextContract) {
     const id = params.id
+    const identity = await this.httpIdentityService.getRequestIdentity()
     const comment = await Comment.findOrFail(id)
     const parent = await comment.related('parent').query().first()
     const [children] = await comment.related('responses').query().whereNot('stateId', States.ARCHIVED).count('id')
+
+    await bouncer.with('CommentPolicy').authorize('delete', comment, identity)
 
     if (Number(children.$extras.count)) {
       comment.merge({ 

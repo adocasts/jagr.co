@@ -8,8 +8,7 @@ import PostType, {PostTypeDesc} from "App/Enums/PostType";
 import Roles from 'App/Enums/Roles'
 
 export default class AppProvider {
-  constructor (protected app: ApplicationContract) {
-  }
+  constructor (protected app: ApplicationContract) {}
 
   public register () {
     // Register your own bindings

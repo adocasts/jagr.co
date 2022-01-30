@@ -7,40 +7,52 @@
 
     <li>
       <div class="flex items-center justify-end space-x-3">
-        <button type="button" @click="create( {{ comment.id }} )">
-          Reply
-        </button>
-        <button type="button" @click="edit( {{ comment.id }} )">
-          Edit
-        </button>
-        <form method="POST" action="{{ route('comments.destroy', { id: comment.id }, { qs: { _method: 'DELETE' }}) }}">
-          {{ csrfField() }}
-          <button type="submit">Delete</button>
-        </form>
+        @can('CommentPolicy.reply')
+          <button type="button" @click="create( {{ comment.id }} )">
+            Reply
+          </button>
+        @endcan
+        
+        @can('CommentPolicy.update', comment, identity)
+          <button type="button" @click="edit( {{ comment.id }} )">
+            Edit
+          </button>
+        @endcan
+
+        @can('CommentPolicy.delete', comment, identity)
+          <form method="POST" action="{{ route('comments.destroy', { id: comment.id }, { qs: { _method: 'DELETE' }}) }}">
+            {{ csrfField() }}
+            <button type="submit">Delete</button>
+          </form>
+        @endcan
       </div>
       <h6>{{ comment.user?.username ?? comment.name }}</h6>
       <p>{{ comment.body }}</p>
 
-      {{--  edit comment form  --}}
-      <div x-show="editId === {{ comment.id }}">
-        @!comment.form({
-          ...comment.serialize(),
-          cancelable: true,
-          onCancel: 'cancel()'
-        })
-      </div>
+      @can('CommentPolicy.update', comment, identity)
+        {{--  edit comment form  --}}
+        <div x-show="editId === {{ comment.id }}">
+          @!comment.form({
+            ...comment.serialize(),
+            cancelable: true,
+            onCancel: 'cancel()'
+          })
+        </div>
+      @endcan
 
-      {{--  reply to form  --}}
-      <div x-show="createId === {{ comment.id }}">
-        @!comment.form({ 
-          postId, 
-          rootParentId, 
-          replyTo, 
-          levelIndex, 
-          cancelable: true,
-          onCancel: 'cancel()'
-        })
-      </div>
+      @can('CommentPolicy.reply', comment, identity)
+        {{--  reply to form  --}}
+        <div x-show="createId === {{ comment.id }}">
+          @!comment.form({ 
+            postId, 
+            rootParentId, 
+            replyTo, 
+            levelIndex, 
+            cancelable: true,
+            onCancel: 'cancel()'
+          })
+        </div>
+      @endcan
       
       @if (childComments.length)
         @!comment.list({ 
