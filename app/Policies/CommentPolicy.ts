@@ -15,13 +15,13 @@ export default class CommentPolicy extends BasePolicy {
 
 	public async update(user: User, comment: Comment, identity: string) {
 		const isOwner = comment.userId === user.id
-		const isIdentityOwner = identity === comment.identity
+		const isIdentityOwner = identity === comment.identity && !comment.userId
 		return isOwner || isIdentityOwner
 	}
 	
 	public async delete(user: User, comment: Comment, identity: string) {
 		const isOwner = comment.userId === user.id
-		const isIdentityOwner = identity === comment.identity
+		const isIdentityOwner = identity === comment.identity && !comment.userId
 		return isOwner || isIdentityOwner
 	}
 }

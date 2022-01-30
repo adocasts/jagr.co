@@ -4,6 +4,7 @@ import User from './User'
 import Post from './Post'
 import State from 'App/Enums/States'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import * as timeago from 'timeago.js'
 
 export default class Comment extends AppBaseModel {
   @column({ isPrimary: true })
@@ -62,5 +63,10 @@ export default class Comment extends AppBaseModel {
   @computed()
   public get createdAtCalendar() {
     return this.createdAt.toRelativeCalendar();
+  }
+
+  @computed()
+  public get timeago() {
+    return timeago.format(this.createdAt.toJSDate())
   }
 }
