@@ -43,6 +43,7 @@
         aria-describedby="{{ name }}-error"
         {{ max && `maxlength=${max}` }}
         {{ min && `minlength=${min}` }}
+        {{ readonly && 'readonly' }}
         oninput="{{ onInput ?? undefined }}"
         @focus="focused = true"
         @blur="focused = false"
@@ -66,6 +67,7 @@
           }}
         "
         style="{{ style }}"
+        {{ readonly && 'readonly' }}
         @focus="focused = true"
         @blur="focused = false">
         {{{ await $slots.main() }}}
@@ -91,6 +93,7 @@
         {{ max ? `maxlength=${max}` : '' }}
         {{ min ? `minlength=${min}` : '' }}
         {{{ dataAttrs }}}
+        {{ readonly && 'readonly' }}
         oninput="{{ onInput ?? undefined }}"
         @focus="focused = true"
         @blur="focused = false">

@@ -8,18 +8,22 @@
 <li class="{{ itemClassName ?? '' }}">
   @set('nodeChildren', nodes.filter(c => c[columnName] === node[primaryKey]))
 
-  {{{ await $slots.main({ node, index }) }}}
+  {{{ await $slots.main({ node, index, parent, rootParent }) }}}
 
   @if (nodeChildren.length)
     <ul class="{{ className ?? '' }}">
       @each ((childNode, childIndex) in nodeChildren)
         @tree.node({
+          className,
           itemClassName,
+          primaryKey,
           columnName,
           columnValue,
           nodes,
           node: childNode,
-          index: childIndex
+          index: childIndex,
+          parent: node,
+          rootParent: rootParent,
         })
           @slot('main', slot)
             {{{ await $slots.main(slot) }}}

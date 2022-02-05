@@ -23,6 +23,7 @@
   ],
   "providers": [
     "./providers/AppProvider",
+    "./providers/LogProvider",
     "@adonisjs/core",
     "@adonisjs/session",
     "@adonisjs/view",

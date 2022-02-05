@@ -105,7 +105,7 @@ export default class PostsController {
 
     const posts = await Post.query()
       .if(Array.isArray(ignoreIds), query => query.whereNotIn('id', ignoreIds))
-      .where('title', 'LIKE', `%${term}%`)
+      .where('title', 'ILIKE', `%${term}%`)
       .orderBy('publishAt', 'desc')
       .limit(limit)
 

@@ -11,7 +11,13 @@ export default class Taxonomy extends AppBaseModel {
   public id: number
 
   @column()
+  public rootParentId: number | null
+
+  @column()
   public parentId: number | null
+
+  @column()
+  public levelIndex: number
 
   @column()
   public assetId: number | null

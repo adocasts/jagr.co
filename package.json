@@ -69,6 +69,7 @@
     "editorjs-parser": "^1.5.3",
     "gravatar": "^1.8.2",
     "luxon": "^2.0.2",
+    "node-discord-logger": "^1.2.1",
     "pg": "^8.7.1",
     "phc-argon2": "^1.1.2",
     "proxy-addr": "^2.0.7",

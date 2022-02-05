@@ -30,6 +30,8 @@ export default class TaxonomyValidator {
    *    ```
    */
   public schema = schema.create({
+    rootParentId: schema.number.nullableAndOptional([rules.exists({ table: 'taxonomies', column: 'id' })]),
+    parentId: schema.number.nullableAndOptional([rules.exists({ table: 'taxonomies', column: 'id' })]),
     name: schema.string({ trim: true }, [rules.maxLength(100)]),
     slug: schema.string.optional({}, [rules.maxLength(150), rules.unique({
       table: 'taxonomies',
@@ -40,6 +42,7 @@ export default class TaxonomyValidator {
     pageTitle: schema.string.optional({ trim: true }, [rules.maxLength(100)]),
     description: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     metaDescription: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    postIds: schema.array.optional().members(schema.number([rules.exists({ table: 'posts', column: 'id' })])),
   })
 
   /**

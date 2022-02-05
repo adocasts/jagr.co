@@ -78,7 +78,6 @@ export default class CollectionsController {
     const children = await Collection.query()
       .where('parentId', collection.id)
       .preload('posts', query => query.orderBy('pivot_sort_order'))
-      //.orderBy('pivot_sort_order')
 
     return view.render('studio/collections/createOrEdit', { collection, children, states, statuses, collectionTypes })
   }
