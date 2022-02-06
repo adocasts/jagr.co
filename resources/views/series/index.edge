@@ -4,11 +4,6 @@
 
   <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">
     @container()
-
-      {{ inspect(posts) }}
-
-      {{ inspect(children) }}
-
       {{--  Series  --}}
       <div class="py-3 flex flex-col mb-3">
         <h1 class="text-3xl font-extrabold text-gray-950 tracking-tight">Series</h1>
@@ -17,14 +12,14 @@
         </p>
       </div>
       <div class="flex flex-col -mx-6 mb-8 space-y-6">
-        @each (i in [0,1,2,3])
+        @each ((item, i) in series)
           <div class="flex flex-wrap">
-            <a href="#" class="anchor w-full md:w-1/4 group px-2 flex flex-col justify-center items-center transition border border-gray-300 relative left-px -ml-px rounded-lg relative overflow-hidden">
+            <a href="{{ route('series.show', { slug: item.slug }) }}" class="anchor w-full md:w-1/4 group px-2 flex flex-col justify-center items-center transition border border-gray-300 left-px -ml-px rounded-lg relative overflow-hidden">
               <div class="absolute top-0 left-0 w-full bg-gray-50 transition duration-300 transform -translate-y-full group-hover:translate-y-0" style="height: calc(100% + 1.5rem)"></div>
               <div class="w-full flex flex-col items-center bg-gray-50 py-6 px-6 rounded-b-3xl relative z-10">
                 <img src="https://via.placeholder.com/65" class="rounded-full w-24 mb-3" />
                 <h4 class="text-lg">
-                  Let's Learn AdonisJS 5
+                  {{ item.name }}
                 </h4>
                 <div class="flex flex-wrap items-center space-x-1 pt-3">
                   @badge()
@@ -37,6 +32,9 @@
                     Edge
                   @end
                 </div>
+                <p class="mt-3 text-center text-sm">
+                  {{ excerpt(item.description, 130) }}
+                </p>
               </div>
               <div class="w-1/2 mx-auto border-t border-gray-300 relative z-10 opacity-0 group-hover:opacity-100"></div>
               <div class="w-full text-gray-700 text-xs py-3 px-6 flex justify-around items-center relative z-10">
@@ -51,14 +49,15 @@
                 </div>
               </div>
               <object class="flex flex-col w-full space-y-3 mb-3 mt-2 relative z-10">
-                  @button({ href: route('series.show', { slug: 1 }), variant: 'blackSecondary', block: true, group: true })
+                  @button({ href: route('series.show', { slug: item.slug }), variant: 'blackSecondary', block: true, group: true })
                     Start Series
                   @end
               </object>
             </a>
 
-            @each (x in [1,2,3])
+            @each ((post, x) in item.$extras.displayPosts)
               @!lesson.card({
+                post,
                 className: x !== 0 && 'hidden md:flex'
               })
             @endeach

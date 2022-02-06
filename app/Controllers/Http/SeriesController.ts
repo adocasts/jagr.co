@@ -5,28 +5,21 @@ import Collection from 'App/Models/Collection'
 
 export default class SeriesController {
   public async index({ view }: HttpContextContract) {
-    const series = await Collection.series().wherePublic().whereNull('parentId')
-    let neededPosts = 3
-
-    for (let i = 0; i < series.length; i++) {
-
-    }
-
-
+    const postsToTake = 3
     const series = await Collection.series()
       .wherePublic()
       .whereNull('parentId')
-      .preload('posts', query => query.apply(scope => scope.forCollectionDisplay()))
+      .preload('posts', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' })).limit(postsToTake))
       .preload('children', query => query
         .orderBy('sortOrder')
-        .preload('posts', query => query.apply(scope => scope.forCollectionDisplay()))
+        .preload('posts', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' })).limit(postsToTake))
       )
 
     series.map(collection => {
       const childPosts = collection.children.map(c => c.posts).flat()
       const parentPosts = collection.posts
 
-      collection.$extras.displayPosts = [...parentPosts, ...childPosts]
+      collection.$extras.displayPosts = [...parentPosts, ...childPosts].slice(0, postsToTake)
     })
 
     return view.render('series/index', { series })

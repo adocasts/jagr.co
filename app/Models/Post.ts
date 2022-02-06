@@ -252,9 +252,9 @@ export default class Post extends AppBaseModel {
       .preload('authors')
   })
 
-  public static forCollectionDisplay = scope<typeof Post>((query) => {
+  public static forCollectionDisplay = scope<typeof Post>((query, { orderBy, direction }: { orderBy: 'pivot_sort_order'|'pivot_root_sort_order', direction: 'asc'|'desc' } = { orderBy: 'pivot_sort_order', direction: 'asc' }) => {
     query
       .apply(scope => scope.forDisplay())
-      .orderBy('pivot_sort_order')
+      .orderBy(orderBy, direction)
   })
 }

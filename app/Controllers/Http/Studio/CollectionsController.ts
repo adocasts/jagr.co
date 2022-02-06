@@ -84,8 +84,12 @@ export default class CollectionsController {
     return response.redirect().toRoute('studio.collections.index')
   }
 
-  public async destroy ({ response, params }: HttpContextContract) {
-    await CollectionService.delete(params.id)
+  public async destroy ({ request, response, params }: HttpContextContract) {
+    const collection = await CollectionService.delete(params.id)
+
+    if (request.accepts(['json'])) {
+      return response.json({ success: true, collection })
+    }
 
     return response.redirect().toRoute('studio.collections.index')
   }

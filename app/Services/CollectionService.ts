@@ -29,7 +29,7 @@ export default class CollectionService {
 
     await collection.merge(data).save()
 
-    await CollectionService.syncPosts(collection, postIds)
+    await CollectionService.syncPosts(collection, postIds, { root_collection_id: collection.id })
 
     if (subcollectionPostIds) {
       await this.syncSubcollectionPosts(collection, subcollectionCollectionIds, subcollectionPostIds, subcollectionCollectionNames)
@@ -60,16 +60,17 @@ export default class CollectionService {
     return collection
   }
 
-  public static async syncPosts(collection: Collection, postIds: number[] = []) {
-    const syncData = this.getPostSyncData(postIds)
+  public static async syncPosts(collection: Collection, postIds: number[] = [], intermediaryData: { [x: string]: any } = {}) {
+    const syncData = this.getPostSyncData(postIds, intermediaryData)
 
     return collection.related('posts').sync(syncData)
   }
 
-  public static getPostSyncData(postIds: number[] = []) {
+  public static getPostSyncData(postIds: number[] = [], intermediaryData: { [x: string]: any } = {}) {
     return postIds.reduce((prev, curr, i) => ({
       ...prev,
       [curr]: {
+        ...intermediaryData,
         sort_order: i
       }
     }), {})

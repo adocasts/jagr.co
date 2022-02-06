@@ -25,6 +25,14 @@ function collectionManager({ parentId, collections = [], posts = [] }) {
     async addCollection() {
       const { data } = await axios.post('/api/studio/collections/stub', { parentId })
       this.collections.push(data.collection)
+      this.$nextTick(() => {
+        this.initAutocomplete(`#autocomplete_collection_${data.collection.id}`, data.collection)
+      })
+    },
+
+    async deleteCollection(collection) {
+      await axios.delete(`/studio/collections/${collection.id}`)
+      this.collections = this.collections.filter(c => c.id != collection.id)
     },
 
     addPost() {

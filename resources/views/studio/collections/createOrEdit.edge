@@ -133,8 +133,11 @@
 
                   <div class="flex justify-between pb-1">
                     <input type="text" :name="`subcollectionCollectionNames[${x}]`" x-model="subcollection.name" class="w-full natural bg-transparent border-transparent focus-within:border-gray-300 focus-within:bg-white p-0 placeholder-gray-700 mr-3 -mx-1 px-1" />
-                    <button type="button" @click="collectionPostAddId = subcollection.id" class="text-xs hover:text-brand-800 transition whitespace-nowrap">
+                    <button type="button" @click="collectionPostAddId = subcollection.id" class="text-xs hover:text-brand-800 transition whitespace-nowrap mr-3">
                       + Add post
+                    </button>
+                    <button type="button" @click="deleteCollection(subcollection)" class="text-xs transition whitespace-nowrap text-red-700 hover:text-red-800">
+                      - Delete
                     </button>
                   </div>
 
