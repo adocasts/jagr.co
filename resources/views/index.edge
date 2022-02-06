@@ -125,8 +125,8 @@
         </a>
       </div>
       <div class="flex flex-wrap -mx-6 mb-8">
-        @each (i in [0,1,2,3,4,5])
-          @!topic.card({ index: i })
+        @each (topic in topics)
+          @!topic.card({ topic, index: i })
         @endeach
       </div>
 

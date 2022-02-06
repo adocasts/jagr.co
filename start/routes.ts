@@ -20,9 +20,7 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
-Route.get('/', async ({ view }) => {
-  return view.render('index')
-})
+Route.get('/', 'HomeController.index').as('home')
 
 Route.get('/img/:userId/:filename', 'AssetsController.show').as('userimg');
 // Route.get('/img/*', 'AssetsController.show').where('path', /.*/).as('img');

@@ -16,9 +16,9 @@
       </div>
 
       <div class="flex flex-wrap -mx-6">
-        @each(i in [0,1,2,3,4,5])
+        @each(topic in topics)
           <div class="w-full md:w-1/3 lg:w-1/4 px-3 pb-6">
-            @!topic.card({ className: 'w-full' })
+            @!topic.card({ topic, className: 'w-full' })
           </div>
         @endeach
       </div>

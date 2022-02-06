@@ -26,8 +26,16 @@ export default class AppProvider {
 
     View.global('img', AssetService.getAssetUrl)
 
-    View.global('getSingularOrPlural', (string: string, array: any[] ) => {
-      return array.length > 1 ? stringHelpers.pluralize(string) : string
+    View.global('getSingularOrPlural', (string: string, count: string|number|any[] ) => {
+      let isPlural = false
+      
+      if (Array.isArray(count)) {
+        isPlural = count.length == 0 || count.length > 1
+      } else {
+        isPlural = count == 0 || count != 1
+      }
+      
+      return isPlural ? stringHelpers.pluralize(string) : string
     })
 
     View.global('Db', (table: string) => {
