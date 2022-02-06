@@ -6,7 +6,7 @@ import {
   HasMany,
   hasMany,
   ManyToMany,
-  manyToMany
+  manyToMany, scope
 } from '@ioc:Adonis/Lucid/Orm'
 import Asset from './Asset'
 import PostSnapshot from './PostSnapshot'
@@ -20,6 +20,9 @@ import EditorBlockParser from 'App/Services/EditorBlockParser'
 import PostType from 'App/Enums/PostType'
 import Comment from './Comment'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import States from 'App/Enums/States'
+import Collection from 'App/Models/Collection'
+import CollectionTypes from 'App/Enums/CollectionTypes'
 
 export default class Post extends AppBaseModel {
   public serializeExtras = true
@@ -133,6 +136,30 @@ export default class Post extends AppBaseModel {
   })
   public taxonomies: ManyToMany<typeof Taxonomy>
 
+  @manyToMany(() => Collection, {
+    onQuery(query) {
+      query.where('collectionTypeId', CollectionTypes.SERIES)
+    },
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
+  })
+  public series: ManyToMany<typeof Collection>
+
+  @manyToMany(() => Collection, {
+    onQuery(query) {
+      query.where('collectionTypeId', CollectionTypes.COURSE)
+    },
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
+  })
+  public courses: ManyToMany<typeof Collection>
+
+  @manyToMany(() => Collection, {
+    onQuery(query) {
+      query.where('collectionTypeId', CollectionTypes.PLAYLIST)
+    },
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
+  })
+  public playlists: ManyToMany<typeof Collection>
+
   @computed()
   public get publishAtDateString() {
     return this.publishAt?.toFormat('yyyy-MM-dd')
@@ -205,4 +232,29 @@ export default class Post extends AppBaseModel {
   public static links() {
     return this.query().where('postTypeId', PostType.LINK)
   }
+
+  public static loadForDisplay() {
+    return this.query().apply(scope => scope.forDisplay())
+  }
+
+  public static published = scope<typeof Post>((query) => {
+    query
+      .where('stateId', States.PUBLIC)
+      .where('publishAt', '<=', DateTime.now().toSQL())
+  })
+
+  public static forDisplay = scope<typeof Post>((query) => {
+    query
+      .apply(scope => scope.published())
+      .preload('assets')
+      .preload('taxonomies')
+      .preload('series')
+      .preload('authors')
+  })
+
+  public static forCollectionDisplay = scope<typeof Post>((query) => {
+    query
+      .apply(scope => scope.forDisplay())
+      .orderBy('pivot_sort_order')
+  })
 }

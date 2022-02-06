@@ -2,7 +2,7 @@ import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import AssetService from 'App/Services/AssetService'
 import State, { StateDesc } from 'App/Enums/States'
 import Status, { StatusDesc } from 'App/Enums/Status'
-import CollectionType, { CollectionTypeDesc } from "App/Enums/CollectionType"
+import CollectionType, { CollectionTypeDesc } from "App/Enums/CollectionTypes"
 import { DateTime } from 'luxon'
 import PostType, {PostTypeDesc} from "App/Enums/PostType";
 import Roles from 'App/Enums/Roles'

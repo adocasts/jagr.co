@@ -6,7 +6,7 @@ import {
   ManyToMany,
   manyToMany
 } from '@ioc:Adonis/Lucid/Orm'
-import CollectionType from 'App/Enums/CollectionType'
+import CollectionTypes from 'App/Enums/CollectionTypes'
 import Status from 'App/Enums/Status'
 import User from './User'
 import Post from './Post'
@@ -27,7 +27,7 @@ export default class Collection extends AppBaseModel {
   public parentId: number | null
 
   @column()
-  public collectionTypeId: CollectionType
+  public collectionTypeId: CollectionTypes
 
   @column()
   public statusId: Status
@@ -77,7 +77,7 @@ export default class Collection extends AppBaseModel {
 
   @manyToMany(() => Post, {
     pivotTable: 'collection_posts',
-    pivotColumns: ['sort_order']
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
   })
   public posts: ManyToMany<typeof Post>
 
@@ -91,4 +91,16 @@ export default class Collection extends AppBaseModel {
     foreignKey: 'parentId'
   })
   public children: HasMany<typeof Collection>
+
+  public static series() {
+    return this.query().where('collectionTypeId', CollectionTypes.SERIES)
+  }
+
+  public static courses() {
+    return this.query().where('collectionTypeId', CollectionTypes.COURSE)
+  }
+
+  public static playlists() {
+    return this.query().where('collectionTypeId', CollectionTypes.PLAYLIST)
+  }
 }

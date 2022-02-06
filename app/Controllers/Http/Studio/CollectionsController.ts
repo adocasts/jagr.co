@@ -1,11 +1,12 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import CollectionType from 'App/Enums/CollectionType'
+import CollectionType from 'App/Enums/CollectionTypes'
 import State from 'App/Enums/States'
 import Status from 'App/Enums/Status'
 import Collection from 'App/Models/Collection'
 import CollectionValidator from 'App/Validators/CollectionValidator'
 import Route from '@ioc:Adonis/Core/Route'
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import CollectionService from 'App/Services/CollectionService'
 
 export default class CollectionsController {
   public async index ({ view, request, auth }: HttpContextContract) {
@@ -38,14 +39,11 @@ export default class CollectionsController {
   public async store ({ request, response, session, auth }: HttpContextContract) {
     const data = await request.validate(CollectionValidator)
 
-    await Collection.create({
-      ...data,
-      ownerId: auth.user!.id,
-    })
+    const collection = await CollectionService.updateOrCreate(undefined, { ...data, ownerId: auth.user!.id })
 
     session.flash('success', "Your collection has been created")
 
-    return response.redirect().toRoute('studio.collections.index')
+    return response.redirect().toRoute('studio.collections.edit', { id: collection.id })
   }
 
   public async stub ({ request, response, auth }: HttpContextContract) {
@@ -55,11 +53,7 @@ export default class CollectionsController {
       })
     })
 
-    const collection = await Collection.create({
-      ...data,
-      name: 'Your new collection',
-      ownerId: auth.user!.id
-    })
+    const collection = await CollectionService.stub(auth.user!.id, data)
 
     return response.json({ collection })
   }
@@ -83,54 +77,15 @@ export default class CollectionsController {
   }
 
   public async update ({ request, response, params }: HttpContextContract) {
-    const {
-      postIds,
-      subcollectionCollectionIds = [],
-      subcollectionCollectionNames = [],
-      subcollectionPostIds,
-      ...data
-    } = await request.validate(CollectionValidator)
+    const data = await request.validate(CollectionValidator)
 
-    const collection = await Collection.findOrFail(params.id)
-
-    await collection.merge(data).save()
-
-    await collection.related('posts').sync(postIds ?? [])
-
-    if (subcollectionPostIds) {
-      const promises = subcollectionCollectionIds.map((collectionId, i) => {
-        return new Promise(async (resolve) => {
-          const postIds = subcollectionPostIds[i] ?? []
-          const collectionName = subcollectionCollectionNames[i]
-          const postSyncData = postIds.reduce((prev, curr, i) => ({
-            ...prev,
-            [curr]: {
-              sort_order: i
-            }
-          }), {})
-
-          const collection = await Collection.findOrFail(collectionId)
-
-          if (collection.name !== collectionName) {
-            await collection.merge({ name: collectionName }).save()
-          }
-
-          await collection.related('posts').sync(postSyncData)
-
-          resolve(true)
-        })
-      })
-
-      await Promise.all(promises)
-    }
+    await CollectionService.updateOrCreate(params.id, data)
 
     return response.redirect().toRoute('studio.collections.index')
   }
 
   public async destroy ({ response, params }: HttpContextContract) {
-    const collection = await Collection.findOrFail(params.id)
-
-    await collection.delete()
+    await CollectionService.delete(params.id)
 
     return response.redirect().toRoute('studio.collections.index')
   }

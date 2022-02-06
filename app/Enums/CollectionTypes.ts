@@ -1,4 +1,4 @@
-enum CollectionType {
+enum CollectionTypes {
   SERIES = 1,
   COURSE = 2,
   PLAYLIST = 3
@@ -10,4 +10,4 @@ export const CollectionTypeDesc = {
   3: 'Playlist'
 }
 
-export default CollectionType
+export default CollectionTypes

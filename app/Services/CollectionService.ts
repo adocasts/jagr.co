@@ -1,4 +1,5 @@
 import Collection from 'App/Models/Collection'
+import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class CollectionService {
   // TODO: finish
@@ -21,5 +22,88 @@ export default class CollectionService {
       .select('id')
 
     return subCollections
+  }
+
+  public static async updateOrCreate(collectionId: number | undefined, { postIds, subcollectionCollectionIds = [], subcollectionCollectionNames = [], subcollectionPostIds = [], ...data }: { [x: string]: any }) {
+    const collection = await Collection.firstOrNewById(collectionId)
+
+    await collection.merge(data).save()
+
+    await CollectionService.syncPosts(collection, postIds)
+
+    if (subcollectionPostIds) {
+      await this.syncSubcollectionPosts(collection, subcollectionCollectionIds, subcollectionPostIds, subcollectionCollectionNames)
+    }
+
+    return collection
+  }
+
+  public static async stub(userId: number, data: { parentId: number }) {
+    return Collection.create({
+      ...data,
+      name: 'Your new collection',
+      ownerId: userId
+    })
+  }
+
+  public static async delete(collectionId: number) {
+    const collection = await Collection.query()
+      .where('id', collectionId)
+      .preload('children', query => query.select('id'))
+      .firstOrFail()
+
+    const collectionIds = [...collection.children.map(c => c.id), collection.id]
+    await Database.from('collection_posts').whereIn('collection_id', collectionIds).delete()
+    await Database.from('collection_taxonomies').whereIn('collection_id', collectionIds).delete()
+    await Collection.query().whereIn('id', collectionIds).delete()
+
+    return collection
+  }
+
+  public static async syncPosts(collection: Collection, postIds: number[] = []) {
+    const syncData = this.getPostSyncData(postIds)
+
+    return collection.related('posts').sync(syncData)
+  }
+
+  public static getPostSyncData(postIds: number[] = []) {
+    return postIds.reduce((prev, curr, i) => ({
+      ...prev,
+      [curr]: {
+        sort_order: i
+      }
+    }), {})
+  }
+
+  public static async syncSubcollectionPosts(rootCollection: Collection, subcollectionCollectionIds: number[], subcollectionPostIds: number[][], subcollectionCollectionNames: string[]) {
+    let rootSortOrder = -1
+
+    const promises = subcollectionCollectionIds.map((collectionId, i) => {
+      return new Promise(async (resolve) => {
+        const postIds = subcollectionPostIds[i] ?? []
+        const collectionName = subcollectionCollectionNames[i]
+        const postSyncData = postIds.reduce((prev, curr, i) => ({
+          ...prev,
+          [curr]: {
+            sort_order: i,
+            root_sort_order: ++rootSortOrder,
+            root_collection_id: rootCollection.id
+          }
+        }), {})
+
+        const collection = await Collection.findOrFail(collectionId)
+
+        await collection.merge({
+          name: collectionName,
+          collectionTypeId: rootCollection.collectionTypeId
+        }).save()
+
+        await collection.related('posts').sync(postSyncData)
+
+        resolve(true)
+      })
+    })
+
+    await Promise.all(promises)
   }
 }
