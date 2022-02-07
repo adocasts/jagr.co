@@ -50,7 +50,8 @@ Route.get('/lessons', 'LessonsController.index').as('lessons.index')
 
 Route.get('/posts', 'PostsController.index').as('posts.index')
 
-Route.get('/topics', 'TopicsController.index').as('topics.index')
+Route.get('/topics',        'TopicsController.index').as('topics.index')
+Route.get('/topics/:slug',  'TopicsController.show').as('topics.show')
 
 Route.post('/comments',       'CommentsController.store').as('comments.store')
 Route.put('/comments/:id',    'CommentsController.update').as('comments.update')

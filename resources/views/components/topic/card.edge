@@ -1,10 +1,10 @@
 @set('className', className ?? 'w-1/2 md:w-1/6')
 @set('index', index ?? null)
 
-<a href="#" class="anchor {{ className }} {{ i === 0 && 'rounded-l-lg' }} {{ i === 5 && 'rounded-r-lg' }} {{ index === null && 'rounded-lg' }} group py-2 flex flex-col justify-center items-center transition border border-gray-300 relative left-px -ml-px overflow-hidden">
+<a href="{{ route('topics.show', { slug: topic.slug }) }}" class="anchor {{ className }} {{ i === 0 && 'rounded-l-lg' }} {{ i === 5 && 'rounded-r-lg' }} {{ index === null && 'rounded-lg' }} group py-1 flex flex-col justify-center items-center transition border border-gray-300 relative left-px -ml-px overflow-hidden">
   <div class="absolute top-0 left-0 w-full bg-gray-50 transition duration-300 transform -translate-x-full group-hover:translate-x-0" style="height: calc(100% + 1.5rem)"></div>
 
-  <div class="w-full flex items-center py-3 px-3 rounded-b-3xl relative z-10">
+  <div class="w-full flex items-center py-2 px-3 rounded-b-3xl relative z-10">
     <div class="bg-gray-50 -m-3 p-3 rounded-r-xl mr-3">
       <img src="https://via.placeholder.com/65" class="rounded-full w-16" />      
     </div>

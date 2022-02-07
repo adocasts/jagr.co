@@ -9,4 +9,14 @@ export default class TopicsController {
       .orderBy('name')
     return view.render('topics/index', { topics })
   }
+
+  public async show({ view, params }: HttpContextContract) {
+    const topic = await Taxonomy.firstOrFail(params.slug)
+
+    await topic.load('children', query => query.apply(scope => scope.hasContent()).orderBy('name'))
+    await topic.load('posts', query => query.apply(scope => scope.forDisplay()))
+    await topic.load('collections', query => query.wherePublic().orderBy('name'))
+
+    return view.render('topics/show', { topic })
+  }
 }

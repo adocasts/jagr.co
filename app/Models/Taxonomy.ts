@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { BelongsTo, belongsTo, column, HasMany, hasMany, ManyToMany, manyToMany, scope } from '@ioc:Adonis/Lucid/Orm'
 import Asset from './Asset'
 import Collection from './Collection'
 import Post from './Post'
@@ -61,14 +61,19 @@ export default class Taxonomy extends AppBaseModel {
   public children: HasMany<typeof Taxonomy>
 
   @manyToMany(() => Post, {
-    pivotTable: 'post_taxonomies',
     pivotColumns: ['sort_order']
   })
   public posts: ManyToMany<typeof Post>
 
   @manyToMany(() => Collection, {
-    pivotTable: 'collection_taxonomies',
     pivotColumns: ['sort_order']
   })
   public collections: ManyToMany<typeof Collection>
+
+  public static hasContent = scope<typeof Taxonomy>((query) => {
+    query.where(q => q
+      .orWhereHas('posts', p => p.apply(scope => scope.published()))
+      .orWhereHas('collections', p => p.wherePublic())
+    )
+  })
 }
