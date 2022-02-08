@@ -1,4 +1,4 @@
-@set('anchors', data.getUrlsForRange(data.currentPage, data.lastPage))
+@set('anchors', data.getUrlsForRange(data.firstPage, data.lastPage))
 @set('isFirstPage', data.currentPage === data.firstPage)
 @set('isLastPage', data.currentPage === data.lastPage)
 @set('pageStartCount', data.currentPage === data.firstPage ? 1 : data.currentPage * data.perPage)
@@ -7,10 +7,10 @@
 
 <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 {{ className }}">
   <div class="flex-1 flex justify-between sm:hidden">
-    <a {{ !isFirstPage && `href="?page=${data.firstPage}"` }} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white {{ isFirstPage ? disabledClass : 'text-gray-900 hover:bg-gray-50' }}">
+    <a {{{ !isFirstPage && `href="${data.getNextPageUrl()}"` }}} class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white {{ isFirstPage ? disabledClass : 'text-gray-900 hover:bg-gray-50' }}">
       Previous
     </a>
-    <a {{ !isLastPage && `href="?page=${data.lastPage}"` }} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white {{ isLastPage ? disabledClass : 'text-gray-900 hover:bg-gray-50' }}">
+    <a {{{ !isLastPage && `href="?page=${data.getPreviousPageUrl()}"` }}} class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md bg-white {{ isLastPage ? disabledClass : 'text-gray-900 hover:bg-gray-50' }}">
       Next
     </a>
   </div>
@@ -28,7 +28,7 @@
     </div>
     <div>
       <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-        <a {{ !isFirstPage && `href="?page=${data.lastPage}"` }} class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium {{ isFirstPage ? disabledClass : 'text-gray-800 hover:bg-gray-50' }}">
+        <a {{{ !isFirstPage && `href="${data.getPreviousPageUrl()}"` }}} class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium {{ isFirstPage ? disabledClass : 'text-gray-800 hover:bg-gray-50' }}">
           <span class="sr-only">Previous</span>
           <!-- Heroicon name: solid/chevron-left -->
           <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -52,7 +52,7 @@
           ...
         </span>  --}}
 
-        <a {{ !isLastPage && `href="?page=${data.lastPage}"` }} class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium {{ isLastPage ? disabledClass : 'text-gray-800 hover:bg-gray-50' }}">
+        <a {{{ !isLastPage && `href="${data.getNextPageUrl()}"` }}} class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium {{ isLastPage ? disabledClass : 'text-gray-800 hover:bg-gray-50' }}">
           <span class="sr-only">Next</span>
           <!-- Heroicon name: solid/chevron-right -->
           <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -63,3 +63,4 @@
     </div>
   </div>
 </div>
+

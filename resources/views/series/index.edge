@@ -55,9 +55,9 @@
               </object>
             </a>
 
-            @each ((post, x) in item.$extras.displayPosts)
+            @each ((item, x) in item.postsFlattened)
               @!lesson.card({
-                post,
+                item,
                 className: x !== 0 && 'hidden md:flex'
               })
             @endeach

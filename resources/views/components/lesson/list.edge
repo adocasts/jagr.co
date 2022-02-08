@@ -1,34 +1,41 @@
 <div class="flex flex-col -mx-6">
   <div class="{{ columns ?? 'columns-1' }}">
-    @each (i in [0,1,2,3,4,5,6,7,8,9,10])
+    @each ((item, i) in items)
+      @set('author', item.authors && item.authors[0])
+      @set('thumbnail', item.assets && item.assets[0])
+      @set('series', item.series && item.series[0])
+
       <a href="#" class="w-full flex flex-wrap mb-3 p-3 rounded-xl hover:bg-gray-50 transition">
         <div class="w-full md:w-2/5 md:pr-3">
-          @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg', className: 'rounded-lg overflow-hidden' })
+          @if (thumbnail)
+            @!picture({ filename: thumbnail.filename, className: 'rounded-lg overflow-hidden' })
+          @endif
         </div>
         <div class="w-full md:w-3/5 flex flex-col md:pl-3">
-          <object>
-            <h5 class="uppercase inline-flex items-center text-accent-800 tracking-wide text-xs">
-              <a href="#" class="anchor">
-                AdonisJS Quick Tip
-              </a>
-              <span class="px-3 font-bold text-gray-400">/</span>
-              <span class="text-gray-700">
-                Lesson 1.3
-              </span>
-            </h5>
-          </object>
+          @if (series)
+            <object>
+              <h5 class="uppercase inline-flex items-center text-accent-800 tracking-wide text-xs">
+                <a href="#" class="anchor">
+                  {{ series.name }}
+                </a>
+                <span class="px-3 font-bold text-gray-400">/</span>
+                <span class="text-gray-700">
+                  Lesson {{ item.lessonIndexDisplay }}
+                </span>
+              </h5>
+            </object>
+          @endif
           <h3 class="text-lg font-bold mb-1">
-            Getting Data By The User's Timezone
+            {{ item.title }}
           </h3>
           <p class="mb-2 text-sm">
-            In this lesson, we'll learn how we can use the user's current time zone to create, update,
-            or query time-sensitive information in AdonisJS using Luxon's DateTime object.
+            {{ item.description }}
           </p>
           <object>
             <p class="flex text-sm items-center">
               By&nbsp;
               <a href="#" class="anchor-inv">
-                Tom Gobich
+                {{ author.username }}
               </a>
             </p>
           </object>

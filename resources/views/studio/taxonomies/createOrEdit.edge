@@ -93,6 +93,15 @@
             rows: 3
           })
         </details>
+
+        @form.input.alt({ type: 'group', label: 'Icon', help: 'Max image size of 2MB' })
+          @slot('input')
+            @!form.file.manager({
+              assets: [taxonomy?.asset],
+              placeholder: 'Select and image'
+            })
+          @endslot
+        @end
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3">

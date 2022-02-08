@@ -39,6 +39,7 @@ export default class TaxonomiesController {
   public async edit({ view, params }: HttpContextContract) {
     const taxonomy = await Taxonomy.findOrFail(params.id)
 
+    await taxonomy.load('asset')
     await taxonomy.load('posts', query => query.orderBy('pivot_sort_order'))
 
     return view.render('studio/taxonomies/createOrEdit', { taxonomy })

@@ -146,6 +146,15 @@ export default class Post extends AppBaseModel {
 
   @manyToMany(() => Collection, {
     onQuery(query) {
+      query.where('collectionTypeId', CollectionTypes.SERIES)
+    },
+    pivotRelatedForeignKey: 'root_collection_id',
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
+  })
+  public rootSeries: ManyToMany<typeof Collection>
+
+  @manyToMany(() => Collection, {
+    onQuery(query) {
       query.where('collectionTypeId', CollectionTypes.COURSE)
     },
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
@@ -219,6 +228,20 @@ export default class Post extends AppBaseModel {
     post.readMinutes = readTime.minutes
     post.readTime = readTime.time
     post.wordCount = readTime.words
+  }
+
+  public get lessonIndexDisplay() {
+    const series = this.series?.length && this.series[0]
+    
+    if (!series) {
+      return ''
+    }
+
+    if (!series.parentId) {
+      return `${series.$extras.pivot_sort_order + 1}.0`
+    }
+
+    return `${series.sortOrder + 1}.${series.$extras.pivot_sort_order}`
   }
 
   public static lessons() {

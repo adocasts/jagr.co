@@ -7,17 +7,20 @@
       @container()
         <div class="flex flex-col max-w-4xl py-4 md:py-6">
           <h1 class="font-bold text-4xl md:text-5xl text-white mb-4">
-            AdonisJS Quick Tip
+            {{ item.name }}
           </h1>
           <div class="flex items-center opacity-80 mb-2">
-            <div class="mr-3">6 Lessons</div>
+            <div class="mr-3">
+              {{ item.$extras.root_posts_count ?? '0' }}
+              {{ getSingularOrPlural('Lesson', item.$extras.root_posts_count ?? 0) }}
+            </div>
             <div class="mr-3">3 Hours</div>
           </div>
           <p class="opacity-80 mb-6">
-            In this lesson, we'll learn how we can use the user's current time zone to create, update, or query time-sensitive information in AdonisJS using Luxon's DateTime object.
+            {{ item.description }}
           </p>
           <div class="flex items-center pb-12">
-            <a href="{{ route('series.lesson', { slug: 'example', index: 1 }) }}" class="mr-3 bg-white hover:bg-brand-800 hover:text-brand-100 transition duration-300 flex items-center rounded-full text-black pr-6">
+            <a href="{{ route('series.lesson', { slug: item.slug, index: 1 }) }}" class="mr-3 bg-white hover:bg-brand-800 hover:text-brand-100 transition duration-300 flex items-center rounded-full text-black pr-6">
               <svg class="w-6 h-6 md:w-12 md:h-12 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
               Start Series
             </a>

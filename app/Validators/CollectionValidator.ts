@@ -3,6 +3,13 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class CollectionValidator {
   constructor (protected ctx: HttpContextContract) {
+		const body = ctx.request.body()
+		
+		if (body.assetIds && body.assetIds.length) {
+			body.assetId = body.assetIds[0]
+		}
+
+		ctx.request.updateBody(body)
   }
 
 	get slugUniqueConstraint() {

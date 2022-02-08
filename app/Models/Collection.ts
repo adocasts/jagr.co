@@ -4,7 +4,7 @@ import {
   belongsTo,
   column, HasMany, hasMany,
   ManyToMany,
-  manyToMany
+  manyToMany, scope
 } from '@ioc:Adonis/Lucid/Orm'
 import CollectionTypes from 'App/Enums/CollectionTypes'
 import Status from 'App/Enums/Status'
@@ -15,6 +15,8 @@ import Asset from './Asset'
 import State from 'App/Enums/States'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import Database from '@ioc:Adonis/Lucid/Database'
+import States from 'App/Enums/States'
 
 export default class Collection extends AppBaseModel {
   @column({ isPrimary: true })
@@ -81,8 +83,14 @@ export default class Collection extends AppBaseModel {
   })
   public posts: ManyToMany<typeof Post>
 
+  @manyToMany(() => Post, {
+    pivotForeignKey: 'root_collection_id',
+    pivotTable: 'collection_posts',
+    pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
+  })
+  public postsFlattened: ManyToMany<typeof Post>
+
   @manyToMany(() => Taxonomy, {
-    pivotTable: 'collection_taxonomies',
     pivotColumns: ['sort_order']
   })
   public taxonomies: ManyToMany<typeof Taxonomy>
@@ -102,5 +110,36 @@ export default class Collection extends AppBaseModel {
 
   public static playlists() {
     return this.query().where('collectionTypeId', CollectionTypes.PLAYLIST)
+  }
+
+  public static withPostLatestPublished = scope<typeof Collection>((query) => {
+    query.select(
+      Database.rawQuery(`(
+        select
+          p.publish_at
+        from
+          posts as p inner join collection_posts
+            on p.id = collection_posts.post_id
+            where
+                  collections.id = collection_posts.collection_id
+              and p.state_id = ?
+              and p.is_personal = false
+              and p.publish_at <= ?
+            order by p.publish_at desc
+            limit 1
+      ) as latest_publish_at`, [States.PUBLIC, DateTime.local().toSQL()])
+    )
+  })
+
+  public static withPublishedPostCount = scope<typeof Collection>((query) => {
+    query.withCount('posts', post => post.apply(scope => scope.published()))
+  })
+
+  public static get postCountSubQuery() {
+    return Database
+      .from('collection_posts')
+      .where('root_collection_id', Database.ref('collections.id'))
+      .count('*')
+      .as('root_posts_count')
   }
 }

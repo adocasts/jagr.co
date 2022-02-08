@@ -1,0 +1,39 @@
+@set('author', item.authors.length && item.authors[0])
+@set('series', item.series.length && item.series[0])
+@set('thumbnail', item.assets.length && item.assets[0])
+
+<div class="bg-gray-50 hover:bg-gray-100 transition pt-12 relative z-20 border-b border-gray-300">
+  @container({ className: 'flex flex-wrap px-12' })
+    @if (thumbnail)
+      <div class="w-full md:w-3/5 -mb-12">
+        <a href="#">
+          @!picture({ filename: thumbnail.filename, className: 'rounded-lg shadow-xl' })
+        </a>
+      </div>
+    @endif
+
+    <div class="w-full md:w-2/5 px-12">
+      @if (series)
+        <h5 class="uppercase text-accent-800 tracking-wide text-sm mb-3">
+          <a href="#" class="anchor">
+            {{ series.name }}
+          </a>
+        </h5>
+      @endif
+      <h1 class="text-4xl font-bold mb-6">
+        <a href="#">
+          {{ item.title }}
+        </a>
+      </h1>
+      <p class="mb-3">
+        {{ item.description }}
+      </p>
+      <p>
+        By
+        <a href="#" class="anchor-inv">
+          {{ author.username }}
+        </a>
+      </p>
+    </div>
+  @end
+</div>

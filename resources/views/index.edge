@@ -2,38 +2,7 @@
 
 @section('hero')
 
-  <div class="bg-gray-50 hover:bg-gray-100 transition pt-12 relative z-20 border-b border-gray-300">
-    @container({ className: 'flex flex-wrap px-12' })
-      <div class="w-full md:w-3/5 -mb-12">
-        <a href="#">
-          @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg', className: 'rounded-lg shadow-xl' })
-        </a>
-      </div>
-
-      <div class="w-full md:w-2/5 px-12">
-        <h5 class="uppercase text-accent-800 tracking-wide text-sm mb-3">
-          <a href="#" class="anchor">
-            AdonisJS Quick Tip
-          </a>
-        </h5>
-        <h1 class="text-4xl font-bold mb-6">
-          <a href="#">
-            Getting Data By The User's Timezone
-          </a>
-        </h1>
-        <p class="mb-3">
-          In this lesson, we'll learn how we can use the user's current time zone to create, update,
-          or query time-sensitive information in AdonisJS using Luxon's DateTime object.
-        </p>
-        <p>
-          By
-          <a href="#" class="anchor-inv">
-            Tom Gobich
-          </a>
-        </p>
-      </div>
-    @end
-  </div>
+  @!lesson.feature({ item: featuredLesson })
 
 @endsection
 
@@ -74,21 +43,21 @@
       {{--  Series  --}}
       <div class="py-3 flex flex-wrap justify-between">
         <h3 class="font-bold">Series</h3>
-        <a href="#" class="anchor text-sm flex flex-nowrap items-end space-x-2">
+        <a href="{{ route('series.index') }}" class="anchor text-sm flex flex-nowrap items-end space-x-2">
           <span>View all series</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
       </div>
       <div class="flex flex-wrap -mx-6 mb-8">
-        @each (i in [0,1,2,3])
-          @!series.card()
+        @each ((item, i) in series)
+          @!series.card({ item, index: i, length: series.length })
         @endeach
       </div>
 
       {{--  Topics  --}}
       <div class="py-3 flex flex-wrap justify-between">
         <h3 class="font-bold">Topics</h3>
-        <a href="#" class="anchor text-sm flex flex-nowrap items-end space-x-2">
+        <a href="{{ route('topics.index') }}" class="anchor text-sm flex flex-nowrap items-end space-x-2">
           <span>View all topics</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
         </a>
@@ -189,15 +158,15 @@
         <div class="w-full md:w-2/3 md:px-6 md:order-1">
           <div class="py-3 flex flex-wrap justify-between">
             <h3 class="font-bold">Latest Lessons</h3>
-            <a href="#" class="anchor text-sm flex flex-nowrap items-end space-x-2">
+            <a href="{{ route('lessons.index') }}" class="anchor text-sm flex flex-nowrap items-end space-x-2">
               <span>View all lessons</span>
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
             </a>
           </div>
 
-          @lesson.list()
+          @lesson.list({ items: latestLessons })
             @slot('footer')
-              <a href="#" class="anchor-inv text-lg font-bold inline-block mx-auto px-6 pb-2 mt-3">
+              <a href="{{ route('lessons.index') }}" class="anchor-inv text-lg font-bold inline-block mx-auto px-6 pb-2 mt-3">
                 View All Lessons
               </a>
             @endslot

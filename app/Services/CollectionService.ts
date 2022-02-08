@@ -96,7 +96,8 @@ export default class CollectionService {
 
         await collection.merge({
           name: collectionName,
-          collectionTypeId: rootCollection.collectionTypeId
+          collectionTypeId: rootCollection.collectionTypeId,
+          sortOrder: i
         }).save()
 
         await collection.related('posts').sync(postSyncData)

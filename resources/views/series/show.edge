@@ -4,17 +4,17 @@
 
   {{--  TODO: if user hasn't start the series show series info instead of lesson info  --}}
   {{--   @!lesson.hero() --}}
-  @!series.hero()
+  @!series.hero({ item: series })
 
 @endsection
 
 @section('content')
-
+  
   {{--  Series Lessons  --}}
   {{--  TODO: need to display modules somehow  --}}
   <div class="flex flex-wrap -mx-2 -mt-6  rounded-t-lg relative bg-white z-10 overflow-hidden">
-    @each (i in [0,1,2,3,4])
-      @!lesson.card({ index: i, className: 'rounded-lg' })
+    @each ((item, i) in series.postsFlattened)
+      @!lesson.card({ item, index: i, className: 'rounded-lg' })
     @endeach
   </div>
 

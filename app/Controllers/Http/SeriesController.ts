@@ -5,28 +5,26 @@ import Collection from 'App/Models/Collection'
 
 export default class SeriesController {
   public async index({ view }: HttpContextContract) {
-    const postsToTake = 3
     const series = await Collection.series()
       .wherePublic()
       .whereNull('parentId')
-      .preload('posts', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' })).limit(postsToTake))
-      .preload('children', query => query
-        .orderBy('sortOrder')
-        .preload('posts', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' })).limit(postsToTake))
+      .preload('postsFlattened', query => query
+        .apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' }))
+        .groupLimit(3)
       )
-
-    series.map(collection => {
-      const childPosts = collection.children.map(c => c.posts).flat()
-      const parentPosts = collection.posts
-
-      collection.$extras.displayPosts = [...parentPosts, ...childPosts].slice(0, postsToTake)
-    })
 
     return view.render('series/index', { series })
   }
 
-  public async show({ view }: HttpContextContract) {
-    return view.render('series/show')
+  public async show({ view, params }: HttpContextContract) {
+    const series = await Collection.series()
+      .apply(scope => scope.withPublishedPostCount())
+      .wherePublic()
+      .where({ slug: params.slug })
+      .preload('postsFlattened', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order' })))
+      .firstOrFail()
+
+    return view.render('series/show', { series })
   }
 
   public async lesson({ view }: HttpContextContract) {

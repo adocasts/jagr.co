@@ -5,6 +5,8 @@ import Collection from './Collection'
 import Post from './Post'
 import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import Database from '@ioc:Adonis/Lucid/Database'
+import States from 'App/Enums/States'
 
 export default class Taxonomy extends AppBaseModel {
   @column({ isPrimary: true })
@@ -74,6 +76,25 @@ export default class Taxonomy extends AppBaseModel {
     query.where(q => q
       .orWhereHas('posts', p => p.apply(scope => scope.published()))
       .orWhereHas('collections', p => p.wherePublic())
+    )
+  })
+
+  public static withPostLatestPublished = scope<typeof Taxonomy>((query) => {
+    query.select(
+      Database.rawQuery(`(
+        select
+          p.publish_at
+        from
+          posts as p inner join post_taxonomies
+            on p.id = post_taxonomies.post_id
+            where
+                  taxonomies.id = post_taxonomies.taxonomy_id
+              and p.state_id = ?
+              and p.is_personal = false
+              and p.publish_at <= ?
+            order by p.publish_at desc
+            limit 1
+      ) as latest_publish_at`, [States.PUBLIC, DateTime.local().toSQL()])
     )
   })
 }

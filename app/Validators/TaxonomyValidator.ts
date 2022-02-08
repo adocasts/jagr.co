@@ -2,7 +2,15 @@ import {rules, schema} from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class TaxonomyValidator {
-  constructor(protected ctx: HttpContextContract) {}
+  constructor(protected ctx: HttpContextContract) {
+    const body = ctx.request.body()
+		
+		if (body.assetIds && body.assetIds.length) {
+			body.assetId = body.assetIds[0]
+		}
+
+		ctx.request.updateBody(body)
+  }
 
   get slugUniqueConstraint() {
     return !this.ctx.params.id ? {} : {

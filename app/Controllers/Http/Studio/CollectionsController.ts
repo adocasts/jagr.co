@@ -67,6 +67,7 @@ export default class CollectionsController {
     const statuses = Status
     const collectionTypes = CollectionType
 
+    await collection.load('asset')
     await collection.load('posts', query => query.orderBy('pivot_sort_order'))
 
     const children = await Collection.query()

@@ -35,7 +35,8 @@
     "@adonisjs/mail",
     "@adonisjs/redis",
     "@adonisjs/bouncer",
-    "./providers/QueryBuilderProvider"
+    "./providers/QueryBuilderProvider",
+    "@adonisjs/attachment-lite"
   ],
   "metaFiles": [
     {
