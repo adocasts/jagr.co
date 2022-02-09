@@ -25,6 +25,7 @@ export default class PostStoreValidator {
 		body: schema.string.optional({}),
 		bodyBlocks: schema.string.optional(),
 		videoUrl: schema.string.optional({}, [rules.maxLength(255), rules.url()]),
+    videoSeconds: schema.number.optional(),
 		timezone: schema.string.optional(),
 		publishAtDate: schema.date.optional({ format: 'yyyy-MM-dd' }),
 		publishAtTime: schema.date.optional({ format: 'HH:mm' }),

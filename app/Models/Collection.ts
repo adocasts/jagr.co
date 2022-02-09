@@ -132,7 +132,7 @@ export default class Collection extends AppBaseModel {
   })
 
   public static withPublishedPostCount = scope<typeof Collection>((query) => {
-    query.withCount('posts', post => post.apply(scope => scope.published()))
+    query.withCount('postsFlattened', post => post.apply(scope => scope.published()))
   })
 
   public static get postCountSubQuery() {

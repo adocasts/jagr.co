@@ -11,7 +11,7 @@
           </h1>
           <div class="flex items-center opacity-80 mb-2">
             <div class="mr-3">
-              {{ item.$extras.root_posts_count ?? '0' }}
+              {{ item.$extras.postsFlattened_count ?? '0' }}
               {{ getSingularOrPlural('Lesson', item.$extras.root_posts_count ?? 0) }}
             </div>
             <div class="mr-3">3 Hours</div>

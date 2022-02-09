@@ -167,14 +167,24 @@
         })
           @slot('after')
             <div id="videoUrlPreview" class="aspect-w-16 aspect-h-9 rounded overflow-hidden bg-gray-100 shadow-inner mt-3">
-              <div class="text-gray-700 flex flex-col h-full w-full items-center justify-center">
-                <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
-                <h4 class="font-semibold">No Video</h4>
-                <p class="text-xs">Enter a valid youtube video url to add a video to this post</p>
+              <div id="videoDurationEmbed">
+                <div class="text-gray-700 flex flex-col h-full w-full items-center justify-center">
+                  <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  <h4 class="font-semibold">No Video</h4>
+                  <p class="text-xs">Enter a valid youtube video url to add a video to this post</p>
+                </div>
               </div>
             </div>
           @endslot
         @end
+
+        @!form.input.alt({
+          label: 'Video Length (in seconds)',
+          name: 'videoSeconds',
+          placeholder: 'Enter length of video in seconds',
+          value: flashMessages.get('videoSeconds') ?? post?.videoSeconds ?? '',
+          errors: flashMessages.get('errors.videoSeconds')
+        })
 
         @form.input.alt({
           type: 'group',

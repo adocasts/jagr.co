@@ -62,6 +62,29 @@ class VideoManager {
     return (source.startsWith('https://youtube.com/watch?v=') || source.startsWith('https://vimeo.com/')) && videoId.length
   }
 
+  static #embed(source) {
+    const videoId = source.replace('https://youtube.com/watch?v=', '')
+    const tag = document.createElement('script')
+    let player
+
+    tag.src = "https://www.youtube.com/iframe_api"
+    document.body.appendChild(tag)
+
+    function onPlayerReady(event) {
+      const duration = player.getDuration()
+      document.querySelector('input[name=videoSeconds]').value = duration
+    }
+
+    window.onYouTubeIframeAPIReady = function () {
+      player = new YT.Player('videoDurationEmbed', {
+        videoId: videoId,
+        events: {
+          'onReady': onPlayerReady,
+        }
+      })
+    }
+  }
+
   static getEmbed(source) {
     var embedUrl = source
       .replace('https://youtube.com/watch?v=', 'https://youtube.com/embed/')
@@ -78,7 +101,9 @@ class VideoManager {
   }
 
   static onInput(event) {
-    const element = event.hasOwnProperty('target') ? event.target : event
+    const element = event.target ? event.target : event
+
+    console.log({ element, dataset: element.dataset })
 
     if (!element.dataset.previewSelector) {
       console.warn('Video input is missing a preview selector')
@@ -90,10 +115,7 @@ class VideoManager {
 
     if (!isValid) return
 
-    const embed = this.getEmbed(source)
-    const previewSelector = element.dataset.previewSelector
-
-    document.querySelector(previewSelector).innerHTML = embed
+    this.#embed(source)
   }
 
   static onLoad(element) {
