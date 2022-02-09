@@ -71,7 +71,8 @@ export default class CollectionService {
       ...prev,
       [curr]: {
         ...intermediaryData,
-        sort_order: i
+        sort_order: i,
+        root_sort_order: i
       }
     }), {})
   }

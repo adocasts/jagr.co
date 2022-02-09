@@ -8,6 +8,7 @@ export default class SeriesController {
     const series = await Collection.series()
       .wherePublic()
       .whereNull('parentId')
+      .preload('asset')
       .preload('postsFlattened', query => query
         .apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' }))
         .groupLimit(3)
@@ -21,6 +22,7 @@ export default class SeriesController {
       .apply(scope => scope.withPublishedPostCount())
       .wherePublic()
       .where({ slug: params.slug })
+      .preload('asset')
       .preload('postsFlattened', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order' })))
       .firstOrFail()
 

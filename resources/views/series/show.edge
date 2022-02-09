@@ -9,12 +9,17 @@
 @endsection
 
 @section('content')
-  
+
   {{--  Series Lessons  --}}
   {{--  TODO: need to display modules somehow  --}}
   <div class="flex flex-wrap -mx-2 -mt-6  rounded-t-lg relative bg-white z-10 overflow-hidden">
-    @each ((item, i) in series.postsFlattened)
-      @!lesson.card({ item, index: i, className: 'rounded-lg' })
+    @each ((post, i) in series.postsFlattened)
+      @!lesson.card({
+        item: post,
+        index: i,
+        className: 'rounded-lg',
+        getRoute:  (post) => route('series.lesson', { slug: series.slug, index: i + 1 })
+      })
     @endeach
   </div>
 

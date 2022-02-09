@@ -206,6 +206,15 @@ export default class Post extends AppBaseModel {
   }
 
   @computed()
+  public get rootSortOrder() {
+    if (!this.series || !this.series.length) {
+      return undefined
+    }
+
+    return this.series[0].$extras.pivot_root_sort_order
+  }
+
+  @computed()
   public get videoId() {
     if (!this.videoUrl) return '';
 
@@ -232,7 +241,7 @@ export default class Post extends AppBaseModel {
 
   public get lessonIndexDisplay() {
     const series = this.series?.length && this.series[0]
-    
+
     if (!series) {
       return ''
     }

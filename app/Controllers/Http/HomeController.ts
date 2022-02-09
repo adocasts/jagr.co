@@ -18,6 +18,7 @@ export default class HomeController {
 
     const series = await Collection.series()
       .apply(scope => scope.withPostLatestPublished())
+      .preload('asset')
       .wherePublic()
       .whereNull('parentId')
       .orderBy('latest_publish_at', 'desc')

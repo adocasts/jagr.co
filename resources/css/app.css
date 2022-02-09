@@ -45,6 +45,10 @@ h6 {
   aspect-ratio: 16 / 9;
 }
 
+.aspect-square {
+  aspect-ratio: 1 / 1;
+}
+
 .bg-pattern {
   background-color: theme('colors.gray.950');
   position: relative;
