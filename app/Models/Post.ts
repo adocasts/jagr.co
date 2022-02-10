@@ -23,6 +23,7 @@ import AppBaseModel from 'App/Models/AppBaseModel'
 import States from 'App/Enums/States'
 import Collection from 'App/Models/Collection'
 import CollectionTypes from 'App/Enums/CollectionTypes'
+import Watchlist from 'App/Models/Watchlist'
 
 export default class Post extends AppBaseModel {
   public serializeExtras = true
@@ -169,6 +170,9 @@ export default class Post extends AppBaseModel {
   })
   public playlists: ManyToMany<typeof Collection>
 
+  @hasMany(() => Watchlist)
+  public watchlist: HasMany<typeof Watchlist>
+
   @computed()
   public get publishAtDateString() {
     return this.publishAt?.toFormat('yyyy-MM-dd')
@@ -223,6 +227,15 @@ export default class Post extends AppBaseModel {
       .replace('https://youtube.com/watch?v=', '')
       .replace('https://youtube.com/embed/', '')
       .replace('https://youtu.be/', '');
+  }
+
+  @computed()
+  public get isInWatchlist() {
+    if (!this.$extras.watchlist_count) {
+      return false
+    }
+
+    return Number(this.$extras.watchlist_count) > 0
   }
 
   @beforeSave()
@@ -281,7 +294,7 @@ export default class Post extends AppBaseModel {
       .preload('assets')
       .preload('taxonomies')
       .preload('series')
-      .preload('authors')
+      .preload('authors', query => query.preload('profile'))
   })
 
   public static forCollectionDisplay = scope<typeof Post>((query, { orderBy, direction }: { orderBy: 'pivot_sort_order'|'pivot_root_sort_order', direction: 'asc'|'desc' } = { orderBy: 'pivot_sort_order', direction: 'asc' }) => {

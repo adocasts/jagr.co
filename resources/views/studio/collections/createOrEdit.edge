@@ -39,7 +39,7 @@
           label: 'Name',
           name: 'name',
           placeholder: 'Enter a concise & descriptive name',
-          value: collection?.name ?? flashMessages.get('name'),
+          value: flashMessages.get('name') ?? collection?.name,
           errors: flashMessages.get('errors.name'),
           required: true,
           max: 100,
@@ -50,7 +50,7 @@
           label: 'Slug',
           name: 'slug',
           placeholder: 'Enter a unique url safe identifier',
-          value: collection?.slug ?? flashMessages.get('slug') ?? '',
+          value: flashMessages.get('slug') ?? collection?.slug ?? '',
           errors: flashMessages.get('errors.slug')
         })
 
@@ -59,7 +59,7 @@
           label: 'Description',
           name: 'description',
           placeholder: 'Enter a high-level overview of your collection',
-          value: collection?.description ?? flashMessages.get('description') ?? '',
+          value: flashMessages.get('description') ?? collection?.description ?? '',
           errors: flashMessages.get('errors.description'),
           rows: 3
         })
@@ -71,7 +71,7 @@
             label: 'Page Title',
             name: 'pageTitle',
             placeholder: 'Enter a concise SEO friendly page title. Defaults to the title when left empty',
-            value: collection?.pageTitle ?? flashMessages.get('pageTitle') ?? '',
+            value: flashMessages.get('pageTitle') ?? collection?.pageTitle ?? '',
             errors: flashMessages.get('errors.pageTitle')
           })
 
@@ -80,7 +80,7 @@
             label: 'Meta Description',
             name: 'metaDescription',
             placeholder: 'Enter a SEO friendly description. Defaults to the summary when left empty.',
-            value: collection?.metaDescription ?? flashMessages.get('metaDescription') ?? '',
+            value: flashMessages.get('metaDescription') ?? collection?.metaDescription ?? '',
             errors: flashMessages.get('errors.metaDescription'),
             rows: 3
           })
@@ -90,7 +90,7 @@
           type: 'select',
           label: 'Status',
           name: 'statusId',
-          value: collection?.statusId ?? flashMessages.get('statusId') ?? statuses.IN_PROGRESS,
+          value: flashMessages.get('statusId') ?? collection?.statusId ?? statuses.IN_PROGRESS,
           errors: flashMessages.get('errors.statusId')
         })
           <option value="{{ statuses.IN_PROGRESS }}">In-Progress</option>
@@ -103,7 +103,7 @@
           type: 'select',
           label: 'Type',
           name: 'collectionTypeId',
-          value: collection?.collectionTypeId ?? flashMessages.get('collectionTypeId') ?? collectionTypes.SERIES,
+          value: flashMessages.get('collectionTypeId') ?? collection?.collectionTypeId ?? collectionTypes.SERIES,
           errors: flashMessages.get('errors.collectionTypeId')
         })
           <option value="{{ collectionTypes.SERIES }}">Series</option>
@@ -119,6 +119,14 @@
             })
           @endslot
         @end
+
+        @!form.input.alt({
+          label: 'YouTube Playlist Url',
+          name: 'youtubePlaylistUrl',
+          placeholder: 'Enter the url for the series YouTube playlist',
+          value: flashMessages.get('youtubePlaylistUrl') ?? collection?.youtubePlaylistUrl ?? '',
+          errors: flashMessages.get('errors.slug')
+        })
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3 -my-3 p-6 shadow-inner bg-gray-50 rounded-lg">

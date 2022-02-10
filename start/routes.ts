@@ -108,6 +108,10 @@ Route.group(() => {
   Route.delete('/studio/assets/:id', 'AssetsController.destroy').as('studio.assets.destroy')
   Route.post('/studio/editor/assets', 'AssetsController.store').as('studio.editor.asset')//.middleware(['admin'])
 
+  Route.post('/watchlist',         'WatchlistsController.store').as('watchlist.store')
+  Route.post('/watchlist/toggle',  'WatchlistsController.toggle').as('watchlist.toggle')
+  Route.delete('/watchlist/:id',   'WatchlistsController.destroy').as('watchlist.destroy')
+
   Route.group(() => {
 
     Route.get('/posts/search', 'PostsController.search').as('posts.search')

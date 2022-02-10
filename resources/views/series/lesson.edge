@@ -4,8 +4,8 @@
 
   <div class="break">
     <div class="flex flex-col md:flex-row md:justify-end relative">
-      <div x-data="{ show: false }" class="w-1/5 bg-gray-950 text-gray-50 md:absolute top-0 left-0 max-h-full overflow-y-scroll">
-        <div @click="show = !show" class="flex justify-between items-center py-6 md:sticky top-0 z-10 bg-gray-950">
+      <div x-data="{ show: false }" class="w-1/5 bg-gray-950 text-gray-50 md:absolute top-0 left-0 max-h-full min-h-full overflow-y-scroll">
+        <div @click="show = !show" class="flex justify-between items-center pt-6 md:sticky top-0 z-10 bg-gray-950">
           <div>
             <h5 class="font-medium uppercase text-sm opacity-60 flex items-center px-6">
               <span class="mr-2">
@@ -14,7 +14,7 @@
               SERIES
             </h5>
             <a href="#" class="block px-6" :class="[{ 'pb-3': !show }]">
-              <h4 class="text-xl font-black mb-2">AdonisJS Quick Tip</h4>
+              <h4 class="text-xl font-black mb-2">{{ series.name }}</h4>
             </a>
           </div>
 
@@ -23,11 +23,11 @@
           </div>
         </div>
         <ol class="list-none m-0 p-0 px-3 top-0 left-0 overflow-y-auto mb-6">
-          @each(x in [1,2,3])
+          @each((module, x) in series.children)
             <li>
-              <div class="px-3">Introduction</div>
+              <div class="px-3 pb-2 pt-6">{{ module.name }}</div>
               <ol class="text-sm">
-                @each(i in [1,2,3,4,5])
+                @each((item, i) in module.posts)
                   <li>
                     <a href="" class="flex items-center p-3 hover:bg-gray-900 rounded-xl transition duration-300 group">
                       <div class="relative mr-3 -my-3">
@@ -36,11 +36,11 @@
                           @!svg.play({ className: 'w-10 h-10 relative z-10' })
                         </div>
                         <div class="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-xs">
-                          1.{{ i }}
+                          {{ item.lessonIndexDisplay }}
                         </div>
                       </div>
                       <div class="flex flex-col flex-1">
-                        <div>Debugging An AdonisJS Application</div>
+                        <div>{{ item.title }}</div>
                       </div>
                     </a>
                   </li>
@@ -56,27 +56,28 @@
           <div id="lessonVideoEmbed" class="absolute top-0 left-0 w-full h-full"></div>
 
           @if (!post.videoUrl)
-            <div class="absolute top-0 left-0 w-full h-full">
-              @!picture({ filename: '7/2021-QuickTip-JAGR-01_1637429305160.jpeg' })
-            </div>
+            @if (post.assets && post.assets.length)
+              <div class="absolute top-0 left-0 w-full h-full">
+                @!picture({ filename: post.assets[0].filename })
+              </div>
+            @endif
 
             <div class="w-full h-3/4 flex flex-col justify-end absolute bottom-0 bg-gradient-to-t from-black to-transparent z-10 text-white">
               <div class="bg-gradient-to-t from-black to-transparent">
                 @container()
                   <div class="flex flex-col max-w-4xl py-4 md:py-6">
                     <h2 class="font-bold text-3xl md:text-4xl text-white mb-2">
-                      AdonisJS Quick Tip
+                      {{ series.name }}
                     </h2>
                     <h1 class="text-4xl md:text-5xl text-white mb-4">
-                      Getting Data by the User's Timezone
+                      {{ post.title }}
                     </h1>
                     <div class="flex items-center opacity-80 mb-2">
-                      <div class="mr-3">6 MIN</div>
+                      <div class="mr-3">{{ post.readMinutes }} MIN READ</div>
                       <div class="mr-3">2 MONTHS AGO</div>
                     </div>
                     <p class="opacity-80 mb-6">
-                      In this lesson, we'll learn how we can use the user's current time zone to create, update, or 
-                      query time-sensitive information in AdonisJS using Luxon's DateTime object.
+                      {{ post.description }}
                     </p>
                     <div class="flex items-center pb-3">
                       <button class="mr-3">
@@ -103,27 +104,42 @@
         <div class="-mx-6">
           <div class="w-full p-6 bg-gray-100 border-4 border-gray-100 rounded-xl mb-12">
             <h2 class="font-bold text-3xl md:text-4xl mb-2">
-              AdonisJS Quick Tip
+              {{ series.name }}
             </h2>
             <h1 class="text-4xl md:text-5xl mb-4">
-              Getting Data by the User's Timezone
+              {{ post.title }}
             </h1>
             <div class="flex items-center opacity-80 mb-2">
-              <div class="mr-3">6 MIN</div>
+              <div class="mr-3">{{ post.readMinutes }} MIN READ</div>
               <div class="mr-3">2 MONTHS AGO</div>
             </div>
             <p class="opacity-80 mb-6 max-w-2xl">
-              In this lesson, we'll learn how we can use the user's current time zone to create, update, or query time-sensitive information in AdonisJS using Luxon's DateTime object.
+              {{ post.description }}
             </p>
             <div class="flex items-center px-6 py-3 rounded-xl bg-gray-50 -mb-6 -mx-6">
-              <button class="mr-3">
-                @!svg.play({ className: 'w-12 h-12' })
+              <button class="mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
+                @!svg.play({ className: 'w-12 h-12 mr-2' })
+                Start Lesson
               </button>
-              <button class="w-8 h-8 rounded-full bg-black mr-5 text-white flex items-center justify-center">
-                @!svg.plus({ className: 'w-6 h-6' })
-              </button>
-              <button class="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center">
-                @!svg.youtube({ className: 'w-5' })
+              <div x-cloak x-data="appWatchlist('{{ route('api.watchlist.toggle') }}', { postId: {{ post.id }} }, {{ post.isInWatchlist }})">
+                <button x-show="!isInWatchlist" @click="toggle" type="button" class="group mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
+                  <div class="w-8 h-8 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
+                    @!svg.plus({ className: 'w-6 h-6' })
+                  </div>
+                  Add To Watchlist
+                </button>
+                <button x-show="isInWatchlist" @click="toggle" type="button" class="group mr-3 flex items-center bg-brand-200 text-brand-800 hover:bg-brand-300 transition duration-300 rounded-full py-1 pl-1 pr-6">
+                  <div class="w-8 h-8 rounded-full bg-brand-800 text-brand-100 flex items-center transition duraton-300 justify-center mr-2">
+                    @!svg.check({ className: 'w-6 h-6' })
+                  </div>
+                  In Watchlist
+                </button>
+              </div>
+              <button class="group mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
+                <div class="w-8 h-8 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
+                  @!svg.youtube({ className: 'w-5' })
+                </div>
+                Watch on YouTube
               </button>
             </div>
           </div>
@@ -131,17 +147,19 @@
       @endif
 
       <div class="flex flex-wrap md:flex-nowrap -mx-6">
-        <div class="w-full flex-1 md:px-6">
-          <div class="prose md:prose-md lg:prose-lg xl:prose-xl">
+        <div class="w-content md:px-6">
+          <div class="prose md:prose-md lg:prose-lg xl:prose-xl flex-1">
             {{{ post.body }}}
           </div>
 
           @!comment.base({ postId: post.id, comments })
         </div>
 
-        <div class="w-full flex-1 md:px-6">
-          @!author.card({ author })
-        </div>
+        @if (post.authors && post.authors.length)
+          <div class="w-full flex-1 md:px-6">
+            @!author.card({ author: post.authors[0] })
+          </div>
+        @endif
       </div>
     @end
   </div>

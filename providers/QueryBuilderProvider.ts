@@ -39,6 +39,13 @@ export default class QueryBuilderProvider {
       return this.where({ stateId })
     })
 
+    ModelQueryBuilder.macro('withWatchlist', function(userId: number | undefined) {
+      return this
+        .if (userId, query => query
+          .withCount('watchlist', query => query.where({ userId }))
+        )
+    })
+
     ModelQueryBuilder.macro('getCount', async function () {
       const result = await this.count('* as total')
       return BigInt(result[0].$extras.total)

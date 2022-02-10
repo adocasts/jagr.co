@@ -2,7 +2,7 @@ import { DateTime } from 'luxon'
 import {
   BelongsTo,
   belongsTo,
-  column, HasMany, hasMany,
+  column, computed, HasMany, hasMany,
   ManyToMany,
   manyToMany, scope
 } from '@ioc:Adonis/Lucid/Orm'
@@ -17,6 +17,7 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import AppBaseModel from 'App/Models/AppBaseModel'
 import Database from '@ioc:Adonis/Lucid/Database'
 import States from 'App/Enums/States'
+import Watchlist from 'App/Models/Watchlist'
 
 export default class Collection extends AppBaseModel {
   @column({ isPrimary: true })
@@ -60,6 +61,9 @@ export default class Collection extends AppBaseModel {
   public metaDescription: string
 
   @column()
+  public youtubePlaylistUrl: string
+
+  @column()
   public sortOrder: number
 
   @column.dateTime({ autoCreate: true })
@@ -67,6 +71,15 @@ export default class Collection extends AppBaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   public updatedAt: DateTime
+
+  @computed()
+  public get isInWatchlist() {
+    if (!this.$extras.watchlist_count) {
+      return false
+    }
+
+    return Number(this.$extras.watchlist_count) > 0
+  }
 
   @belongsTo(() => User)
   public owner: BelongsTo<typeof User>
@@ -99,6 +112,9 @@ export default class Collection extends AppBaseModel {
     foreignKey: 'parentId'
   })
   public children: HasMany<typeof Collection>
+
+  @hasMany(() => Watchlist)
+  public watchlist: HasMany<typeof Watchlist>
 
   public static series() {
     return this.query().where('collectionTypeId', CollectionTypes.SERIES)

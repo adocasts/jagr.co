@@ -1,7 +1,7 @@
 <a href="{{ route('series.show', { slug: item.slug }) }}" class="anchor {{ width ?? 'w-full md:w-1/4' }} group px-2 flex flex-col justify-center items-center transition border border-gray-300 relative left-px -ml-px {{ index === 0 && 'rounded-l-lg' }} {{ index + 1 === length && 'rounded-r-lg' }} relative overflow-hidden {{ className ?? '' }}">
   <div class="absolute top-0 left-0 w-full bg-gray-50 transition duration-300 transform -translate-y-full group-hover:translate-y-0" style="height: calc(100% + 1.5rem)"></div>
   <div class="w-full flex flex-col items-center bg-gray-50 py-6 px-6 rounded-b-3xl relative z-10">
-    <div class="aspect-square">
+    <div class="aspect-square mb-3">
       @if (item.asset)
         <img src="/img/{{ item.asset.filename }}" class="rounded-full w-24 mb-3" />
       @else
@@ -9,7 +9,7 @@
       @endif
     </div>
 
-    <h4 class="text-lg">
+    <h4 class="text-lg font-semibold">
       {{ item.name }}
     </h4>
     <div class="flex flex-wrap items-center space-x-1 pt-3">

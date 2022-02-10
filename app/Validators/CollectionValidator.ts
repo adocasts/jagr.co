@@ -4,7 +4,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class CollectionValidator {
   constructor (protected ctx: HttpContextContract) {
 		const body = ctx.request.body()
-		
+
 		if (body.assetIds && body.assetIds.length) {
 			body.assetId = body.assetIds[0]
 		}
@@ -32,6 +32,7 @@ export default class CollectionValidator {
 		pageTitle: schema.string.optional({ trim: true }, [rules.maxLength(100)]),
 		description: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
 		metaDescription: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    youtubePlaylistUrl: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
 		postIds: schema.array.optional().members(schema.number([rules.exists({ table: 'posts', column: 'id' })])),
 		subcollectionCollectionIds: schema.array.optional().members(
 			schema.number([rules.exists({ table: 'collections', column: 'id' })])

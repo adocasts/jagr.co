@@ -9,6 +9,7 @@ import gravatar from 'gravatar'
 import Collection from './Collection'
 import Comment from './Comment'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import Watchlist from 'App/Models/Watchlist'
 
 export default class User extends AppBaseModel {
   @column({ isPrimary: true })
@@ -84,4 +85,7 @@ export default class User extends AppBaseModel {
     pivotColumns: ['author_type_id']
   })
   public posts: ManyToMany<typeof Post>
+
+  @hasMany(() => Watchlist)
+  public watchlist: HasMany<typeof Watchlist>
 }

@@ -2,6 +2,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Taxonomy from 'App/Models/Taxonomy'
 import Collection from 'App/Models/Collection'
 import Post from 'App/Models/Post'
+import States from 'App/Enums/States'
 
 export default class HomeController {
   public async index({ view }: HttpContextContract) {
@@ -26,6 +27,8 @@ export default class HomeController {
 
     const topics = await Taxonomy.query()
       .apply(scope => scope.withPostLatestPublished())
+      .withCount('posts', query => query.apply(scope => scope.published()))
+      .withCount('collections', query => query.where('stateId', States.PUBLIC))
       .orderBy('latest_publish_at', 'desc')
       .select('taxonomies.*')
 

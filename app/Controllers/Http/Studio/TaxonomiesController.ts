@@ -14,8 +14,7 @@ export default class TaxonomiesController {
 
   public async create({ view, request }: HttpContextContract) {
     const { rootParentId, parentId } = request.qs()
-
-    const parent = await Taxonomy.findOrFail(parentId)
+    const parent = parentId ? await Taxonomy.findOrFail(parentId) : null
 
     return view.render('studio/taxonomies/createOrEdit', {
       rootParentId,
