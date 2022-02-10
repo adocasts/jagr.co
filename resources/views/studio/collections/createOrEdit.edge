@@ -114,7 +114,7 @@
         @form.input.alt({ type: 'group', label: 'Icon', help: 'Max image size of 2MB' })
           @slot('input')
             @!form.file.manager({
-              assets: [collection?.asset],
+              assets: [collection?.asset].filter(Boolean),
               placeholder: 'Select and image'
             })
           @endslot
