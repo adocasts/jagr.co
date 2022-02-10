@@ -11,19 +11,19 @@
 ])
 
 <nav id="studioNav" class="py-2 bg-brand-950 overflow-hidden w-full px-2 sm:px-4 lg:px-8 shadow-xl">
-  <div class="-mx-2">
-    <ul class="max-w-screen-xl mx-auto list-none flex justify-center space-x-4 lg:space-x-8">
+  @container()
+    <ul class="list-none flex space-x-4 lg:space-x-3">
       @each(item in studioRoutes)
         @can(item.show)
           <li>
             <a
               href="{{ item.href }}"
-              class="bg-transparent text-brand-200 hover:bg-brand-900 hover:text-white rounded text-sm px-2 lg:px-3 py-1 inline-block {{ item.active && 'bg-brand-900 text-white' }} {{ item.soon && 'opacity-40' }}">
+              class="bg-transparent text-brand-200 hover:bg-brand-900 transition duration-300 hover:text-white rounded text-sm px-2 lg:px-3 py-1 inline-block {{ item.active && 'bg-brand-900 text-white' }} {{ item.soon && 'opacity-40' }}">
               {{ item.name }}
             </a>
           </li>
         @end
       @endeach
     </ul>
-  </div>
+  @end
 </nav>

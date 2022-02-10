@@ -2,7 +2,7 @@
 @set('series', item.series.length && item.series[0])
 @set('thumbnail', item.assets.length && item.assets[0])
 
-<div class="bg-gray-50 hover:bg-gray-100 transition pt-12 relative z-20 border-b border-gray-300">
+<div class="bg-brand-950 text-white transition pt-12 relative z-20 border-b border-gray-300">
   @container({ className: 'flex flex-wrap px-12' })
     @if (thumbnail)
       <div class="w-full md:w-3/5 -mb-12">
@@ -25,15 +25,18 @@
           {{ item.title }}
         </a>
       </h1>
-      <p class="mb-3">
+      <p class="mb-3 opacity-70">
         {{ item.description }}
       </p>
-      <p>
-        By
-        <a href="#" class="anchor-inv">
-          {{ author.username }}
-        </a>
-      </p>
+{{--       <p class="opacity-70"> --}}
+{{--         By --}}
+{{--         <a href="#" class="anchor-inv"> --}}
+{{--           {{ author.username }} --}}
+{{--         </a> --}}
+{{--       </p> --}}
+      @button({ href: '#', className: 'mt-6' })
+        View Lesson
+      @end
     </div>
   @end
 </div>
