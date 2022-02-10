@@ -10,14 +10,15 @@
   Nav('Settings', route('studio.settings.index'), 'StudioPolicy.viewSettings')
 ])
 
-<!-- This example requires Tailwind CSS v2.0+ -->
 <div class="relative bg-gradient-to-r from-brand-950 to-brand-900 z-30">
   <div class="flex justify-between items-center px-4 py-3 sm:px-6 md:space-x-10 max-w-screen-xl mx-auto">
-    <div>
-      <a href="/" class="flex">
+    <div class="flex items-center">
+      <a href="/" class="flex mr-6 lg:mr-12">
         <span class="sr-only">Jagr</span>
         <img class="h-6 w-auto sm:h-7" src="/imgs/full-white.svg" alt="Jagr">
       </a>
+
+      @!header.desktop.nav()
     </div>
     <div class="-mr-2 -my-2 md:hidden">
       <button type="button" class="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-800" aria-expanded="false">
@@ -25,237 +26,9 @@
         @!svg.menuOutline({ className: 'w-6 h-6' })
       </button>
     </div>
-    <nav class="hidden md:flex space-x-6">
-{{--       @dropdown.header({ label: 'Series', big: true }) --}}
-{{--         <div class="relative grid gap-6 bg-white px-5 py-6 sm:gap-8 sm:p-8 lg:grid-cols-2"> --}}
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/chart-bar --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Analytics --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Get a better understanding of where your traffic is coming from. --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/cursor-click --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Engagement --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Speak directly to your customers in a more meaningful way. --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/shield-check --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Security --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Your customers&#039; data will be safe and secure. --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/view-grid --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Integrations --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Connect with third-party tools that you&#039;re already using. --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/refresh --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Automations --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Build strategic funnels that will drive your customers to convert --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-
-{{--           <a href="#" class="-m-3 p-3 flex items-start rounded-lg hover:bg-gray-50"> --}}
-{{--             <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-brand-800 text-white sm:h-12 sm:w-12"> --}}
-{{--               <!-- Heroicon name: outline/document-report --> --}}
-{{--               <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"> --}}
-{{--                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /> --}}
-{{--               </svg> --}}
-{{--             </div> --}}
-{{--             <div class="ml-4"> --}}
-{{--               <p class="text-base font-medium text-gray-950"> --}}
-{{--                 Reports --}}
-{{--               </p> --}}
-{{--               <p class="mt-1 text-sm text-gray-900"> --}}
-{{--                 Get detailed reports that will help you make more informed decisions --}}
-{{--               </p> --}}
-{{--             </div> --}}
-{{--           </a> --}}
-{{--         </div> --}}
-{{--         <div class="p-5 bg-gray-50 sm:p-8"> --}}
-{{--           <a href="#" class="-m-3 p-3 flow-root rounded-md hover:bg-gray-100"> --}}
-{{--             <div class="flex items-center"> --}}
-{{--               <div class="text-base font-medium text-gray-950"> --}}
-{{--                 Enterprise --}}
-{{--               </div> --}}
-{{--               <span class="ml-3 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-medium leading-5 bg-indigo-100 text-indigo-800"> --}}
-{{--                 New --}}
-{{--               </span> --}}
-{{--             </div> --}}
-{{--             <p class="mt-1 text-sm text-gray-900"> --}}
-{{--               Empower your entire team with even more advanced tools. --}}
-{{--             </p> --}}
-{{--           </a> --}}
-{{--         </div> --}}
-{{--       @end --}}
-
-      <a href="{{ route('series.index') }}" class="text-base font-medium text-brand-200 hover:text-white">
-        Series
-      </a>
-      <a href="{{ route('lessons.index') }}" class="text-base font-medium text-brand-200 hover:text-white">
-        Lessons
-      </a>
-      <a href="#" class="text-base font-medium text-brand-200 hover:text-white">
-        Quick Tips
-      </a>
-      <a href="{{ route('topics.index') }}" class="text-base font-medium text-brand-200 hover:text-white">
-        Topics
-      </a>
-      <a href="{{ route('posts.index') }}" class="text-base font-medium text-brand-200 hover:text-white">
-        Blog
-      </a>
-
-      @dropdown.header({ label: 'More' })
-        <a href="#" class="-m-3 p-3 block rounded-md hover:bg-gray-50">
-          <p class="text-base font-medium text-gray-950">
-            Help Center
-          </p>
-          <p class="mt-1 text-sm text-gray-900">
-            Get all of your questions answered in our forums or contact support.
-          </p>
-        </a>
-
-        <a href="#" class="-m-3 p-3 block rounded-md hover:bg-gray-50">
-          <p class="text-base font-medium text-gray-950">
-            Guides
-          </p>
-          <p class="mt-1 text-sm text-gray-900">
-            Learn how to maximize our platform to get the most out of it.
-          </p>
-        </a>
-
-        <a href="#" class="-m-3 p-3 block rounded-md hover:bg-gray-50">
-          <p class="text-base font-medium text-gray-950">
-            Events
-          </p>
-          <p class="mt-1 text-sm text-gray-900">
-            See what meet-ups and other events we might be planning near you.
-          </p>
-        </a>
-
-        <a href="#" class="-m-3 p-3 block rounded-md hover:bg-gray-50">
-          <p class="text-base font-medium text-gray-950">
-            Security
-          </p>
-          <p class="mt-1 text-sm text-gray-900">
-            Understand how we take your privacy seriously.
-          </p>
-        </a>
-      @end
-    </nav>
     <div class="hidden md:flex items-center md:ml-12">
-      <div class="relative z-0 flex-1 px-2 flex items-center justify-end sm:justify-end sm:pr-16 lg:pr-0 sm:absolute lg:relative sm:inset-0">
-        <form action="/search" method="GET" class="w-full max-w-6 mx-3 focus-within:max-w-400">
-          <label for="search" class="sr-only">Search</label>
-          <label class="relative">
-            <div class="search relative -ml-3">
-              <div class="icon absolute inset-y-0 left-0 pl-3 flex items-center z-10">
-                <!-- Heroicon name: search -->
-                <svg class="h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                </svg>
-              </div>
-              <input id="search" name="term" class="block w-full bg-transparent focus:bg-brand-800 border-none focus:border border-brand-900 rounded-md py-2 pl-10 pr-3 text-sm placeholder-brand-300 focus:outline-none focus:text-white focus:placeholder-brand-200 focus:ring-1 focus:ring-brand-700 focus:border-brand-700 sm:text-sm" placeholder="Search" type="search">
-            </div>
-          </label>
-        </form>
-      </div>
-      @if (!auth.user)
-        <a href="{{ route('auth.signin.show') }}" class="text-base font-medium text-brand-200 hover:text-white">
-          Sign in
-        </a>
-        <a href="{{ route('auth.signup.show') }}" class="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-brand-800 hover:bg-brand-700 hover:shadow-inner">
-          Sign up
-        </a>
-      @else
-        @dropdown.base()
-          @slot('trigger')
-            <img class="rounded-full w-8 h-8" src="{{ auth.user.avatar }}" />
-          @endslot
-
-          @dropdown.item({ href: '#' })
-            {{ auth.user.username }}
-          @end
-
-          <div class="border-b border-gray-200 pt-1 mb-1"></div>
-
-          <div class="text-xs text-gray-700 uppercase px-4 mb-1 pt-3">
-            Studio
-          </div>
-
-          @each (route in studioRoutes)
-            @can(route.show)
-              @dropdown.item({ href: route.href })
-                {{ route.name }}
-              @end
-            @end
-          @endeach
-
-          <div class="border-b border-gray-200 pt-1 mb-1"></div>
-
-          @dropdown.item({ href: route('auth.signout') })
-            Sign out
-          @end
-        @end
-      @endif
+      @!header.desktop.search()
+      @!header.desktop.auth()
     </div>
   </div>
 
