@@ -16,9 +16,9 @@
         </p>
       </div>
 
-      <div class="flex flex-wrap -mx-6">
+      <div class="flex flex-wrap md:-mx-6">
         @each(topic in topics)
-          <div class="w-full md:w-1/4 lg:w-1/5 px-3 pb-6">
+          <div class="w-full md:w-1/4 lg:w-1/5 md:px-3 pb-6">
             @!topic.card({ topic, className: 'w-full' })
           </div>
         @endeach

@@ -17,7 +17,7 @@
         /img/{{ filename }}?w={{ width }} 1x,
       "
       alt="{{ altText || '' }}"
-      class="w-full max-w-full {{ ratio ? ratio : 'aspect-video' }} {{ fit ? `object-${fit} h-full` : '' }} {{ blur ? 'bg-img-blur' : '' }} {{ imgClassName ? imgClassName : '' }}"
+      class="w-full max-w-full {{ ratio ? ratio : 'aspect-video' }} {{ fit ? `${fit} h-full` : '' }} {{ blur ? 'bg-img-blur' : '' }} {{ imgClassName ? imgClassName : '' }}"
     />
   </picture>
 </div>
