@@ -32,6 +32,7 @@ export default class SeriesController {
   public async lesson({ view, params, auth }: HttpContextContract) {
     const series = await Collection.series()
       .where({ slug: params.slug })
+      .wherePublic()
       .preload('posts', query => query.apply(scope => scope.forCollectionDisplay()))
       .preload('children', query => query
         .wherePublic()
