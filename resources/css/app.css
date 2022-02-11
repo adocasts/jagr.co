@@ -214,6 +214,17 @@ input[type="file"].file-drop + label:hover {
   transform-origin: bottom left;
 }
 
+@media (prefers-reduced-motion) {
+  .anchor::after,
+  .anchor-b::after {
+    transition: transform 0.05s cubic-bezier(0.86, 0, 0.07, 1);
+  }
+
+  .transition.duration-300 {
+    transition-duration: 0.05s;
+  }
+}
+
 .anchor-inv::after {
   content: '';
   position: absolute;

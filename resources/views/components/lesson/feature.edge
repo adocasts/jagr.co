@@ -2,10 +2,10 @@
 @set('series', item.series.length && item.series[0])
 @set('thumbnail', item.assets.length && item.assets[0])
 
-<div class="bg-brand-950 text-white transition pt-12 relative z-20 border-b border-gray-300">
+<div class="bg-brand-950 text-white transition pt-6 relative z-20 border-b border-gray-300">
   @container({ className: 'flex flex-wrap px-12' })
     @if (thumbnail)
-      <div class="w-full md:w-3/5 -mb-12">
+      <div class="w-full md:w-3/5 -mb-8">
         <a href="#">
           @!picture({ filename: thumbnail.filename, className: 'rounded-lg shadow-xl' })
         </a>

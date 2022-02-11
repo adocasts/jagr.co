@@ -24,8 +24,11 @@
   <form id="taxonomyForm" name="taxonomyForm" method="POST" action="{{ action }}">
     {{ csrfField() }}
 
-    @if (!taxonomy?.id)
+    @if (rootParentId)
       <input type="hidden" name="rootParentId" value="{{ rootParentId }}" />
+    @endif
+
+    @if (parentId)
       <input type="hidden" name="parentId" value="{{ parentId }}" />
     @endif
 
