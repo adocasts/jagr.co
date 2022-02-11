@@ -1,3 +1,5 @@
-<a href="{{ href }}" class="text-base text-brand-300 hover:text-white">
+@set('isActive', request.matchesRoute(href))
+
+<a href="{{ href }}" class="text-base hover:text-white px-3 py-1 rounded {{ isActive ? 'bg-brand-900 text-white' : 'text-brand-300' }}">
   {{ await $slots.main() }}
 </a>
