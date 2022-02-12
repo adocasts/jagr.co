@@ -13,3 +13,15 @@ window.appWatchlist = function(route, payload, isInWatchlist) {
     }
   }
 }
+
+window.appCompleted = function(route, payload, isCompleted) {
+  return {
+    payload,
+    isCompleted,
+
+    async toggle() {
+      const { data } = await axios.post(route, this.payload)
+      this.isCompleted = !data.wasDeleted
+    }
+  }
+}
