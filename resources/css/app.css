@@ -265,6 +265,23 @@ input[type="file"].file-drop + label:hover {
   width: 100vw;
 }
 
+.body-content {
+  width: 100%;
+  max-width: 100%;
+
+  @screen lg {
+    max-width: 74ch;
+  }
+
+  @screen xl {
+    max-width: 85ch;
+  }
+
+  .prose {
+    max-width: 100%;
+  }
+}
+
 .cdx-block.ce-code {
   position: relative;
 }

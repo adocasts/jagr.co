@@ -18,13 +18,13 @@
     </div>
   </div>
   <div class="px-3">
-    <p class="text-gray-900 mb-4">
+    <p class="text-gray-900 mb-4 text-sm md:text-base">
       Owner of Jagr, JavaScript developer, educator, PlayStation gamer, burrito eater.
     </p>
 
-    <ul class="stagger space-y-2 columns-2 mb-6">
+    <ul class="stagger space-y-2 columns-2 mb-6 text-xs md:text-base">
       @if (author.profile.company)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900">
+        <li class="flex items-center text-sm leading-5 text-gray-900">
           @!svg.briefcase()
           <div class="ml-3">
             {{ author.profile.company }}
@@ -33,7 +33,7 @@
       @endif
 
       @if (author.profile.youtubeUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.youtube()
           <div class="ml-3">
             <a href="{{ author.profile.youtubeUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
@@ -43,7 +43,7 @@
         </li>
       @endif
       @if (author.profile.githubUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.github()
           <div class="ml-3">
             <a href="{{ author.profile.githubUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
@@ -53,7 +53,7 @@
         </li>
       @endif
       @if (author.profile.twitterUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.twitter()
           <div class="ml-3">
             <a href="{{ author.profile.twitterUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
@@ -63,7 +63,7 @@
         </li>
       @endif
       @if (author.profile.facebookUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.facebook()
           <div class="ml-3">
             <a href="{{ author.profile.facebookUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
@@ -73,7 +73,7 @@
         </li>
       @endif
       @if (author.profile.instagramUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.instagram()
           <div class="ml-3">
             <a href="{{ author.profile.instagramUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
@@ -83,7 +83,7 @@
         </li>
       @endif
       @if (author.profile.linkedinUrl)
-        <li class="flex items-center text-sm leading-5 font-medium text-gray-900 hover:text-gray-950">
+        <li class="flex items-center text-sm leading-5 text-gray-900 hover:text-gray-950">
           @!svg.linkedin()
           <div class="ml-3">
             <a href="{{ author.profile.linkedinUrl }}" rel="noopener nofollow" target="_blank" class="text-success-500 hover:text-success-400 transition duration-150 ease-in-out hover:underline">
