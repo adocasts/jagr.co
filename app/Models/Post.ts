@@ -293,6 +293,7 @@ export default class Post extends AppBaseModel {
       .apply(scope => scope.published())
       .preload('assets')
       .preload('taxonomies')
+      .preload('rootSeries')
       .preload('series')
       .preload('authors', query => query.preload('profile'))
   })

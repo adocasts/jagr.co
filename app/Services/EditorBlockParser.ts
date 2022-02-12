@@ -10,7 +10,7 @@ async function highlightCode(code: string, languageCode: string) {
       {
         id: 'edge',
         scopeName: 'text.html.edge',
-        path: Application.configPath('/shiki/edge.json')
+        path: Application.publicPath('/shiki/edge.json')
       }
     ]
   })

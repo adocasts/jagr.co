@@ -5,8 +5,8 @@
     </div>
     @each ((item, i) in items)
       <a href="{{ routePost(item, { slug: item.slug }) }}" class="anchor-b bg-white w-full md:w-1/2 lg:w-1/5 px-6 pb-6 pt-32 {{ i === 0 && 'md:border-l md:rounded-bl-lg' }} {{ i === 4 && 'md:rounded-br-lg' }} md:border-r md:border-b border-gray-300 hover:bg-gray-50 transition relative z-10 overflow-hidden">
-        @if (item.series && item.series.length)
-          @set('series', item.series[0])
+        @if (item.rootSeries && item.rootSeries.length)
+          @set('series', item.rootSeries[0])
           <object>
             <h5 class="uppercase text-accent-800 tracking-wide text-xs mb-2">
               <a href="{{ route('series.show', { slug: series.slug }) }}" class="anchor">

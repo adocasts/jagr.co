@@ -1,5 +1,5 @@
 @set('author', item.authors.length && item.authors[0])
-@set('series', item.series.length && item.series[0])
+@set('series', item.rootSeries.length && item.rootSeries[0])
 @set('thumbnail', item.assets.length && item.assets[0])
 @set('href', routePost(item, { slug: item.slug }))
 
