@@ -24,13 +24,16 @@ export default class HomeController {
       .whereNull('parentId')
       .orderBy('latest_publish_at', 'desc')
       .select(['collections.*', Collection.postCountSubQuery])
+      .limit(4)
 
     const topics = await Taxonomy.query()
       .apply(scope => scope.withPostLatestPublished())
+      .preload('parent')
       .withCount('posts', query => query.apply(scope => scope.published()))
       .withCount('collections', query => query.where('stateId', States.PUBLIC))
       .orderBy('latest_publish_at', 'desc')
       .select('taxonomies.*')
+      .limit(10)
 
     const latestLessons = await Post.lessons()
       .apply(scope => scope.forDisplay())

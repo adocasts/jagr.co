@@ -1,12 +1,17 @@
 @each((item, i) in posts)
+  @set('href', routePost(item, { slug: item.slug }))
+  @set('isActive', request.routeParams.slug == item.slug || request.routeParams.index - 1 === item.$extras.pivot_root_sort_order)
+
   <li>
-    <a href="" class="flex items-center p-3 hover:bg-gray-900 hover:bg-opacity-30 rounded-xl transition duration-300 group">
+    <a href="{{ href }}" class="flex items-center p-3 rounded-xl transition duration-300 group {{ isActive ? 'bg-brand-900 bg-opacity-30' : 'hover:bg-gray-900 hover:bg-opacity-30' }}">
       <div class="relative mr-3 -my-3">
-        <div class="absolute -top-1 -left-1 opacity-0 group-hover:opacity-100 transition duration-300">
-          <div class="w-8 h-8 bg-gray-950 rounded-full absolute top-1 left-1"></div>
-          @!svg.play({ className: 'w-10 h-10 relative z-10' })
-        </div>
-        <div class="w-8 h-8 bg-gray-900 bg-opacity-30 rounded-full flex items-center justify-center text-xs">
+        @if (!isActive)
+          <div class="absolute -top-1 -left-1 opacity-0 group-hover:opacity-100 transition duration-300">
+            <div class="w-8 h-8 bg-gray-950 rounded-full absolute top-1 left-1"></div>
+            @!svg.play({ className: 'w-10 h-10 relative z-10' })
+          </div>
+        @endif
+        <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs {{ isActive ? 'bg-brand-800 bg-opacity-30' : 'bg-gray-900 bg-opacity-30' }}">
           {{ item.lessonIndexDisplay }}
         </div>
       </div>

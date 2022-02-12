@@ -5,15 +5,22 @@
 <a href="{{ route('topics.show', { slug: topic.slug }) }}" class="anchor {{ className }} {{ index === 0 && 'rounded-t-lg md:rounded-t-none lg:rounded-l-lg' }} {{ index === length - 1 && 'rounded-b-lg md:rounded-b-none lg:rounded-r-lg' }} {{ index === null && 'rounded-lg' }} group py-1 flex flex-col justify-center items-center transition border border-gray-300 relative left-px -ml-px -mt-px md:mt-0 overflow-hidden">
   <div class="absolute top-0 left-0 w-full bg-gray-50 transition duration-300 transform -translate-x-full group-hover:translate-x-0" style="height: calc(100% + 1.5rem)"></div>
 
-  <div class="w-full flex items-center py-2 px-3 rounded-b-3xl relative">
-    <div class="bg-gray-50 -m-3 p-3 rounded-r-xl mr-3">
-      <img src="https://via.placeholder.com/65" class="rounded-full w-12 lg:w-16" />
+  <div class="w-full flex items-center px-3 rounded-b-3xl relative">
+    <div class="bg-gray-50 -m-3 p-3 rounded-r-lg mr-3 my-0.5">
+      <img src="https://via.placeholder.com/65" class="rounded-full w-12" />
     </div>
 
     <div class="flex flex-col">
-      <h4 class="px-3 font-semibold">
+      @if (topic.parent)
+        <h6 class="text-xs px-3 text-gray-700">
+          {{ topic.parent.name }}
+        </h6>
+      @endif
+
+      <h4 class="px-3 font-semibold truncate">
         {{ topic.name }}
       </h4>
+
       <div class="w-full text-gray-700 text-xs pt-1 flex relative z-10">
         <div class="flex px-3">
           <span class="mr-1">{{ topic.$extas?.collection_count ?? 0 }}</span>

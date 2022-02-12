@@ -8,7 +8,7 @@
     @if (thumbnail)
       <div class="w-full md:w-3/5 mb-6 md:-mb-8">
         <a href="{{ href }}">
-          @!picture({ filename: thumbnail.filename, className: 'rounded-lg shadow-xl' })
+          @!picture({ filename: thumbnail.filename, className: 'rounded-lg shadow-xl', width: 900 })
         </a>
       </div>
     @endif

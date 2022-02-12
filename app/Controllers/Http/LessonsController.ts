@@ -19,7 +19,7 @@ export default class LessonsController {
   public async show({ view, params }: HttpContextContract) {
     const post = await Post.lessons().where({ slug: params.slug }).firstOrFail()
     const comments = await CommentService.getForPost(post)
-    const series = await post.related('series').query()
+    const series = await post.related('rootSeries').query()
       .wherePublic()
       .preload('posts', query => query.apply(scope => scope.forCollectionDisplay()))
       .preload('children', query => query

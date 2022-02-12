@@ -38,7 +38,7 @@ View.global('getSingularOrPlural', (str: string, count: string|number|any[] ) =>
     isPlural = count == 0 || count != 1
   }
 
-  return isPlural ? string.pluralize(str) : string
+  return isPlural ? string.pluralize(str) : str
 })
 
 View.global('Db', (table: string) => {

@@ -53,7 +53,7 @@ export default class Taxonomy extends AppBaseModel {
   public asset: BelongsTo<typeof Asset>
 
   @belongsTo(() => Taxonomy, {
-    localKey: 'parentId'
+    foreignKey: 'parentId'
   })
   public parent: BelongsTo<typeof Taxonomy>
 
