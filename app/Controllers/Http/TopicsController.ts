@@ -1,5 +1,6 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Taxonomy from 'App/Models/Taxonomy'
+import CollectionTypes from 'App/Enums/CollectionTypes'
 
 export default class TopicsController {
   public async index({ view }: HttpContextContract) {
@@ -12,11 +13,13 @@ export default class TopicsController {
 
   public async show({ view, params }: HttpContextContract) {
     const topic = await Taxonomy.firstOrFail(params.slug)
+    const children = await topic.related('children').query().apply(scope => scope.hasContent()).orderBy('name')
+    const posts = await topic.related('posts').query().apply(scope => scope.forDisplay())
+    const series = await topic.related('collections').query()
+      .wherePublic()
+      .where('collectionTypeId', CollectionTypes.SERIES)
+      .orderBy('name')
 
-    await topic.load('children', query => query.apply(scope => scope.hasContent()).orderBy('name'))
-    await topic.load('posts', query => query.apply(scope => scope.forDisplay()))
-    await topic.load('collections', query => query.wherePublic().orderBy('name'))
-
-    return view.render('topics/show', { topic })
+    return view.render('topics/show', { topic, children, posts, series })
   }
 }
