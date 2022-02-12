@@ -1,4 +1,5 @@
 import Post from 'App/Models/Post'
+import Application from '@ioc:Adonis/Core/Application'
 const BlockParser = require('editorjs-parser')
 const shiki = require('shiki')
 
@@ -9,7 +10,7 @@ async function highlightCode(code: string, languageCode: string) {
       {
         id: 'edge',
         scopeName: 'text.html.edge',
-        path: '../../config/shiki/edge.json'
+        path: Application.configPath('/shiki/edge.json')
       }
     ]
   })
