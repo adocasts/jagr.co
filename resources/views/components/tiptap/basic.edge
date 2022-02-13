@@ -1,5 +1,20 @@
-<div x-data="setupEditor(`{{ body ?? '' }}`)" x-init="() => init($refs.element)">
-  <div x-ref="element" class="prose md:prose-md lg:prose-lg mt-3 mb-6"></div>
+<div x-data="setupEditor(`{{ value ?? '' }}`)" x-init="() => init($refs.element)">
+  <div class="bubble-menu bg-gray-900 text-gray-400 text-sm py-1 px-2 rounded-md space-x-2 flex flex-wrap items-center">
+    <template x-if="typeof isInitialized === 'boolean'">
+      <button type="button" @click="command('bold')" :class="{ 'text-white': isActive('bold') }">
+        Bold
+      </button>
+      <button type="button" @click="command('italic')" :class="{ 'text-white': isActive('italic') }">
+        Italic
+      </button>
+      <button type="button" @click="command('strike')" :class="{ 'text-white': isActive('strike') }">
+        Strike
+      </button>
+
+    </template>
+  </div>
+
+  <div x-ref="element" class="{{ className ?? 'prose mt-3 mb-6' }}"></div>
   <input type="hidden" name="body" :value="content">
 </div>
 

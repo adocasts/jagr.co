@@ -12,5 +12,8 @@ declare module '@ioc:Adonis/Lucid/Orm' {
     selectIds(idColumn?: string): number
     selectId(idColumn?: string): number
     selectIdOrFail(idColumn?: string): number
+    highlight(columnName?: string, targetColumnName?: string): this
+    highlightOrFail(columnName?: string, targetColumnName?: string): this
+    highlightAll(columnName?: string, targetColumnName?: string): this
   }
 }

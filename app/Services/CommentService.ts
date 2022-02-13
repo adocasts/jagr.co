@@ -6,7 +6,7 @@ export default class CommentService {
   public static async getForPost(post: Post) {
     const httpIdentityService = new HttpIdentityService()
     const identity = await httpIdentityService.getRequestIdentity()
-    
+
     return post.related('comments')
       .query()
       .preload('user')
@@ -15,5 +15,6 @@ export default class CommentService {
           .orWhere({ identity })
       )
       .orderBy('createdAt', 'desc')
+      .highlightAll()
   }
 }

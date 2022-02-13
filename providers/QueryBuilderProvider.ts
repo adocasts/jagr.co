@@ -1,5 +1,6 @@
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import States from 'App/Enums/States'
+import HtmlParser from 'App/Services/HtmlParser'
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,29 @@ export default class QueryBuilderProvider {
     ModelQueryBuilder.macro('selectIdOrFail', async function(idColumn: string = 'id') {
       const result = await this.select(idColumn).firstOrFail()
       return result.length && result[0].id
+    })
+
+    ModelQueryBuilder.macro('highlight', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+      const result = await this.first()
+      if (!result) return
+      result[targetColumnName] = await HtmlParser.highlight(result[columnName])
+      return result
+    })
+
+    ModelQueryBuilder.macro('highlightOrFail', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+      const result = await this.firstOrFail()
+      result[targetColumnName] = await HtmlParser.highlight(result[columnName])
+      return result
+    })
+
+    ModelQueryBuilder.macro('highlightAll', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+      const result = await this
+      const promises = result.map(async r => {
+        r[targetColumnName] = await HtmlParser.highlight(r[columnName])
+        console.log({ r })
+        return r
+      })
+      return await Promise.all(promises)
     })
   }
 

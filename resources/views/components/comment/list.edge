@@ -33,9 +33,9 @@
             </div>
           @endif
         </div>
-  
+
         <div class="ml-10 pl-3">
-          <div x-show="editId !== {{ comment.id }}" class="prose-sm mb-3">{{ comment.body }}</div>
+          <div x-show="editId !== {{ comment.id }}" class="prose-sm mb-3">{{{ comment.bodyHtml }}}</div>
 
           @can('CommentPolicy.update', comment, identity)
             <div x-show="editId === {{ comment.id }}">
@@ -69,7 +69,7 @@
                 Edit
               </button>
             @endcan
-    
+
             @can('CommentPolicy.delete', comment, identity)
               <form method="POST" action="{{ route('comments.destroy', { id: comment.id }, { qs: { _method: 'DELETE' }}) }}">
                 {{ csrfField() }}
@@ -86,22 +86,22 @@
       @can('CommentPolicy.reply', comment, identity)
         {{--  reply to form  --}}
         <div x-show="createId === {{ comment.id }}" class="bg-gray-50 border border-gray-100 p-3 rounded-xl ml-8 mb-3">
-          @!comment.form({ 
-            postId, 
-            rootParentId, 
-            replyTo, 
-            levelIndex, 
+          @!comment.form({
+            postId,
+            rootParentId,
+            replyTo,
+            levelIndex,
             cancelable: true,
             onCancel: 'cancel()'
           })
         </div>
       @endcan
-      
+
       @if (childComments.length)
-        @!comment.list({ 
-          postId, 
-          rootParentId, 
-          comments, 
+        @!comment.list({
+          postId,
+          rootParentId,
+          comments,
           levelIndex,
           nodeComments: childComments,
         })

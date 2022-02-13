@@ -23,7 +23,9 @@
     }
   </script>
 </head>
-<body x-data="{ state: {} }" @mounted="state = { ...state, [$event.detail.name]: $event.detail.data }" @call="state[$event.detail.namespace][$event.detail.name]($event.detail.args)">
+<body>
+  <div id="context" x-data="{ state: {} }" @mounted="state = { ...state, [$event.detail.name]: $event.detail.data }" @call="state[$event.detail.namespace][$event.detail.name]($event.detail.args)"></div>
+
   @!header.base()
 
   @!section('hero')

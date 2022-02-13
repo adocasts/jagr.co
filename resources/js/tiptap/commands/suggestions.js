@@ -1,63 +1,10 @@
 import tippy from 'tippy.js'
+import { commandList } from './list'
 
 export default {
   items: ({ query }) => {
     return [
-      {
-        title: 'Heading 2',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode('heading', { level: 2 })
-            .run()
-        },
-      },
-      {
-        title: 'Heading 3',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode('heading', { level: 3 })
-            .run()
-        },
-      },
-      {
-        title: 'Heading 4',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode('heading', { level: 4 })
-            .run()
-        },
-      },
-      {
-        title: 'Bold',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setMark('bold')
-            .run()
-        },
-      },
-      {
-        title: 'Italic',
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setMark('italic')
-            .run()
-        },
-      },
+      ...commandList
     ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
   },
 
@@ -66,14 +13,16 @@ export default {
     let popup
     let commandState
 
+    const context = document.getElementById('context')
+
     const mount = (name, data) => {
       const event = new CustomEvent('mounted', { detail: { name, data } })
-      document.body.dispatchEvent(event)
+      context.dispatchEvent(event)
     }
 
     const call = (namespace, name, args) => {
       const event = new CustomEvent('call', { detail: { namespace, name, args } })
-      document.body.dispatchEvent(event)
+      context.dispatchEvent(event)
     }
 
     return {
@@ -135,7 +84,7 @@ export default {
         popup = tippy('body', {
           allowHTML: true,
           getReferenceClientRect: state.clientRect,
-          appendTo: () => document.body,
+          appendTo: () => context,
           content: component,
           showOnCreate: true,
           interactive: true,
