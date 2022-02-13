@@ -307,3 +307,24 @@ input[type="file"].file-drop + label:hover {
   bottom: 2ch;
   right: 0;
 }
+
+.ProseMirror {
+  @apply border border-gray-300 p-3 rounded-lg;
+  min-height: 125px;
+
+  > :first-child {
+    margin-top: 0;
+  }
+
+  > :last-child {
+    margin-bottom: 0;
+  }
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}

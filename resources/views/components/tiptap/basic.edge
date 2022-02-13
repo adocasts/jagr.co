@@ -1,0 +1,6 @@
+<div x-data="setupEditor(`{{ body ?? '' }}`)" x-init="() => init($refs.element)">
+  <div x-ref="element" class="prose md:prose-md lg:prose-lg mt-3 mb-6"></div>
+  <input type="hidden" name="body" :value="content">
+</div>
+
+<script src="{{ asset('assets/tiptap_basic.js') }}"></script>

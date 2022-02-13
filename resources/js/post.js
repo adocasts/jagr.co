@@ -34,3 +34,12 @@ window.initVideo = function ({ el = 'ytEmbed', videoId } = {}) {
     isYtVideoPlaying = event.data == YT.PlayerState.PLAYING
   }
 }
+
+// scroll active series item into view
+// document.querySelector('ol li a.active').scrollIntoView({
+//   behavior: 'smooth',
+//   block: 'nearest',
+//   inline: 'start'
+// })
+
+

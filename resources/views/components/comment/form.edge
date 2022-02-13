@@ -1,4 +1,5 @@
 @set('action', route('comments.store'))
+@set('_id', '_' + Math.random().toString(36).substr(2, 9))
 
 @if (id)
   @set('action', route('comments.update', { id }, { qs: { _method: 'PUT' }}))
@@ -6,10 +7,10 @@
 
 <form method="POST" action="{{ action }}">
   {{ csrfField() }}
-  
+
   <input type="hidden" name="postId" value="{{ postId }}" />
   <input type="hidden" name="levelIndex" value="{{ levelIndex ?? 0 }}" />
-  
+
   @if (rootParentId)
     <input type="hidden" name="rootParentId" value="{{ rootParentId }}" />
   @endif
@@ -18,11 +19,7 @@
     <input type="hidden" name="replyTo" value="{{ replyTo }}" />
   @endif
 
-  @!form.input({ 
-    type: 'textarea',
-    name: 'body',
-    value: body ?? ''
-  })
+  @!tiptap.basic({ value: body })
 
   @button({ type: 'submit', variant: 'black' })
     {{ id ? 'Update' : 'Create' }} Comment

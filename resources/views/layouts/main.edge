@@ -23,7 +23,7 @@
     }
   </script>
 </head>
-<body>
+<body x-data="{ state: {} }" @mounted="state = { ...state, [$event.detail.name]: $event.detail.data }" @call="state[$event.detail.namespace][$event.detail.name]($event.detail.args)">
   @!header.base()
 
   @!section('hero')

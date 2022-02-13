@@ -40,10 +40,7 @@ export default class QueryBuilderProvider {
     })
 
     ModelQueryBuilder.macro('withWatchlist', function(userId: number | undefined) {
-      return this
-        .if (userId, query => query
-          .withCount('watchlist', query => query.where({ userId }))
-        )
+      return this.if(userId, query => query.withCount('watchlist', query => query.where({ userId })))
     })
 
     ModelQueryBuilder.macro('getCount', async function () {

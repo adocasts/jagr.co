@@ -18,10 +18,10 @@ export default class SeriesController {
 
   public async show({ view, params, auth }: HttpContextContract) {
     const series = await Collection.series()
+      .if(auth.user, query => query.withWatchlist(auth.user!.id))
       .apply(scope => scope.withPublishedPostCount())
       .wherePublic()
       .where({ slug: params.slug })
-      .withWatchlist(auth.user?.id)
       .preload('asset')
       .preload('postsFlattened', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order' })))
       .firstOrFail()
@@ -41,8 +41,8 @@ export default class SeriesController {
       .firstOrFail()
 
     const post = await series.related('postsFlattened').query()
+      .if(auth.user, query => query.withWatchlist(auth.user?.id))
       .where("root_sort_order", params.index - 1)
-      .withWatchlist(auth.user!.id)
       .apply(scope => scope.forDisplay())
       .firstOrFail()
 
