@@ -1,14 +1,18 @@
-import Alpine from 'alpinejs'
 import { Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import Link from '@tiptap/extension-link'
 import Commands from './commands'
-import suggestion from './commands/suggestions'
+import { getSuggestions } from './commands/suggestions'
 import BubbleMenu from '@tiptap/extension-bubble-menu'
 import CodeBlock from '@tiptap/extension-code-block'
 import { commandList } from './commands/list'
 import { languages } from '../syntax/languages'
+import Blockquote from '@tiptap/extension-blockquote'
+import Dropcursor from '@tiptap/extension-dropcursor'
+import HardBreak from '@tiptap/extension-hard-break'
+import Image from '@tiptap/extension-image'
+import { Typography } from '@tiptap/extension-typography'
 
 window.setupEditor = function(content) {
   let editor;
@@ -56,6 +60,16 @@ window.setupEditor = function(content) {
               rel: 'nofollow noopener noreferrer'
             }
           }),
+          Blockquote.configure({}),
+          Dropcursor.configure({}),
+          HardBreak.configure({}),
+          Image.configure({}),
+          Typography.configure({
+            openDoubleQuote: false,
+            closeDoubleQuote: false,
+            openSingleQuote: false,
+            closeSingleQuote: false,
+          }),
           CodeBlock.configure({
             languageClassPrefix: 'language-',
             HTMLAttributes: {
@@ -98,7 +112,7 @@ window.setupEditor = function(content) {
             }
           }),
           Commands.configure({
-            suggestion
+            suggestion: getSuggestions({ isBasic: true })
           })
         ],
         content: this.content,

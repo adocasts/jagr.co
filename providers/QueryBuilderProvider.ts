@@ -67,6 +67,7 @@ export default class QueryBuilderProvider {
       return result.length && result[0].id
     })
 
+    // @ts-ignore
     ModelQueryBuilder.macro('highlight', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
       const result = await this.first()
       if (!result) return
@@ -74,12 +75,14 @@ export default class QueryBuilderProvider {
       return result
     })
 
+    // @ts-ignore
     ModelQueryBuilder.macro('highlightOrFail', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
       const result = await this.firstOrFail()
       result[targetColumnName] = await HtmlParser.highlight(result[columnName])
       return result
     })
 
+    // @ts-ignore
     ModelQueryBuilder.macro('highlightAll', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
       const result = await this
       const promises = result.map(async r => {

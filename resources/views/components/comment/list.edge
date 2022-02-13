@@ -35,7 +35,7 @@
         </div>
 
         <div class="ml-10 pl-3">
-          <div x-show="editId !== {{ comment.id }}" class="prose-sm mb-3">{{{ comment.bodyHtml }}}</div>
+          <div x-show="editId !== {{ comment.id }}" class="prose mb-3">{{{ comment.bodyHtml }}}</div>
 
           @can('CommentPolicy.update', comment, identity)
             <div x-show="editId === {{ comment.id }}">

@@ -1,11 +1,16 @@
 import tippy from 'tippy.js'
 import { commandList } from './list'
 
-export default {
+export const getSuggestions = ({ isBasic = true }) => ({
   items: ({ query }) => {
     return [
       ...commandList
-    ].filter(item => item.title.toLowerCase().startsWith(query.toLowerCase())).slice(0, 10)
+    ].filter(item => {
+      const isTitleMatch = item.title.toLowerCase().startsWith(query.toLowerCase())
+      const isNameMatch = item.name.toLowerCase().startsWith(query.toLowerCase())
+      const isBasicMatch = isBasic ? item.basic !== false : true
+      return isBasicMatch && (isTitleMatch || isNameMatch)
+    })
   },
 
   render: () => {
@@ -123,4 +128,4 @@ export default {
       },
     }
   },
-}
+})
