@@ -1,8 +1,10 @@
 import { DateTime } from 'luxon'
-import { column, computed, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
+import { column, computed, HasMany, hasMany, ManyToMany, manyToMany } from '@ioc:Adonis/Lucid/Orm'
 import Post from './Post'
 import AssetService from 'App/Services/AssetService'
 import AppBaseModel from 'App/Models/AppBaseModel'
+import Collection from 'App/Models/Collection'
+import Taxonomy from 'App/Models/Taxonomy'
 
 export default class Asset extends AppBaseModel {
   @column({ isPrimary: true })
@@ -39,4 +41,10 @@ export default class Asset extends AppBaseModel {
     pivotColumns: ['sort_order']
   })
   public posts: ManyToMany<typeof Post>
+  
+  @hasMany(() => Collection)
+  public collections: HasMany<typeof Collection>
+  
+  @hasMany(() => Taxonomy)
+  public taxonomies: HasMany<typeof Taxonomy>
 }

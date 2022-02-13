@@ -82,12 +82,12 @@ export default class AssetsController {
 
       if (!isCached && !isSVG) {
         const exists = await StorageService.exists(tempName);
-        
+
         if (!exists) {
           let file = await StorageService.getBufferOrProd(path);
-          
+
           image = await AssetService.getAlteredImage(file, options);
-          
+
           await StorageService.upload(image, tempName);
         }
       }
@@ -114,7 +114,10 @@ export default class AssetsController {
 
   public async destroy({ response, params }: HttpContextContract) {
     const asset = await Asset.findOrFail(params.id)
-    asset.related('posts').detach()
+
+    await asset.related('posts').detach()
+    await asset.related('collections').query().update({ assetId: null })
+    await asset.related('taxonomies').query().update({ assetId: null })
     await asset.delete()
 
     await StorageService.destroy(asset.filename)
