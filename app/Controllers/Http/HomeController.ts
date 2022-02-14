@@ -28,7 +28,8 @@ export default class HomeController {
 
     const topics = await Taxonomy.query()
       .apply(scope => scope.withPostLatestPublished())
-      .preload('parent')
+      .preload('parent', query => query.preload('asset'))
+      .preload('asset')
       .withCount('posts', query => query.apply(scope => scope.published()))
       .withCount('collections', query => query.where('stateId', States.PUBLIC))
       .orderBy('latest_publish_at', 'desc')

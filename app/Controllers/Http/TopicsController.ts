@@ -6,7 +6,8 @@ export default class TopicsController {
   public async index({ view }: HttpContextContract) {
     const topics = await Taxonomy.query()
       .apply(scope => scope.hasContent())
-      .preload('parent')
+      .preload('parent', query => query.preload('asset'))
+      .preload('asset')
       .withCount('posts')
       .withCount('collections')
       .orderBy('name')
@@ -17,6 +18,8 @@ export default class TopicsController {
     const topic = await Taxonomy.firstOrFail(params.slug)
     const children = await topic.related('children').query()
       .apply(scope => scope.hasContent())
+      .preload('parent', query => query.preload('asset'))
+      .preload('asset')
       .withCount('posts')
       .withCount('collections')
       .orderBy('name')
