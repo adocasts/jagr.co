@@ -1,5 +1,16 @@
 @layout('layouts/main')
 
+@section('meta')
+  @!meta.tags({
+    url: route('lessons.show', request.routeParams),
+    title: post.page_title ?? post.title,
+    series: series,
+    desc: excerpt(post.meta_description ?? post.description, 180),
+    asset: post.assets && post.assets[0],
+    index: post.isPublished
+  })
+@endsection
+
 @section('content')
 
   <div class="break">

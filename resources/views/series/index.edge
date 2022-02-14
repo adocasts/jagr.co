@@ -1,5 +1,15 @@
 @layout('layouts/main')
 
+@section('meta')
+  @!meta.tags({
+    url: route('series.index'),
+    title: 'Series, Recently Updated',
+    desc: "Browse our most recently updated series and their latest lessons below. Series are ordered groups of posts focusing, in-depth, on a specific topic.",
+    asset: null,
+    index: true
+  })
+@endsection
+
 @section('content')
 
   <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">

@@ -1,5 +1,15 @@
 @layout('layouts/main')
 
+@section('meta')
+  @!meta.tags({
+    url: route('series.show', { slug: series.slug }),
+    title: series.name,
+    desc: excerpt(series.description, 180),
+    asset: series.assets,
+    index: true
+  })
+@endsection
+
 @section('hero')
 
   {{--  TODO: if user hasn't start the series show series info instead of lesson info  --}}

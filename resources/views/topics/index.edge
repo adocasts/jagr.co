@@ -1,5 +1,15 @@
 @layout('layouts/main')
 
+@section('meta')
+  @!meta.tags({
+    url: route('topics.index'),
+    title: 'Topics',
+    desc: "Jagr series and lessons are all categorized into topics, some more specific than others. You can find all content about a particular topic by clicking a topic below.",
+    asset: null,
+    index: true
+  })
+@endsection
+
 @section('content')
 
   <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">

@@ -1,5 +1,15 @@
 @layout('layouts/main')
 
+@section('meta')
+  @!meta.tags({
+    url: route('home'),
+    title: "Educational JavaScript Dev Screencasts",
+    desc: `Jagr provides high-quality screencasts and written lessons covering a wide array of topics, including AdonisJS and AWS Amplify.`,
+    asset: null,
+    index: true
+  })
+@endsection
+
 @section('hero')
 
   @!lesson.feature({ item: featuredLesson })
