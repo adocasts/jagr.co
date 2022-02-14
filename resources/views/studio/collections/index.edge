@@ -51,14 +51,14 @@
             <div>{{ scope.row.children.length }} Modules</div>
           </div>
         @elseif (scope.column.field === 'type')
-          {{ CollectionTypeEnumDesc[scope.row.collectionTypeId] }}
+          <span class="text-sm">{{ CollectionTypeEnumDesc[scope.row.collectionTypeId] }}</span>
         @elseif (scope.column.field === 'publish_at')
           {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
           <div class="text-xs text-gray-800">
             {{ formatDte(post.publish_at) }}
           </div> --}}
         @elseif (scope.column.field === '_actions')
-          <div class="flex">
+          <div class="flex text-sm">
             <a href="{{ route('studio.collections.edit', { id: scope.row.id }) }}" class="text-gray-950 hover:text-brand-800 mr-3">
               Edit
             </a>
@@ -70,7 +70,7 @@
             </form>
           </div>
         @else
-          {{ scope.row[scope.column.field] }}
+          <span class="text-sm">{{ scope.row[scope.column.field] }}</span>
         @endif
       @endslot
     @end

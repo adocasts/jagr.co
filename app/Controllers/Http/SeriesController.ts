@@ -5,6 +5,8 @@ import Collection from 'App/Models/Collection'
 export default class SeriesController {
   public async index({ view }: HttpContextContract) {
     const series = await Collection.series()
+      .apply(scope => scope.withPostLatestPublished())
+      .select(['collections.*'])
       .wherePublic()
       .whereNull('parentId')
       .preload('asset')
@@ -12,6 +14,7 @@ export default class SeriesController {
         .apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order', direction: 'desc' }))
         .groupLimit(3)
       )
+      .orderBy('latest_publish_at', 'desc')
 
     return view.render('series/index', { series })
   }

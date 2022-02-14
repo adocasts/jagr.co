@@ -17,7 +17,10 @@ export default class LessonsController {
   }
 
   public async show({ view, params }: HttpContextContract) {
-    const post = await Post.lessons().where({ slug: params.slug }).firstOrFail()
+    const post = await Post.lessons()
+      .apply(scope => scope.forDisplay())
+      .where({ slug: params.slug })
+      .firstOrFail()
     const comments = await CommentService.getForPost(post)
     const series = await post.related('rootSeries').query()
       .wherePublic()
