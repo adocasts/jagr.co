@@ -24,6 +24,7 @@ import States from 'App/Enums/States'
 import Collection from 'App/Models/Collection'
 import CollectionTypes from 'App/Enums/CollectionTypes'
 import Watchlist from 'App/Models/Watchlist'
+import * as timeago from 'timeago.js'
 
 export default class Post extends AppBaseModel {
   public serializeExtras = true
@@ -238,12 +239,18 @@ export default class Post extends AppBaseModel {
     return Number(this.$extras.watchlist_count) > 0
   }
 
+  @computed()
+  public get timeago() {
+    return this.publishAt ? timeago.format(this.publishAt.toJSDate()) : ''
+  }
+
   @beforeSave()
   public static async setReadTimeValues(post: Post) {
-    post.bodyTypeId = post.$dirty.bodyBlocks ? BodyTypes.JSON : BodyTypes.HTML
-
-    if (post.bodyTypeId == BodyTypes.JSON) {
+    if (post.$dirty.bodyBlocks) {
+      post.bodyTypeId = BodyTypes.JSON
       await EditorBlockParser.parse(post)
+    } else if (post.$dirty.body) {
+      post.bodyTypeId = BodyTypes.HTML
     }
 
     const readTime = ReadService.getReadCounts(post.body)

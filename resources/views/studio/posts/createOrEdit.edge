@@ -128,16 +128,11 @@
           type: 'group',
           label: 'Body',
           name: 'body',
-          value: flashMessages.get('body') ?? post?.body ?? '',
           errors: flashMessages.get('errors.body') ?? flashMessages.get('errors.bodyBlocks')
         })
           @slot('input')
-            <div class="-mx-8">
-              <input type="hidden" name="body" value="{{ flashMessages.get('body') ?? post?.body ?? '' }}" />
-              <input type="hidden" name="bodyBlocks" value="{{ stringify(flashMessages.get('bodyBlocks') ?? post?.bodyBlocks ?? '') }}" />
-              <input type="hidden" name="bodyTypeId" value="{{ flashMessages.get('bodyTypeId') ?? post?.bodyTypeId ?? 1 }}" />
-              <div id="editorjs" class="prose md:prose-md lg:prose-lg xl:prose-xl"></div>
-            </div>
+            <input type="hidden" name="bodyTypeId" value="{{ flashMessages.get('bodyTypeId') ?? post?.bodyTypeId ?? 1 }}" />
+            @!tiptap.full({ value: flashMessages.get('body') ?? post?.body ?? '' })
           @endslot
         @end
       </div>
@@ -234,10 +229,10 @@
   })
 
   async function saveAs(stateId) {
-    const editorData = await window.editor.save()
-    console.log({ ...editorData })
-    document.forms.postForm.bodyBlocks.value = JSON.stringify(editorData)
-    document.forms.postForm.bodyTypeId.value = 2
+//     const editorData = await window.editor.save()
+//     console.log({ ...editorData })
+//     document.forms.postForm.bodyBlocks.value = JSON.stringify(editorData)
+//     document.forms.postForm.bodyTypeId.value = 2
     document.forms.postForm.stateId.value = stateId
     document.forms.postForm.submit();
   }

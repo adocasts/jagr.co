@@ -1,5 +1,4 @@
 import { DateTime } from 'luxon'
-import '../editorjs'
 
 // publish at btn updator
 document.addEventListener('DOMContentLoaded', function() {
@@ -102,8 +101,6 @@ class VideoManager {
 
   static onInput(event) {
     const element = event.target ? event.target : event
-
-    console.log({ element, dataset: element.dataset })
 
     if (!element.dataset.previewSelector) {
       console.warn('Video input is missing a preview selector')

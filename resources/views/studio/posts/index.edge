@@ -38,7 +38,7 @@
         @elseif (scope.column.field === 'author')
           @if (scope.row.authors)
             @each (author in scope.row.authors)
-              {{ author.username }}
+              <span class="text-sm">{{ author.username }}</span>
             @endeach
           @endif
         @elseif (scope.column.field === 'status')
@@ -49,14 +49,14 @@
             {{--  {{ post.history.length }} versions  --}}
           </div>
         @elseif (scope.column.field === 'type')
-          {{ PostTypeEnumDesc[scope.row.postTypeId] }}
+          <span class="text-sm">{{ PostTypeEnumDesc[scope.row.postTypeId] }}</span>
         @elseif (scope.column.field === 'publish_at')
-          {{-- <span class="capitalize">{{ post.publishedAtReadable }}</span>
+          <span class="capitalize text-sm">{{ scope.row.timeago }}</span>
           <div class="text-xs text-gray-800">
-            {{ formatDte(post.publish_at) }}
-          </div> --}}
+            {{ scope.row.publishAt.toFormat('fff') }}
+          </div>
         @elseif (scope.column.field === '_actions')
-          <div class="flex">
+          <div class="flex text-sm">
             <a href="{{ route('studio.posts.edit', { id: scope.row.id }) }}" class="text-gray-950 hover:text-brand-800 mr-3">
               Edit
             </a>
@@ -68,7 +68,7 @@
             </form>
           </div>
         @else
-          {{ scope.row[scope.column.field] }}
+          <span class="text-sm">{{ scope.row[scope.column.field] }}</span>
         @endif
       @endslot
     @end

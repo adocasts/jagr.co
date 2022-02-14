@@ -1,4 +1,4 @@
-<div x-data="setupEditor(`{{ value ?? '' }}`)" x-init="() => init($refs.element)">
+<div x-data="setupEditor({{ stringify(value) ?? '' }})" x-init="() => init($refs.element)">
   <div class="bubble-menu bg-gray-900 text-gray-400 text-sm py-1 px-2 rounded-md">
     <template x-if="typeof isInitialized === 'boolean'">
       <div class="flex items-center space-x-2">
