@@ -3,6 +3,23 @@ import Post from "App/Models/Post";
 import StorageService from "./StorageService";
 
 export default class PostService {
+  public static async getFeatureSingle(excludeIds: number[] = []) {
+    return Post.lessons()
+      .apply(scope => scope.forDisplay())
+      .if(excludeIds.length, query => query.whereNotIn('id', excludeIds))
+      .whereHas('assets', query => query)
+      .orderBy('publishAt', 'desc')
+      .first()
+  }
+
+  public static async getLatest(limit: number = 10, excludeIds: number[] = []) {
+    return Post.lessons()
+      .apply(scope => scope.forDisplay())
+      .if(excludeIds.length, query => query.whereNotIn('id', excludeIds))
+      .orderBy('publishAt', 'desc')
+      .limit(limit)
+  }
+
   public static async syncAssets(post: Post, assetIds: number[] = []) {
     const assetData = assetIds.reduce((prev, currentId, i) => ({
       ...prev,

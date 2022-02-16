@@ -4,7 +4,7 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 export default class TaxonomyValidator {
   constructor(protected ctx: HttpContextContract) {
     const body = ctx.request.body()
-		
+
 		if (body.assetIds && body.assetIds.length) {
 			body.assetId = body.assetIds[0]
 		}
@@ -46,6 +46,7 @@ export default class TaxonomyValidator {
       column: 'slug',
       ...this.slugUniqueConstraint
     })]),
+    isFeatured: schema.boolean.optional(),
     assetId: schema.number.optional([rules.exists({ table: 'assets', column: 'id' })]),
     pageTitle: schema.string.optional({ trim: true }, [rules.maxLength(100)]),
     description: schema.string.optional({ trim: true }, [rules.maxLength(255)]),

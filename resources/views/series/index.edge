@@ -15,12 +15,28 @@
   <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">
     @container()
       {{--  Series  --}}
-      <div class="py-3 flex flex-col mb-3">
-        <h1 class="text-3xl font-extrabold text-gray-950 tracking-tight">Recently Updated Series</h1>
-        <p class="max-w-prose text-lg text-gray-700">
+      @heading.page()
+        Recently Updated Series
+
+        @slot('description')
           Browse our most recently updated series and their latest lessons below.
-        </p>
+        @end
+      @end
+
+      @heading.section()
+        Featured Series
+      @end
+      <div class="flex flex-wrap md:-mx-6 mb-12">
+        @each ((item, i) in featured)
+          <div class="w-full md:w-1/2 lg:w-1/4 md:px-3">
+            @!series.card({ item, width: 'w-full' })
+          </div>
+        @endeach
       </div>
+
+      @heading.section()
+        All Series
+      @end
       <div class="flex flex-col md:-mx-6 mb-8 space-y-6">
         @each ((item, i) in series)
           <div class="flex flex-wrap">

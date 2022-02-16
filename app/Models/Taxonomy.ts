@@ -43,6 +43,9 @@ export default class Taxonomy extends AppBaseModel {
   @column()
   public metaDescription: string
 
+  @column()
+  public isFeatured: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 

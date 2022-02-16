@@ -5,18 +5,16 @@
   <div class="break border-t border-gray-300 relative -top-6 pt-8 mt-3">
     @container()
 
-      {{--  Lessons  --}}
-      <div class="py-3 flex flex-col mb-3">
-        <h1 class="text-3xl font-extrabold text-gray-950 tracking-tight">
-          Latest Blogs
-          @if (items.currentPage != 1)
-            <span class="font-normal">&mdash; Page {{ items.currentPage }}</span>
-          @endif
-        </h1>
-        <p class="max-w-prose text-lg text-gray-700">
+      @heading.page()
+        Latest Blogs
+        @if (items.currentPage != 1)
+          <span class="font-normal">&mdash; Page {{ items.currentPage }}</span>
+        @endif
+
+        @slot('description')
           Browse our latest blog posts below. Our blog posts are laid back and meant to be conversational.
-        </p>
-      </div>
+        @end
+      @end
 
       <div class="flex flex-wrap -mx-6">
         <div class="w-full md:w-3/4 px-6">

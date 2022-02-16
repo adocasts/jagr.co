@@ -64,6 +64,12 @@ export default class Collection extends AppBaseModel {
   public youtubePlaylistUrl: string
 
   @column()
+  public repositoryUrl: string
+
+  @column()
+  public isFeatured: boolean
+
+  @column()
   public sortOrder: number
 
   @column.dateTime({ autoCreate: true })

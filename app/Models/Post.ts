@@ -100,6 +100,9 @@ export default class Post extends AppBaseModel {
   public redirectUrl: string
 
   @column()
+  public repositoryUrl: string
+
+  @column()
   public timezone: string | null
 
   @column()

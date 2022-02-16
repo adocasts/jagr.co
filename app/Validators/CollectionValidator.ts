@@ -33,6 +33,8 @@ export default class CollectionValidator {
 		description: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
 		metaDescription: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
     youtubePlaylistUrl: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    repositoryUrl: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    isFeatured: schema.boolean.optional(),
 		postIds: schema.array.optional().members(schema.number([rules.exists({ table: 'posts', column: 'id' })])),
 		subcollectionCollectionIds: schema.array.optional().members(
 			schema.number([rules.exists({ table: 'collections', column: 'id' })])

@@ -127,6 +127,29 @@
           value: flashMessages.get('youtubePlaylistUrl') ?? collection?.youtubePlaylistUrl ?? '',
           errors: flashMessages.get('errors.slug')
         })
+
+        @!form.input.alt({
+          label: 'Repository Url',
+          name: 'repositoryUrl',
+          placeholder: 'Enter the URL to the collection repo',
+          value: flashMessages.get('repositoryUrl') ?? post?.repositoryUrl ?? '',
+          errors: flashMessages.get('errors.repositoryUrl')
+        })
+
+        @form.input.alt({
+          type: 'group',
+          label: 'Feature',
+          name: 'isFeatured',
+          errors: flashMessages.get('errors.isFeatured')
+        })
+          @slot('input')
+            @set('isChecked', flashMessages.get('isFeatured') ?? collection?.isFeatured ?? false)
+            <label class="inline-flex items-center">
+              <input class="mr-2" type="checkbox" name="isFeatured" id="isFeatured" value="1" {{ isChecked && 'checked' }}>
+              Feature this collection
+            </label>
+          @endslot
+        @end
       </div>
 
       <div class="w-full lg:w-1/3 lg:px-3 -my-3 p-6 shadow-inner bg-gray-50 rounded-lg">

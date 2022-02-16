@@ -1,9 +1,22 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CommentService from 'App/Services/CommentService'
 import Collection from 'App/Models/Collection'
+import UtilityService from 'App/Services/UtilityService'
 
 export default class SeriesController {
   public async index({ view }: HttpContextContract) {
+    const featuredItems = await Collection.series()
+      .apply(scope => scope.withPostLatestPublished())
+      .preload('asset')
+      .wherePublic()
+      .where('isFeatured', true)
+      .whereNull('parentId')
+      .orderBy('latest_publish_at', 'desc')
+      .select(['collections.*', Collection.postCountSubQuery])
+      .limit(4)
+
+    const featured = UtilityService.shuffle(featuredItems)
+
     const series = await Collection.series()
       .apply(scope => scope.withPostLatestPublished())
       .select(['collections.*'])
@@ -16,7 +29,7 @@ export default class SeriesController {
       )
       .orderBy('latest_publish_at', 'desc')
 
-    return view.render('series/index', { series })
+    return view.render('series/index', { featured, series })
   }
 
   public async show({ view, params, auth }: HttpContextContract) {

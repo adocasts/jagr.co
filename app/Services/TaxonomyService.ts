@@ -1,6 +1,20 @@
 import Taxonomy from "App/Models/Taxonomy";
+import States from 'App/Enums/States'
 
 export default class TaxonomyService {
+    public static async getLastUpdated(limit: number = 10, excludeIds: number[] = []) {
+      return Taxonomy.query()
+        .apply(scope => scope.withPostLatestPublished())
+        .if(excludeIds.length, query => query.whereNotIn('id', excludeIds))
+        .preload('parent', query => query.preload('asset'))
+        .preload('asset')
+        .withCount('posts', query => query.apply(scope => scope.published()))
+        .withCount('collections', query => query.where('stateId', States.PUBLIC))
+        .orderBy('latest_publish_at', 'desc')
+        .select('taxonomies.*')
+        .limit(limit)
+    }
+
     public static async getAllForTree() {
       return Taxonomy.query().select(['id', 'name', 'parentId'])
     }

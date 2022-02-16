@@ -2,6 +2,19 @@ import Collection from 'App/Models/Collection'
 import Database from '@ioc:Adonis/Lucid/Database'
 
 export default class CollectionService {
+  public static async getLastUpdated(limit: number = 4, excludeIds: number[] = []) {
+    return Collection.series()
+      .apply(scope => scope.withPostLatestPublished())
+      .if(excludeIds.length, query => query.whereNotIn('id', excludeIds))
+      .withCount('postsFlattened', query => query.apply(scope => scope.published()))
+      .preload('asset')
+      .wherePublic()
+      .whereNull('parentId')
+      .orderBy('latest_publish_at', 'desc')
+      .select(['collections.*'])
+      .limit(limit)
+  }
+
   // TODO: finish
   public static async getPostCounts(collections: Collection[]) {
     const ids = collections.map(c => c.id)

@@ -1,9 +1,22 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Taxonomy from 'App/Models/Taxonomy'
 import CollectionTypes from 'App/Enums/CollectionTypes'
+import UtilityService from 'App/Services/UtilityService'
 
 export default class TopicsController {
   public async index({ view }: HttpContextContract) {
+    const featuredItems = await Taxonomy.query()
+      .apply(scope => scope.hasContent())
+      .preload('parent', query => query.preload('asset'))
+      .where('isFeatured', true)
+      .preload('asset')
+      .withCount('posts')
+      .withCount('collections')
+      .orderBy('name')
+      .limit(5)
+
+    const featured = UtilityService.shuffle(featuredItems)
+
     const topics = await Taxonomy.query()
       .apply(scope => scope.hasContent())
       .preload('parent', query => query.preload('asset'))
@@ -11,11 +24,15 @@ export default class TopicsController {
       .withCount('posts')
       .withCount('collections')
       .orderBy('name')
-    return view.render('topics/index', { topics })
+    return view.render('topics/index', { featured, topics })
   }
 
   public async show({ view, params }: HttpContextContract) {
-    const topic = await Taxonomy.firstOrFail(params.slug)
+    const topic = await Taxonomy.query()
+      .preload('parent')
+      .where({ slug: params.slug })
+      .firstOrFail()
+
     const children = await topic.related('children').query()
       .apply(scope => scope.hasContent())
       .preload('parent', query => query.preload('asset'))

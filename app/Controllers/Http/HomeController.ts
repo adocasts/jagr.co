@@ -3,51 +3,31 @@ import Taxonomy from 'App/Models/Taxonomy'
 import Collection from 'App/Models/Collection'
 import Post from 'App/Models/Post'
 import States from 'App/Enums/States'
+import PostService from 'App/Services/PostService'
+import CollectionService from 'App/Services/CollectionService'
+import TaxonomyService from 'App/Services/TaxonomyService'
+import WatchlistService from 'App/Services/WatchlistService'
 
 export default class HomeController {
-  public async index({ view }: HttpContextContract) {
+  public async index({ view, auth }: HttpContextContract) {
     const excludeIds: number[] = []
-
-    const featuredLesson = await Post.lessons()
-      .apply(scope => scope.forDisplay())
-      .apply(scope => scope.published())
-      .whereHas('assets', query => query)
-      .orderBy('publishAt', 'desc')
-      .first()
+    const featuredLesson = await PostService.getFeatureSingle()
 
     featuredLesson && excludeIds.push(featuredLesson.id)
 
-    const series = await Collection.series()
-      .apply(scope => scope.withPostLatestPublished())
-      .preload('asset')
-      .wherePublic()
-      .whereNull('parentId')
-      .orderBy('latest_publish_at', 'desc')
-      .select(['collections.*', Collection.postCountSubQuery])
-      .limit(4)
-
-    const topics = await Taxonomy.query()
-      .apply(scope => scope.withPostLatestPublished())
-      .preload('parent', query => query.preload('asset'))
-      .preload('asset')
-      .withCount('posts', query => query.apply(scope => scope.published()))
-      .withCount('collections', query => query.where('stateId', States.PUBLIC))
-      .orderBy('latest_publish_at', 'desc')
-      .select('taxonomies.*')
-      .limit(10)
-
-    const latestLessons = await Post.lessons()
-      .apply(scope => scope.forDisplay())
-      .apply(scope => scope.published())
-      .orderBy('publishAt', 'desc')
-      .whereNotIn('id', excludeIds)
-      .limit(10)
+    const series = await CollectionService.getLastUpdated()
+    const topics = await TaxonomyService.getLastUpdated()
+    const latestLessons = await PostService.getLatest(10, excludeIds)
+    const collectionWatchlist = await WatchlistService.getLatestCollections(auth.user)
+    const postWatchlist = await WatchlistService.getLatestPosts(auth.user)
 
     return view.render('index', {
       featuredLesson,
       latestLessons,
       series,
-      topics
+      topics,
+      collectionWatchlist,
+      postWatchlist
     })
   }
 }

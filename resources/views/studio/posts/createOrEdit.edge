@@ -124,6 +124,14 @@
           })
         </details>
 
+        @!form.input.alt({
+          label: 'Repository Url',
+          name: 'repositoryUrl',
+          placeholder: 'Enter the URL to lesson repo',
+          value: flashMessages.get('repositoryUrl') ?? post?.repositoryUrl ?? '',
+          errors: flashMessages.get('errors.repositoryUrl')
+        })
+
         @form.input.alt({
           type: 'group',
           label: 'Body',

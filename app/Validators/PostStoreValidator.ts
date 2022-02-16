@@ -12,21 +12,23 @@ export default class PostStoreValidator {
   }
 
   public schema = schema.create({
-		title: schema.string({}, [rules.maxLength(100)]),
-		slug: schema.string.optional({}, [rules.maxLength(255), rules.unique({
+		title: schema.string({ trim: true }, [rules.maxLength(100)]),
+		slug: schema.string.optional({ trim: true }, [rules.maxLength(255), rules.unique({
 			table: 'posts',
 			column: 'slug',
 			...this.slugUniqueConstraint
 		})]),
-		pageTitle: schema.string.optional({}, [rules.maxLength(100)]),
-		description: schema.string.optional({}, [rules.maxLength(255)]),
-		metaDescription: schema.string.optional({}, [rules.maxLength(255)]),
-		canonical: schema.string.optional({}, [rules.maxLength(255)]),
+		pageTitle: schema.string.optional({ trim: true }, [rules.maxLength(100)]),
+		description: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+		metaDescription: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+		canonical: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
 		body: schema.string.optional({}),
 		bodyBlocks: schema.string.optional(),
-		videoUrl: schema.string.optional({}, [rules.maxLength(255), rules.url()]),
+    repositoryUrl: schema.string.optional({ trim: true }, [rules.maxLength(255)]),
+    isFeatured: schema.boolean.optional(),
+		videoUrl: schema.string.optional({ trim: true }, [rules.maxLength(255), rules.url()]),
     videoSeconds: schema.number.optional(),
-		timezone: schema.string.optional(),
+		timezone: schema.string.optional({ trim: true }),
 		publishAtDate: schema.date.optional({ format: 'yyyy-MM-dd' }),
 		publishAtTime: schema.date.optional({ format: 'HH:mm' }),
 		postTypeId: schema.number.optional(),
