@@ -68,7 +68,7 @@ export default class QueryBuilderProvider {
     })
 
     // @ts-ignore
-    ModelQueryBuilder.macro('highlight', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+    ModelQueryBuilder.macro('highlight', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this.first()
       if (!result) return
       result[targetColumnName] = await HtmlParser.highlight(result[columnName])
@@ -76,18 +76,17 @@ export default class QueryBuilderProvider {
     })
 
     // @ts-ignore
-    ModelQueryBuilder.macro('highlightOrFail', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+    ModelQueryBuilder.macro('highlightOrFail', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this.firstOrFail()
       result[targetColumnName] = await HtmlParser.highlight(result[columnName])
       return result
     })
 
     // @ts-ignore
-    ModelQueryBuilder.macro('highlightAll', async function(columnName: string = 'body', targetColumnName: string = 'bodyHtml') {
+    ModelQueryBuilder.macro('highlightAll', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this
       const promises = result.map(async r => {
         r[targetColumnName] = await HtmlParser.highlight(r[columnName])
-        console.log({ r })
         return r
       })
       return await Promise.all(promises)

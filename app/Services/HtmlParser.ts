@@ -14,6 +14,22 @@ const highlighter = shiki.getHighlighter({
 })
 
 export default class HtmlParser {
+  public static normalizeLanguage(language: string | undefined) {
+    console.log({ language })
+    if (!language) return language
+
+    switch(language.toLowerCase()) {
+      case 'typescript':
+        return 'ts'
+      case 'javascript':
+        return 'js'
+      case 'xml':
+        return 'edge'
+      default:
+        return language
+    }
+  }
+
   public static async highlight(html: string) {
     const root = parse(html)
     const preBlocks = root.querySelectorAll('pre')
@@ -29,8 +45,8 @@ export default class HtmlParser {
 
         if (codeBlock) {
           const classList = [...codeBlock.classList.values()]
-          const lang = classList.find((c) => c.startsWith('language-'))?.replace('language-', '')
-
+          const lang = this.normalizeLanguage(classList.find((c) => c.startsWith('language-'))?.replace('language-', ''))
+          console.log({ lang })
           if (!lang) return
 
           const outerHTML = codeBlock.outerHTML

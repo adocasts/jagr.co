@@ -114,18 +114,22 @@
                   In Watchlist
                 </button>
               </div>
-              <button class="group w-full md:w-auto  mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
-                <div class="w-7 h-7 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
-                  @!svg.youtube({ className: 'w-4' })
-                </div>
-                Watch on YouTube
-              </button>
-              <button class="group w-full md:w-auto  mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
-                <div class="w-7 h-7 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
-                  @!svg.github({ className: 'w-4' })
-                </div>
-                View Repository
-              </button>
+              @if (post.videoUrl)
+                <a target="_blank" rel="noopener noreferrer nofollow" href="{{ post.videoUrl }}" class="group w-full md:w-auto  mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
+                  <div class="w-7 h-7 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
+                    @!svg.youtube({ className: 'w-4' })
+                  </div>
+                  Watch on YouTube
+                </a>
+              @endif
+              @if (post.repositoryUrl)
+                <a target="_blank" rel="noopener noreferrer nofollow" href="{{ post.repositoryUrl }}" class="group w-full md:w-auto  mr-3 flex items-center bg-gray-100 hover:bg-black hover:text-white transition duration-300 rounded-full py-1 pl-1 pr-6">
+                  <div class="w-7 h-7 rounded-full bg-black text-white flex items-center group-hover:bg-white group-hover:text-black transition duraton-300 justify-center mr-2">
+                    @!svg.github({ className: 'w-4' })
+                  </div>
+                  View Repository
+                </a>
+              @endif
             </div>
           </div>
         </div>

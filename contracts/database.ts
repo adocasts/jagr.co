@@ -1,5 +1,6 @@
 declare module '@ioc:Adonis/Lucid/Orm' {
   import States from 'App/Enums/States'
+  import Post from 'App/Models/Post'
 
   interface ModelQueryBuilderContract<
     Model extends LucidModel,
@@ -12,8 +13,8 @@ declare module '@ioc:Adonis/Lucid/Orm' {
     selectIds(idColumn?: string): number
     selectId(idColumn?: string): number
     selectIdOrFail(idColumn?: string): number
-    highlight(columnName?: string, targetColumnName?: string): this
-    highlightOrFail(columnName?: string, targetColumnName?: string): this
-    highlightAll(columnName?: string, targetColumnName?: string): this
+    highlight(columnName?: string, targetColumnName?: string): Post
+    highlightOrFail(columnName?: string, targetColumnName?: string): Post
+    highlightAll(columnName?: string, targetColumnName?: string): Post[]
   }
 }

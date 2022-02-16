@@ -60,7 +60,7 @@ export default class SeriesController {
       .if(auth.user, query => query.withWatchlist(auth.user?.id))
       .where("root_sort_order", params.index - 1)
       .apply(scope => scope.forDisplay())
-      .firstOrFail()
+      .highlightOrFail()
 
     const comments = await CommentService.getForPost(post)
 

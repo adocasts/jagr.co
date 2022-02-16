@@ -20,7 +20,8 @@ export default class LessonsController {
     const post = await Post.lessons()
       .apply(scope => scope.forDisplay())
       .where({ slug: params.slug })
-      .firstOrFail()
+      .highlightOrFail()
+
     const comments = await CommentService.getForPost(post)
     const series = await post.related('rootSeries').query()
       .wherePublic()

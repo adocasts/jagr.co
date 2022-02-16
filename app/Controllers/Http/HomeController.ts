@@ -1,8 +1,4 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Taxonomy from 'App/Models/Taxonomy'
-import Collection from 'App/Models/Collection'
-import Post from 'App/Models/Post'
-import States from 'App/Enums/States'
 import PostService from 'App/Services/PostService'
 import CollectionService from 'App/Services/CollectionService'
 import TaxonomyService from 'App/Services/TaxonomyService'
