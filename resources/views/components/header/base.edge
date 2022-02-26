@@ -10,7 +10,18 @@
   Nav('Settings', route('studio.settings.index'), 'StudioPolicy.viewSettings')
 ])
 
-<div x-data="{ show: false }" class="relative bg-brand-950 z-30">
+<div x-data="{
+  show: false,
+  showNotifications: false,
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications
+    this.showNotifications
+      ? document.body.classList.add('max-h-screen', 'overflow-hidden')
+      : document.body.classList.remove('max-h-screen', 'overflow-hidden');
+  }
+}" class="relative bg-brand-950 z-30">
+  @!header.notifications.list()
+
   <div class="flex justify-between items-center md:space-x-10 py-3 {{ container ?? 'container mx-auto px-4 sm:px-6' }} mx-auto">
     <div class="flex items-center">
       <a href="/" class="flex mr-6 lg:mr-8">
@@ -20,14 +31,35 @@
 
       @!header.desktop.nav()
     </div>
-    <div class="-mr-2 -my-2 md:hidden">
-      <button @click="show = !show" type="button" class="rounded-md p-1 inline-flex items-center justify-center text-brand-300 hover:text-white hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-800" :aria-expanded="show">
-        <span class="sr-only">Open menu</span>
-        @!svg.menuOutline({ className: 'w-6 h-6' })
-      </button>
+
+    <div class="flex justify-end md:hidden">
+      <div class="mr-3">
+        <button @click="toggleNotifications" class="relative">
+          @if (notifications.unread.length)
+            <div class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
+          @endif
+          @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
+        </button>
+      </div>
+
+      <div class="-mr-2 -my-1">
+        <button @click="show = !show" type="button" class="rounded-md p-1 inline-flex items-center justify-center text-brand-300 hover:text-white hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-800" :aria-expanded="show">
+          <span class="sr-only">Open menu</span>
+          @!svg.menuOutline({ className: 'w-6 h-6' })
+        </button>
+      </div>
     </div>
+
     <div class="hidden md:flex items-center md:ml-12">
       @!header.desktop.search()
+
+      <button @click="toggleNotifications" class="relative mr-1">
+        @if (notifications.unread.length)
+          <div class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
+        @endif
+        @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
+      </button>
+
       @!header.desktop.auth({ studioRoutes })
     </div>
   </div>

@@ -3,7 +3,7 @@ import User from 'App/Models/User';
 import Route from '@ioc:Adonis/Core/Route'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { schema as Schema, rules } from '@ioc:Adonis/Core/Validator'
-import AuthAttemptService from 'App/Services/AuthAttemptServices';
+import AuthAttemptService from 'App/Services/AuthAttemptService';
 
 export default class PasswordResetController {
   public async forgotPassword({ view }: HttpContextContract) {

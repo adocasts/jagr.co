@@ -1,7 +1,8 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import { schema as Schema, rules } from '@ioc:Adonis/Core/Validator'
-import AuthAttemptService from 'App/Services/AuthAttemptServices'
+import AuthAttemptService from 'App/Services/AuthAttemptService'
+import SignUpValidator from 'App/Validators/SignUpValidator'
+import SignInValidator from 'App/Validators/SignInValidator'
 
 export default class AuthController {
   public async signupShow({ view }: HttpContextContract) {
@@ -9,14 +10,7 @@ export default class AuthController {
   }
 
   public async signup({ request, response, auth, session }: HttpContextContract) {
-    const schema = Schema.create({
-      username: Schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'username', caseInsensitive: true })]),
-      email: Schema.string({ trim: true }, [rules.unique({ table: 'users', column: 'email' })]),
-      password: Schema.string({ trim: true }, [rules.minLength(8)]),
-    })
-
-    const data = await request.validate({ schema })
-
+    const data = await request.validate(SignUpValidator)
     const user = await User.create(data)
 
     await auth.login(user)
@@ -31,13 +25,7 @@ export default class AuthController {
   }
 
   public async signin({ request, response, auth, session }: HttpContextContract) {
-    const schema = Schema.create({
-      uid: Schema.string(),
-      password: Schema.string(),
-      remember_me: Schema.boolean.optional()
-    })
-
-    const { uid, password, remember_me } = await request.validate({ schema })
+    const { uid, password, remember_me } = await request.validate(SignInValidator)
 
     const loginAttemptsRemaining = await AuthAttemptService.getRemainingAttempts(uid)
     if (loginAttemptsRemaining <= 0) {

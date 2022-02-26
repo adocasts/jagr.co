@@ -88,6 +88,7 @@
     "proxy-addr": "^2.0.7",
     "reading-time": "^1.5.0",
     "reflect-metadata": "^0.1.13",
+    "sanitize-html": "^2.7.0",
     "sharp": "^0.29.3",
     "shiki": "^0.10.0",
     "slugify": "^1.6.2",

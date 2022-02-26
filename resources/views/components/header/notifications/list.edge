@@ -1,0 +1,36 @@
+@panel({ variable: 'showNotifications', closeHandler: 'toggleNotifications' })
+  @if (notifications.unread.length)
+    <div>
+      <h3 class="border-b border-gray-300 pb-2 px-4 pt-2 text-lg font-semibold">
+        Unread Notifications
+      </h3>
+      <ol class="list-none flex flex-col">
+        @each (item in notifications.unread)
+          @!header.notifications.item({ item })
+        @endeach
+      </ol>
+    </div>
+  @endif
+
+  @if (notifications.read.length)
+    <div>
+      <h3 class="border-b border-gray-300 pb-2 px-4 pt-2 text-lg font-semibold">
+        Unread Notifications
+      </h3>
+      <ol class="list-none flex flex-col">
+        @each (item in notifications.read)
+          @!header.notifications.item({ item })
+        @endeach
+      </ol>
+    </div>
+  @endif
+
+  @if (!notifications.unread.length && !notifications.read.length)
+    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+      <strong>No Notifications</strong>
+      <p class="text-xs text-gray-700">
+        You're all set! Start a discussion by leaving a comment on a lesson or replying to an existing comment.
+      </p>
+    </div>
+  @endif
+@end

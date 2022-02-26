@@ -2,27 +2,19 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Comment from 'App/Models/Comment'
 import States from 'App/Enums/States'
 import { inject } from '@adonisjs/core/build/standalone'
-import IdentityService from 'App/Services/IdentityService'
 import HttpIdentityService from 'App/Services/Http/HttpIdentityService'
+import CommentService from 'App/Services/CommentService'
+import Notification from 'App/Models/Notification'
+import NotificationService from 'App/Services/NotificationService'
 
 @inject()
 export default class CommentsController {
   constructor(public httpIdentityService: HttpIdentityService) {}
 
   public async store({ request, response, auth }: HttpContextContract) {
-    const data = request.only(['postId', 'body', 'rootParentId', 'replyTo', 'levelIndex'])
-    const userId = auth.user?.id
     const identity = await this.httpIdentityService.getRequestIdentity()
 
-    // TODO: validate
-
-    await Comment.create({ 
-      ...data, 
-      identity,
-      name: userId ? undefined : await IdentityService.getByIdentity(Comment.table, identity),
-      userId: auth.user?.id,
-      stateId: auth.user?.id ? States.PUBLIC : States.IN_REVIEW,
-    })
+    await CommentService.store(auth.user, identity, request.body())
 
     return response.redirect().back()
   }
@@ -34,6 +26,7 @@ export default class CommentsController {
 
     await bouncer.with('CommentPolicy').authorize('update', comment, identity)
     await comment.merge(data).save()
+    await NotificationService.onUpdate(Comment.table, comment.id, comment.body)
 
     return response.redirect().back()
   }
@@ -48,7 +41,7 @@ export default class CommentsController {
     await bouncer.with('CommentPolicy').authorize('delete', comment, identity)
 
     if (Number(children.$extras.count)) {
-      comment.merge({ 
+      comment.merge({
         body: '[deleted]',
         stateId: States.ARCHIVED
       })
@@ -56,6 +49,7 @@ export default class CommentsController {
       await comment.save()
     } else {
       await comment.delete()
+      await NotificationService.onDelete(Comment.table, comment.id)
     }
 
     if (parent?.stateId === States.ARCHIVED) {
@@ -63,6 +57,7 @@ export default class CommentsController {
 
       if (!Number(siblings.$extras.count)) {
         await parent.delete()
+        await NotificationService.onDelete(Comment.table, parent.id)
       }
     }
 

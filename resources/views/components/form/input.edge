@@ -9,7 +9,13 @@
     </label>
   @endif
 
-  <div class="mt-1 relative">
+  @if (help)
+    <div class="text-xs text-gray-700">
+      {{ help }}
+    </div>
+  @endif
+
+  <div class="mt-1 relative" style="{{ groupStyle ?? '' }}">
     @if(type === 'textarea')
       <textarea
         id="{{ id || name }}"

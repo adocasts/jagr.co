@@ -98,6 +98,11 @@ Route.group(() => {
   Route.group(() => {
 
     Route.get('/', 'SettingsController.index').as('index')
+    Route.patch('/username', 'SettingsController.usernameUpdate').as('username.update')
+    Route.post('/username/unique', 'SettingsController.usernameUnique').as('username.unique')
+    Route.put('/email', 'SettingsController.emailUpdate').as('email')
+    Route.put('/email/notifications', 'SettingsController.emailNotificationUpdate').as('email.notifications')
+    Route.get('/email/undo/:id/:oldEmail/:newEmail', 'SettingsController.emailRevert').as('email.undo')
 
   }).prefix('/settings').as('settings')
 

@@ -15,7 +15,6 @@ const highlighter = shiki.getHighlighter({
 
 export default class HtmlParser {
   public static normalizeLanguage(language: string | undefined) {
-    console.log({ language })
     if (!language) return language
 
     switch(language.toLowerCase()) {
@@ -46,7 +45,7 @@ export default class HtmlParser {
         if (codeBlock) {
           const classList = [...codeBlock.classList.values()]
           const lang = this.normalizeLanguage(classList.find((c) => c.startsWith('language-'))?.replace('language-', ''))
-          console.log({ lang })
+
           if (!lang) return
 
           const outerHTML = codeBlock.outerHTML

@@ -10,6 +10,7 @@ import Collection from './Collection'
 import Comment from './Comment'
 import AppBaseModel from 'App/Models/AppBaseModel'
 import Watchlist from 'App/Models/Watchlist'
+import EmailHistory from 'App/Models/EmailHistory'
 
 export default class User extends AppBaseModel {
   @column({ isPrimary: true })
@@ -88,4 +89,7 @@ export default class User extends AppBaseModel {
 
   @hasMany(() => Watchlist)
   public watchlist: HasMany<typeof Watchlist>
+  
+  @hasMany(() => EmailHistory)
+  public emailHistory: HasMany<typeof EmailHistory>
 }
