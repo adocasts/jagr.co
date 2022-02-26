@@ -4,7 +4,6 @@ import States from 'App/Enums/States'
 import { inject } from '@adonisjs/core/build/standalone'
 import HttpIdentityService from 'App/Services/Http/HttpIdentityService'
 import CommentService from 'App/Services/CommentService'
-import Notification from 'App/Models/Notification'
 import NotificationService from 'App/Services/NotificationService'
 
 @inject()
