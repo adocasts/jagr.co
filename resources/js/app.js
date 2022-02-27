@@ -2,6 +2,8 @@ import '../css/app.css'
 import 'babel-polyfill'
 import axios from 'axios'
 
+window.axios = axios
+
 window.appWatchlist = function(route, payload, isInWatchlist) {
   return {
     payload,

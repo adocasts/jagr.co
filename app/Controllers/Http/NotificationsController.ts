@@ -1,17 +1,32 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import NotAllowedException from 'App/Exceptions/NotAllowedException';
+import NotificationService from 'App/Services/NotificationService';
+import { schema as Schema } from '@ioc:Adonis/Core/Validator';
 
 export default class NotificationsController {
-  public async index({}: HttpContextContract) {}
+  public async read({ request, response, auth }: HttpContextContract) {
+    if (!auth.user) {
+      throw new NotAllowedException("You must be logged in to alter notifications");
+    }
 
-  public async create({}: HttpContextContract) {}
+    const schema = Schema.create({
+      ids: Schema.array().members(Schema.number())
+    });
 
-  public async store({}: HttpContextContract) {}
+    const { ids } = await request.validate({ schema });
 
-  public async show({}: HttpContextContract) {}
+    if (ids && ids.length) {
+      for (let i = 0; i < ids.length; i++) {
+        await NotificationService.onRead(ids[i]);
+      }
+    }
 
-  public async edit({}: HttpContextContract) {}
+    const unreadNotifications = await NotificationService.getUnread(auth.user.id);
+    const readNotifications = await NotificationService.getLatestRead(auth.user.id);
 
-  public async update({}: HttpContextContract) {}
-
-  public async destroy({}: HttpContextContract) {}
+    return response.json({
+      unreadNotifications,
+      readNotifications
+    });
+  }
 }

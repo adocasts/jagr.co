@@ -119,6 +119,8 @@ Route.group(() => {
   Route.post('/watchlist/toggle',  'WatchlistsController.toggle').as('watchlist.toggle')
   Route.delete('/watchlist/:id',   'WatchlistsController.destroy').as('watchlist.destroy')
 
+  Route.post('/notifications/read', 'NotificationsController.read').as('notifications.read')
+
   Route.group(() => {
 
     Route.get('/posts/search', 'PostsController.search').as('posts.search')
@@ -128,3 +130,10 @@ Route.group(() => {
   }).prefix('/studio').as('studio').namespace('App/Controllers/Http/Studio')
 
 }).prefix('/api').as('api').middleware(['auth'])
+
+// GO
+Route.group(() => {
+
+  Route.get('/post/:postId/comment/:commentId', 'GoController.comment').as('comment')
+
+}).prefix('/go').as('go')

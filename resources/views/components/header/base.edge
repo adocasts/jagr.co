@@ -13,12 +13,41 @@
 <div x-data="{
   show: false,
   showNotifications: false,
+  unreadNotifications: {{ stringify(notifications.unread) }},
+  readNotifications: {{ stringify(notifications.read) }},
+  readCount: {{ notifications.read.length }},
+  pendingUnread: null,
+  pendingRead: null,
+
   toggleNotifications() {
     this.showNotifications = !this.showNotifications
-    this.showNotifications
-      ? document.body.classList.add('max-h-screen', 'overflow-hidden')
-      : document.body.classList.remove('max-h-screen', 'overflow-hidden');
-  }
+
+    if (this.showNotifications) {
+      document.body.classList.add('max-h-screen', 'overflow-hidden')
+      this.onShow()
+    } else {
+      document.body.classList.remove('max-h-screen', 'overflow-hidden')
+      this.onClose()
+    }
+  },
+  async onShow() {
+    const ids = {{ stringify(notifications.unread.map(n => n.id)) }}
+    if (!ids || !ids.length) {
+      return
+    }
+
+    const { data } = await axios.post('{{ route('api.notifications.read') }}', { ids })
+
+    this.pendingUnread = data.unreadNotifications
+    this.pendingRead = data.readNotifications
+  },
+  onClose() {
+    if (this.pendingUnread) this.unreadNotifications = this.pendingUnread
+    if (this.pendingRead) this.readNotifications = this.pendingRead
+
+    this.pendingUnread = null
+    this.pendingRead = null
+  },
 }" class="relative bg-brand-950 z-30">
   @!header.notifications.list()
 
@@ -35,9 +64,7 @@
     <div class="flex justify-end md:hidden">
       <div class="mr-3">
         <button @click="toggleNotifications" class="relative">
-          @if (notifications.unread.length)
-            <div class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
-          @endif
+          <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
           @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
         </button>
       </div>
@@ -54,9 +81,7 @@
       @!header.desktop.search()
 
       <button @click="toggleNotifications" class="relative mr-1">
-        @if (notifications.unread.length)
-          <div class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
-        @endif
+        <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
         @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
       </button>
 
