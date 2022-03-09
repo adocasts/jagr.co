@@ -4,6 +4,8 @@ import Route from '@ioc:Adonis/Core/Route'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import { schema as Schema, rules } from '@ioc:Adonis/Core/Validator'
 import AuthAttemptService from 'App/Services/AuthAttemptService';
+import NotAllowedException from 'App/Exceptions/NotAllowedException'
+import Hash from '@ioc:Adonis/Core/Hash'
 
 export default class PasswordResetController {
   public async forgotPassword({ view }: HttpContextContract) {
@@ -48,18 +50,24 @@ export default class PasswordResetController {
   public async resetPassword({ request, view, params }: HttpContextContract) {
     const isSignatureValid = request.hasValidSignature();
     const email = params.email;
+    const token = await Hash.make(email)
 
-    return view.render('auth/password/reset', { isSignatureValid, email });
+    return view.render('auth/password/reset', { isSignatureValid, email, token });
   }
 
   public async resetPasswordStore({ request, response, session, auth }: HttpContextContract) {
     try {
       const schema = Schema.create({
+        token: Schema.string(),
         email: Schema.string({ trim: true }, [rules.exists({ table: 'users', column: 'email' })]),
         password: Schema.string({ trim: true }, [rules.minLength(8)]),
       })
 
-      const { email, password } = await request.validate({ schema })
+      const { token, email, password } = await request.validate({ schema })
+
+      if (!await Hash.verify(token, email)) {
+        throw new NotAllowedException("The request structure is invalid.")
+      }
 
       const user = await User.findByOrFail('email', email);
       user.password = password;

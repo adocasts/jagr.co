@@ -23,6 +23,7 @@
           {{-- @!component('honeypot') --}}
 
           <input type="hidden" name="email" value="{{ email }}">
+          <input type="hidden" name="token" value="{{ token }}">
 
           @if (flashMessages.get('errors.form'))
             <div role="alert" class="bg-red-100 text-red-800 rounded p-3 mb-4">
