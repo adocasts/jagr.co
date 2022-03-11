@@ -121,6 +121,10 @@ Route.group(() => {
 
   Route.post('/notifications/read', 'NotificationsController.read').as('notifications.read')
 
+  Route.post('/history/view', 'HistoriesController.view').as('histories.view')
+  Route.post('/history/progression/toggle', 'HistoriesController.progressionToggle').as('histories.progression.toggle')
+  Route.post('/history/progression/:id?', 'HistoriesController.progression').as('histories.progression')
+
   Route.group(() => {
 
     Route.get('/posts/search', 'PostsController.search').as('posts.search')

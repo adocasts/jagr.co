@@ -328,3 +328,47 @@ input[type="file"].file-drop + label:hover {
   height: 0;
   pointer-events: none;
 }
+
+progress {
+  --progress-width: 100%;
+  --progress-height: 6px;
+  --progress-bar-color: theme('colors.brand.800');
+  --progress-bg: none;
+  --progress-border-radius: 0 6px 6px 0;
+
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+  transition: color 300ms ease;
+}
+
+progress.is-complete {
+  --progress-bar-color: theme('colors.green.800');
+  --progress-border-radius: 0;
+}
+
+progress[value] {
+  appearance: none;
+  border: none;
+  width: var(--progress-width);
+  height: var(--progress-height);
+  background-color: var(--progress-bg);
+  border-radius: var(--progress-border-radius);
+  color: var(--progress-bar-color);
+}
+
+progress[value]::-moz-progress-bar {
+  background-color: var(--progress-bar-color);
+  border-radius: var(--progress-border-radius);
+}
+
+progress[value]::-webkit-progress-bar {
+  background-color: var(--progress-bg);
+  border-radius: var(--progress-border-radius);
+}
+
+progress[value]::-webkit-progress-value {
+  background-color: var(--progress-bar-color);
+  border-radius: var(--progress-border-radius);
+}
+

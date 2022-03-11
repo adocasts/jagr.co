@@ -2,8 +2,13 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import CommentService from 'App/Services/CommentService'
 import Collection from 'App/Models/Collection'
 import UtilityService from 'App/Services/UtilityService'
+import { inject } from '@adonisjs/fold'
+import HistoryService from 'App/Services/Http/HistoryService'
 
+@inject([HistoryService])
 export default class SeriesController {
+  constructor(protected historyService: HistoryService) {}
+
   public async index({ view }: HttpContextContract) {
     const featuredItems = await Collection.series()
       .apply(scope => scope.withPostLatestPublished())
@@ -42,6 +47,8 @@ export default class SeriesController {
       .preload('postsFlattened', query => query.apply(scope => scope.forCollectionDisplay({ orderBy: 'pivot_root_sort_order' })))
       .firstOrFail()
 
+    this.historyService.recordCollectionView(series.id)
+
     return view.render('series/show', { series })
   }
 
@@ -64,6 +71,9 @@ export default class SeriesController {
 
     const comments = await CommentService.getForPost(post)
 
-    return view.render('series/lesson', { post, series, comments })
+    this.historyService.recordPostView(post.id)
+    const userProgression = await this.historyService.getPostProgression(post)
+
+    return view.render('series/lesson', { post, series, comments, userProgression })
   }
 }

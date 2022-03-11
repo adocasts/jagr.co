@@ -62,12 +62,14 @@
     </div>
 
     <div class="flex justify-end md:hidden">
-      <div class="mr-3">
-        <button @click="toggleNotifications" class="relative">
-          <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
-          @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
-        </button>
-      </div>
+      @if (auth.user)
+        <div class="mr-3">
+          <button @click="toggleNotifications" class="relative">
+            <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
+            @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
+          </button>
+        </div>
+      @endif
 
       <div class="-mr-2 -my-1">
         <button @click="show = !show" type="button" class="rounded-md p-1 inline-flex items-center justify-center text-brand-300 hover:text-white hover:bg-brand-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-brand-800" :aria-expanded="show">
@@ -80,10 +82,12 @@
     <div class="hidden md:flex items-center md:ml-12">
       @!header.desktop.search()
 
-      <button @click="toggleNotifications" class="relative mr-1">
-        <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
-        @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
-      </button>
+      @if (auth.user)
+        <button @click="toggleNotifications" class="relative mr-1">
+          <div x-cloak x-show="unreadNotifications.length" class="w-2 h-2 rounded-full bg-accent-800 absolute top-0 right-0.5"></div>
+          @!svg.bell({ className: 'h-5 w-5 text-brand-200 hover:text-white transition duration-150 cursor-pointer' })
+        </button>
+      @endif
 
       @!header.desktop.auth({ studioRoutes })
     </div>

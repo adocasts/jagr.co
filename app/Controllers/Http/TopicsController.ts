@@ -2,8 +2,13 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Taxonomy from 'App/Models/Taxonomy'
 import CollectionTypes from 'App/Enums/CollectionTypes'
 import UtilityService from 'App/Services/UtilityService'
+import { inject } from '@adonisjs/fold'
+import HistoryService from 'App/Services/Http/HistoryService'
 
+@inject([HistoryService])
 export default class TopicsController {
+  constructor(protected historyService: HistoryService) {}
+
   public async index({ view }: HttpContextContract) {
     const featuredItems = await Taxonomy.query()
       .apply(scope => scope.hasContent())
@@ -47,6 +52,8 @@ export default class TopicsController {
       .wherePublic()
       .where('collectionTypeId', CollectionTypes.SERIES)
       .orderBy('name')
+
+    this.historyService.recordTaxonomyView(topic.id)
 
     return view.render('topics/show', { topic, children, posts, series })
   }

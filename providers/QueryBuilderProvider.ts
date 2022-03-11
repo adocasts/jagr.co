@@ -49,25 +49,32 @@ export default class QueryBuilderProvider {
       return BigInt(result[0].$extras.total)
     })
 
+    ModelQueryBuilder.macro('firstOr', async function<T = undefined>(orFunction: () => Promise<T>) {
+      const result = await this.first()
+
+      if (!result) {
+        return orFunction()
+      }
+
+      return result
+    })
+
     // @ts-ignore
     ModelQueryBuilder.macro('selectIds', async function(idColumn: string = 'id') {
       const results = await this.select(idColumn)
       return results.map(r => r.id)
     })
 
-    // @ts-ignore
     ModelQueryBuilder.macro('selectId', async function(idColumn: string = 'id') {
       const result = await this.select(idColumn).first()
       return result.length && result[0].id
     })
 
-    // @ts-ignore
     ModelQueryBuilder.macro('selectIdOrFail', async function(idColumn: string = 'id') {
       const result = await this.select(idColumn).firstOrFail()
       return result.length && result[0].id
     })
 
-    // @ts-ignore
     ModelQueryBuilder.macro('highlight', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this.first()
       if (!result) return
@@ -75,14 +82,12 @@ export default class QueryBuilderProvider {
       return result
     })
 
-    // @ts-ignore
     ModelQueryBuilder.macro('highlightOrFail', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this.firstOrFail()
       result[targetColumnName] = await HtmlParser.highlight(result[columnName])
       return result
     })
 
-    // @ts-ignore
     ModelQueryBuilder.macro('highlightAll', async function(columnName: string = 'body', targetColumnName: string = columnName) {
       const result = await this
       const promises = result.map(async r => {

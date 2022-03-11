@@ -18,6 +18,8 @@ import AppBaseModel from 'App/Models/AppBaseModel'
 import Database from '@ioc:Adonis/Lucid/Database'
 import States from 'App/Enums/States'
 import Watchlist from 'App/Models/Watchlist'
+import History from 'App/Models/History'
+import HistoryTypes from 'App/Enums/HistoryTypes'
 
 export default class Collection extends AppBaseModel {
   @column({ isPrimary: true })
@@ -121,6 +123,16 @@ export default class Collection extends AppBaseModel {
 
   @hasMany(() => Watchlist)
   public watchlist: HasMany<typeof Watchlist>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.VIEW)
+  })
+  public viewHistory: HasMany<typeof History>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.PROGRESSION)
+  })
+  public progressionHistory: HasMany<typeof History>
 
   public static series() {
     return this.query().where('collectionTypeId', CollectionTypes.SERIES)

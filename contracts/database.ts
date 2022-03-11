@@ -9,12 +9,13 @@ declare module '@ioc:Adonis/Lucid/Orm' {
     wherePublic(): this
     whereState(stateId: States): this
     withWatchlist(userId: number | undefined): this
+    firstOr<T = undefined>(orFunction: () => T): Promise<Result> | T
     getCount(): Promise<BigInt>
-    selectIds(idColumn?: string): number
-    selectId(idColumn?: string): number
-    selectIdOrFail(idColumn?: string): number
-    highlight(columnName?: string, targetColumnName?: string): Post
-    highlightOrFail(columnName?: string, targetColumnName?: string): Post
-    highlightAll(columnName?: string, targetColumnName?: string): Post[]
+    selectIds(idColumn?: string): Promise<number>
+    selectId(idColumn?: string): Promise<number>
+    selectIdOrFail(idColumn?: string): Promise<number>
+    highlight(columnName?: string, targetColumnName?: string): Promise<Post>
+    highlightOrFail(columnName?: string, targetColumnName?: string): Promise<Post>
+    highlightAll(columnName?: string, targetColumnName?: string): Promise<Post[]>
   }
 }

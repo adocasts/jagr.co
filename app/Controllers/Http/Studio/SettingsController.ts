@@ -3,7 +3,7 @@ import { usernameValidation } from 'App/Validators/shared/validations'
 import SettingService from 'App/Services/SettingService'
 import Profile from 'App/Models/Profile'
 import NotAllowedException from 'App/Exceptions/NotAllowedException'
-import { schema } from '@ioc:Adonis/Core/Validator'
+import { rules, schema } from '@ioc:Adonis/Core/Validator'
 import Route from '@ioc:Adonis/Core/Route'
 import Event from '@ioc:Adonis/Core/Event'
 import User from 'App/Models/User'
@@ -11,6 +11,7 @@ import User from 'App/Models/User'
 export default class SettingsController {
   public async index({ view, auth }: HttpContextContract) {
     const profile = await Profile.findByOrFail('userId', auth.user!.id)
+
     return view.render('studio/settings/index', { profile })
   }
 
@@ -103,5 +104,31 @@ export default class SettingsController {
     session.flash('success', "Your email notification settings have been updated")
 
     return response.redirect().status(303).back()
+  }
+
+  public async deleteAccout({ request }: HttpContextContract) {
+    const _schema = schema.create({
+      user_username: schema.string({ trim: true }, [rules.confirmed('username')])
+    })
+
+    const messages = {
+      'username.confirmed': "The username provided does not match your username"
+    }
+
+    await request.validate({ schema: _schema, messages });
+
+    // delete comments
+
+    // delete collections
+
+    // delete bookmarks
+
+    // delete watchlists
+
+    // delete posts
+
+    // delete profile
+
+    // delete account
   }
 }

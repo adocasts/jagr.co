@@ -7,6 +7,8 @@ import { slugify } from '@ioc:Adonis/Addons/LucidSlugify'
 import AppBaseModel from 'App/Models/AppBaseModel'
 import Database from '@ioc:Adonis/Lucid/Database'
 import States from 'App/Enums/States'
+import History from 'App/Models/History'
+import HistoryTypes from 'App/Enums/HistoryTypes'
 
 export default class Taxonomy extends AppBaseModel {
   @column({ isPrimary: true })
@@ -64,6 +66,16 @@ export default class Taxonomy extends AppBaseModel {
     foreignKey: 'parentId'
   })
   public children: HasMany<typeof Taxonomy>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.VIEW)
+  })
+  public viewHistory: HasMany<typeof History>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.PROGRESSION)
+  })
+  public progressionHistory: HasMany<typeof History>
 
   @manyToMany(() => Post, {
     pivotColumns: ['sort_order']

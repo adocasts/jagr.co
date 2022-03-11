@@ -16,14 +16,14 @@ window.appWatchlist = function(route, payload, isInWatchlist) {
   }
 }
 
-window.appCompleted = function(route, payload, isCompleted) {
+window.appCompleted = function(route, payload, isCompleted = false) {
   return {
     payload,
     isCompleted,
 
     async toggle() {
       const { data } = await axios.post(route, this.payload)
-      this.isCompleted = !data.wasDeleted
+      this.isCompleted = data.progression.isCompleted
     }
   }
 }

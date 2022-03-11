@@ -12,8 +12,11 @@
   })
 @endsection
 
-@section('content')
+@section('hero')
+  <progress id="reading-progress" class="hidden" max="100" value="0"></progress>
+@endsection
 
+@section('content')
   <div class="break">
     <div class="bg-gray-950">
       <div class="flex flex-col md:flex-row md:justify-end relative max-w-screen-2xl mx-auto">
@@ -165,6 +168,16 @@
       initVideo({
         el: 'lessonVideoEmbed',
         videoId: '{{ post.videoId }}'
+      })
+
+      initProgression({
+        storeProgression: {{ !!auth.user }},
+        httpUrl: '{{ route('api.histories.progression', { id: userProgression?.id }) }}',
+        httpPayload: {
+          postId: {{ post.id }},
+          userId: {{ auth.user?.id }},
+          route: {{ request.route.name }}
+        }
       })
     </script>
   @endif

@@ -25,6 +25,8 @@ import Collection from 'App/Models/Collection'
 import CollectionTypes from 'App/Enums/CollectionTypes'
 import Watchlist from 'App/Models/Watchlist'
 import * as timeago from 'timeago.js'
+import History from 'App/Models/History'
+import HistoryTypes from 'App/Enums/HistoryTypes'
 
 export default class Post extends AppBaseModel {
   public serializeExtras = true
@@ -173,6 +175,16 @@ export default class Post extends AppBaseModel {
     pivotColumns: ['sort_order', 'root_collection_id', 'root_sort_order']
   })
   public playlists: ManyToMany<typeof Collection>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.VIEW)
+  })
+  public viewHistory: HasMany<typeof History>
+
+  @hasMany(() => History, {
+    onQuery: q => q.where('historyTypeId', HistoryTypes.PROGRESSION)
+  })
+  public progressionHistory: HasMany<typeof History>
 
   @hasMany(() => Watchlist)
   public watchlist: HasMany<typeof Watchlist>
