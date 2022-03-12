@@ -15,6 +15,7 @@
 
 import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
 export default class ExceptionHandler extends HttpExceptionHandler {
   protected disableStatusPagesInDevelopment = true
@@ -27,5 +28,23 @@ export default class ExceptionHandler extends HttpExceptionHandler {
 
   constructor () {
     super(Logger)
+  }
+
+  public async handle(error: any, ctx: HttpContextContract) {
+    if (error.code === 'E_BAD_CSRF_TOKEN') {
+      return this.handleExpiredCsrf(ctx)
+    }
+
+    return super.handle(error, ctx)
+  }
+
+  public async handleExpiredCsrf(ctx: HttpContextContract) {
+    if (!ctx.request.accepts(['json'])) {
+      ctx.session.reflashExcept(['password'])
+      ctx.session.flash('warn', "Your session was expired. We've refresh your session, please try again.")
+      return ctx.response.redirect().withQs().back()
+    }
+
+    return ctx.response.status(419)
   }
 }

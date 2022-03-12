@@ -45,6 +45,7 @@ window.initVideo = function ({ el = 'ytEmbed', videoId } = {}) {
 window.initProgression = function ({ storeProgression = false, httpMethod = 'post', httpUrl, httpPayload }) {
   const post = document.querySelector(".body-content .prose")
   const progress = document.getElementById("reading-progress")
+  const appCompleted = document.getElementById('appCompleted')
   let inViewport = false
   let intersectionY = 0
 
@@ -100,7 +101,10 @@ window.initProgression = function ({ storeProgression = false, httpMethod = 'pos
   async function storeReadingProgression(scrollProgress) {
     if (!storeProgression) return
     const readPercent = Math.floor(scrollProgress)
-    return axios[httpMethod](httpUrl, { ...httpPayload, readPercent })
+    const { data } = await axios[httpMethod](httpUrl, { ...httpPayload, readPercent })
+    const isCompleted = data.progression.isCompleted
+    const event = new CustomEvent('completed', { detail: { isCompleted } })
+    appCompleted.dispatchEvent(event)
   }
 
   /* Use requestAnimationFrame*/

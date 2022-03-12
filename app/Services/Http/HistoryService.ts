@@ -63,23 +63,24 @@ export default class HistoryService extends BaseHttpService {
       delete data.readPercent
     }
 
-    data.isCompleted = this.isPercentCompleted(data)
+    progression.merge(data)
+    progression.isCompleted = this.isPercentCompleted(progression)
 
-    await progression.merge(data).save()
+    await progression.save()
 
     return progression
   }
 
-  public isPercentCompleted(data: Partial<History>) {
+  public isPercentCompleted(progression: History) {
     const threshold = 93
 
-    if (data.isCompleted) return true
+    if (progression.isCompleted) return true
 
-    if (typeof data.watchPercent === 'number' && data.watchPercent >= threshold) {
+    if (typeof progression.watchPercent === 'number' && progression.watchPercent >= threshold) {
       return true
     }
 
-    return typeof data.readPercent === 'number' && data.readPercent >= threshold
+    return typeof progression.readPercent === 'number' && progression.readPercent >= threshold
   }
 
   public async recordProgression() {
