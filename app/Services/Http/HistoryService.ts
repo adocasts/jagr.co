@@ -5,6 +5,8 @@ import BaseHttpService from 'App/Services/Http/BaseHttpService'
 import Post from 'App/Models/Post'
 
 export default class HistoryService extends BaseHttpService {
+  protected completedPercentThreshold = 93
+
   public async createView(data: Partial<History>) {
     if (!this.user) return
     return History.create({
@@ -72,15 +74,13 @@ export default class HistoryService extends BaseHttpService {
   }
 
   public isPercentCompleted(progression: History) {
-    const threshold = 93
-
     if (progression.isCompleted) return true
 
-    if (typeof progression.watchPercent === 'number' && progression.watchPercent >= threshold) {
+    if (typeof progression.watchPercent === 'number' && progression.watchPercent >= this.completedPercentThreshold) {
       return true
     }
 
-    return typeof progression.readPercent === 'number' && progression.readPercent >= threshold
+    return typeof progression.readPercent === 'number' && progression.readPercent >= this.completedPercentThreshold
   }
 
   public async recordProgression() {
@@ -105,7 +105,19 @@ export default class HistoryService extends BaseHttpService {
 
     const progression = await this.getProgressionOrNew(data)
 
-    await progression.merge({ isCompleted: !progression.isCompleted }).save()
+    progression.isCompleted = !progression.isCompleted
+
+    // if watch percent is above completed threshold, set to just under threshold
+    if (progression.watchPercent && progression.watchPercent >= this.completedPercentThreshold) {
+      progression.watchPercent = this.completedPercentThreshold - 1
+    }
+
+    // if watch percent is above completed threshold, set to just under threshold
+    if (progression.readPercent && progression.readPercent >= this.completedPercentThreshold) {
+      progression.readPercent = this.completedPercentThreshold - 1
+    }
+
+    await progression.save()
 
     return progression
   }

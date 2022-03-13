@@ -35,6 +35,9 @@ export default class History extends AppBaseModel {
   public watchPercent: number | null
 
   @column()
+  public watchSeconds: number
+
+  @column()
   public isCompleted: boolean
 
   @column.dateTime({ autoCreate: true })

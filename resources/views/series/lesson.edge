@@ -167,7 +167,14 @@
     <script defer>
       initVideo({
         el: 'lessonVideoEmbed',
-        videoId: '{{ post.videoId }}'
+        videoId: '{{ post.videoId }}',
+        watchSeconds: {{ userProgression?.watchSeconds ?? 0 }},
+        httpUrl: '{{ route('api.histories.progression', { id: userProgression?.id }) }}',
+        httpPayload: {
+          postId: {{ post.id }},
+          userId: {{ auth.user?.id }},
+          route: '{{ request.ctx.route?.name }}'
+        }
       })
 
       initProgression({

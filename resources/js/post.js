@@ -1,7 +1,9 @@
 let isYtVideoPlaying = false
-window.initVideo = function ({ el = 'ytEmbed', videoId } = {}) {
+window.initVideo = function ({ el = 'ytEmbed', videoId, httpMethod = 'post', httpUrl, httpPayload = {}, watchSeconds = 0 } = {}) {
   const tag = document.createElement('script')
+  const appCompleted = document.getElementById('appCompleted')
   let player
+  let playerInterval
   tag.src = "https://www.youtube.com/iframe_api"
   document.body.appendChild(tag)
 
@@ -14,7 +16,7 @@ window.initVideo = function ({ el = 'ytEmbed', videoId } = {}) {
         rel: 0,
         showinfo: 0,
         ecver: 2,
-        start: 0 // set to user's last watch time
+        start: watchSeconds
       },
       events: {
         'onReady': onPlayerReady,
@@ -32,6 +34,37 @@ window.initVideo = function ({ el = 'ytEmbed', videoId } = {}) {
 
   function onPlayerStateChange(event) {
     isYtVideoPlaying = event.data == YT.PlayerState.PLAYING
+
+    if (isYtVideoPlaying) {
+      playerInterval = setInterval(async () => {
+        const currentTime = player.getCurrentTime()
+        const duration = player.getDuration()
+
+        // duration may be 0 if meta data is still loading
+        if (duration !== 0) {
+          await storeWatchingProgression(currentTime, duration)
+        }
+      }, 15000)
+    } else {
+      const currentTime = player.getCurrentTime()
+      const duration = player.getDuration()
+
+      clearInterval(playerInterval)
+      storeWatchingProgression(currentTime, duration)
+    }
+  }
+
+  async function storeWatchingProgression(currentTime, duration) {
+    const watchPercent = Math.floor(currentTime / duration * 100)
+    const { data } = await axios[httpMethod](httpUrl, {
+      ...httpPayload,
+      watchPercent,
+      watchSeconds: Math.floor(currentTime)
+    })
+
+    const isCompleted = data.progression.isCompleted
+    const event = new CustomEvent('completed', { detail: { isCompleted } })
+    appCompleted.dispatchEvent(event)
   }
 }
 

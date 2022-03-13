@@ -30,6 +30,7 @@ export default class HistoryValidator {
     route: schema.string({ trim: true }),
     readPercent: schema.number.optional([rules.unsigned()]),
     watchPercent: schema.number.optional([rules.unsigned()]),
+    watchSeconds: schema.number.optional([rules.unsigned()]),
     isCompleted: schema.boolean.optional()
   })
 
