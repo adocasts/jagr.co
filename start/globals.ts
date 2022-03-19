@@ -11,6 +11,8 @@ import { string } from '@ioc:Adonis/Core/Helpers'
 import Status from 'App/Enums/Status'
 import Post from 'App/Models/Post'
 import Route from '@ioc:Adonis/Core/Route'
+import Comment from 'App/Models/Comment'
+import NotificationService from 'App/Services/NotificationService'
 
 View.global('appUrl', (path) => {
   return 'http://localhost:3333' + path
@@ -41,8 +43,14 @@ View.global('getSingularOrPlural', (str: string, count: string|number|any[] ) =>
   return isPlural ? string.pluralize(str) : str
 })
 
+View.global('stripHtml', (string: string, replacement: string = '') => string.replace(/<[^>]*>?/gm, replacement))
+
 View.global('Db', (table: string) => {
   return Database.from(table)
+})
+
+View.global('getCommentGoUrl', (comment: Comment) => {
+  return NotificationService.getGoPath(comment)
 })
 
 View.global('DateTime', DateTime)

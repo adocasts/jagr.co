@@ -97,6 +97,13 @@ Route.group(() => {
 
   Route.group(() => {
 
+    Route.get('/:stateId?', 'CommentsController.index').as('index')
+    Route.patch('/:id/state/:stateId', 'CommentsController.state').as('state').where('stateId', Route.matchers.number())
+
+  }).prefix('/comments').as('comments')
+
+  Route.group(() => {
+
     Route.get('/', 'SettingsController.index').as('index')
     Route.patch('/username', 'SettingsController.usernameUpdate').as('username.update')
     Route.post('/username/unique', 'SettingsController.usernameUnique').as('username.unique')

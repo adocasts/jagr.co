@@ -11,6 +11,10 @@
                 {{ heading }}
               </h3>
             @endif
+
+            @if ($slots.tabs)
+              {{{ await $slots.tabs() }}}
+            @endif
           </div>
           <div class="-mt-3 flex">
             @if ($slots.main)

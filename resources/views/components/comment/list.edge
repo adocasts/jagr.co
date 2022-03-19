@@ -6,8 +6,8 @@
     @set('levelIndex', levelIndex ? levelIndex + 1 : 1)
     @set('isAnon', !comment.userId)
 
-    <li class="relative">
-      <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 mb-6 group">
+    <li class="relative" id="comment{{ comment.id }}">
+      <div class="bg-gray-50 border rounded-lg p-3 mb-6 group" :class="window.location.hash === `#comment{{ comment.id }}` ? 'border-brand-700' : 'border-gray-100'">
         <div class="mb-3 flex items-center">
           @if (isAnon)
             <div class="w-10 h-10 rounded-full mr-3 bg-gray-300 overflow-hidden relative">
