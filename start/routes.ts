@@ -47,10 +47,10 @@ Route.get('/series/:slug',                'SeriesController.show').as('series.sh
 Route.get('/series/:slug/lesson/:index',  'SeriesController.lesson').as('series.lesson')
 
 Route.get('/lessons',       'LessonsController.index').as('lessons.index')
-Route.get('/lessons/:slug', 'LessonsController.show').as('lessons.show')
+Route.get('/lessons/:slug', 'LessonsController.show').as('lessons.show').middleware(['postTypeCheck'])
 
 Route.get('/posts',         'PostsController.index').as('posts.index')
-Route.get('/posts/:slug',   'PostsController.show').as('posts.show')
+Route.get('/posts/:slug',   'PostsController.show').as('posts.show').middleware(['postTypeCheck'])
 
 Route.get('/topics',        'TopicsController.index').as('topics.index')
 Route.get('/topics/:slug',  'TopicsController.show').as('topics.show')

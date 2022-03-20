@@ -29,7 +29,6 @@ export default class CommentsController {
     await bouncer.with('CommentPolicy').authorize('state', comment)
 
     if (!Object.values(States).includes(params.stateId)) {
-      console.log('here', { states: Object.values(States), state: params.stateId })
       session.flash('error', "State provided was invalid. Please provide a valid state to set the comment to.")
       return response.redirect().back()
     }

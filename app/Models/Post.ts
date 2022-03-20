@@ -27,6 +27,7 @@ import Watchlist from 'App/Models/Watchlist'
 import * as timeago from 'timeago.js'
 import History from 'App/Models/History'
 import HistoryTypes from 'App/Enums/HistoryTypes'
+import Route from '@ioc:Adonis/Core/Route'
 
 export default class Post extends AppBaseModel {
   public serializeExtras = true
@@ -257,6 +258,18 @@ export default class Post extends AppBaseModel {
   @computed()
   public get timeago() {
     return this.publishAt ? timeago.format(this.publishAt.toJSDate()) : ''
+  }
+
+  @computed()
+  public get routeUrl() {
+    if (this.redirectUrl) return this.redirectUrl
+
+    switch (this.postTypeId) {
+      case PostType.BLOG:
+        return Route.makeUrl('posts.show', { slug: this.slug })
+      default:
+        return Route.makeUrl('lessons.show', { slug: this.slug })
+    }
   }
 
   @beforeSave()

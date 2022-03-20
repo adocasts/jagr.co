@@ -46,4 +46,5 @@ Server.middleware.register([
 Server.middleware.registerNamed({
   auth: () => import('App/Middleware/Auth'),
   role: () => import('App/Middleware/Role'),
+  postTypeCheck: () => import('App/Middleware/PostTypeCheck')
 })

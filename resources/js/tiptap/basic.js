@@ -92,8 +92,9 @@ window.setupEditor = function(content) {
                 selector.classList.add('absolute', 'top-1', 'right-1', 'rounded', 'text-xs', 'text-gray-200', 'bg-gray-900', 'border-gray-800', 'px-2', 'py-1')
                 selector.contentEditable = false
                 selector.addEventListener('change', (e) => {
+                  const view = props.editor.view
                   const language = e.target.value
-                  props.editor.commands.updateAttributes('codeBlock', { language })
+                  view.dispatch(view.state.tr.setNodeMarkup(props.getPos(), undefined, { language }))
                 })
                 languages.map(lang => {
                   const option = document.createElement('option')
